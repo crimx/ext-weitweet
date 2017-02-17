@@ -1,5 +1,6 @@
+import 'bootstrap/dist/css/bootstrap.css'
 import Vue from 'vue'
-const Editor = require('./Editor')
+import Editor from './Editor'
 
 /* eslint-disable no-new */
 new Vue({
