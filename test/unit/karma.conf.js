@@ -17,21 +17,13 @@ var webpackConfig = merge(baseConfig, {
   ]
 })
 
-// coverage
-webpackConfig = merge.smart(webpackConfig, {
-  module: {
-    rules: [
-      {
-        test: /src.*\.js$/,
-        exclude: /node_modules/,
-        loader: 'istanbul-instrumenter-loader',
-        options: {
-          esModules: true
-        }
-      }
-    ]
-  }
-})
+// Use babel for test files too
+// webpackConfig.module.loaders.some(function (loader, i) {
+//   if (/^babel(-loader)?$/.test(loader.loader)) {
+//     loader.include.push(path.resolve(projectRoot, 'test/unit'))
+//     return true
+//   }
+// })
 
 // no need for app entry during tests
 delete webpackConfig.entry
