@@ -1,10 +1,14 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import Vue from 'vue'
-import Editor from './Editor'
+import store from './store'
+import Editor from './editor'
 
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  template: '<Editor/>',
-  components: { Editor }
+  store,
+  template: '<editor/>',
+  components: {
+    editor: Editor
+  }
 })
