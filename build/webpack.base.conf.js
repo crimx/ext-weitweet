@@ -22,10 +22,18 @@ module.exports = {
           },
           postcss: [
             require('autoprefixer')({
-              browsers: ['Chrome >= 45']
+              browsers: ['Chrome >= 52']
             })
           ]
         }
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        include: [
+          path.resolve(__dirname, '../src')
+        ],
+        exclude: /node_modules/
       },
       {
         test: /\.css?$/,
@@ -57,6 +65,7 @@ module.exports = {
     extensions: ['.*', '.js', '.vue', '.json'],
     alias: {
       'vue$': 'vue/dist/vue.common.js',
+      'test': path.resolve(__dirname, '../test'),
       'src': path.resolve(__dirname, '../src')
     }
   },
