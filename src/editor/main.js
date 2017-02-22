@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import Vue from 'vue'
 import store from './store'
-import Editor from './editor'
+import editor from './editor'
 
 /* eslint-disable no-new */
 new Vue({
@@ -9,6 +9,6 @@ new Vue({
   store,
   template: '<editor/>',
   components: {
-    editor: Editor
+    editor
   }
 })
