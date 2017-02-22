@@ -17,7 +17,7 @@ describe('Vue component: Boxes', function () {
       it('should control text contents of the slave boxes by default', function () {
         store.replaceState(_.cloneDeep(cleanState))
         const newText = 'new text'
-        store.dispatch(types.UPDATE_MASTER_TEXT, newText)
+        store.commit(types.UPDATE_MASTER_TEXT, {text: newText})
         expect(store.state.master.text).to.equal(newText)
         expect(store.state.twitter.text).to.equal(newText)
         expect(store.state.weibo.text).to.equal(newText)
@@ -33,7 +33,7 @@ describe('Vue component: Boxes', function () {
 
         beforeEach(function () {
           store.replaceState(_.cloneDeep(state))
-          store.dispatch(types.UPDATE_MASTER_TEXT, newText)
+          store.commit(types.UPDATE_MASTER_TEXT, {text: newText})
         })
         it('master should request control of the slave boxes', function () {
           expect(store.state.master.isRequestingSlavery).to.be.true
@@ -44,7 +44,7 @@ describe('Vue component: Boxes', function () {
           expect(store.state.weibo.text).to.equal(oldText)
         })
         it('should change all text contents when callback with true for slavery', function () {
-          store.commit(types.REQUEST_SLAVERY_FINISH, true)
+          store.commit(types.REQUEST_SLAVERY_FINISH, {isSlavery: true, text: newText})
           expect(store.state.master.isSlavery).to.be.true
           expect(store.state.master.isRequestingSlavery).to.be.false
           expect(store.state.master.text).to.equal(newText)
@@ -52,7 +52,7 @@ describe('Vue component: Boxes', function () {
           expect(store.state.weibo.text).to.equal(newText)
         })
         it('should keep all text contents when callback with false for slavery', function () {
-          store.commit(types.REQUEST_SLAVERY_FINISH, false)
+          store.commit(types.REQUEST_SLAVERY_FINISH, {isSlavery: false})
           expect(store.state.master.isSlavery).to.be.false
           expect(store.state.master.isRequestingSlavery).to.be.false
           expect(store.state.master.text).to.equal(oldText)
