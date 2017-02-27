@@ -1,36 +1,6 @@
-/**
- * Master box and slave boxes
- */
-import * as types from '../types'
+import * as types from './types'
 
-export const state = {
-  master: {
-    text: '',
-    // selected photos
-    photos: [],
-    // slave boxes being controlled
-    isSlavery: true,
-    isRequestingSlavery: false
-  },
-  twitter: {
-    text: '',
-    photos: [],
-    isLogIn: false
-  },
-  weibo: {
-    text: '',
-    photos: [],
-    isLogIn: false
-  }
-}
-
-export const getters = {
-}
-
-export const actions = {
-}
-
-export const mutations = {
+export default {
   [types.UPDATE_MASTER_TEXT] (state, {text}) {
     if (state.master.isSlavery) {
       // update all text
@@ -49,6 +19,15 @@ export const mutations = {
     state.weibo.text = text
     state.isSlavery = false
   },
+  [types.UPDATE_MASTER_PHOTO] (state, {img}) {
+    state.master.photo = img
+  },
+  [types.UPDATE_WEIBO_PHOTO] (state, {img}) {
+    state.weibo.photo = img
+  },
+  [types.UPDATE_TWITTER_PHOTO] (state, {img}) {
+    state.twitter.photo = img
+  },
   [types.REQUEST_SLAVERY_FINISH] (state, {isSlavery, text}) {
     state.master.isRequestingSlavery = false
     state.master.isSlavery = isSlavery
@@ -59,11 +38,4 @@ export const mutations = {
       state.weibo.text = text
     }
   }
-}
-
-export default {
-  state,
-  getters,
-  actions,
-  mutations
 }

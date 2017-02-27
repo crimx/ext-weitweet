@@ -1,34 +1,34 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import state from './state'
+import mutations from './mutations'
 import * as actions from './actions'
 import * as getters from './getters'
-import boxes from './modules/boxes'
 
 Vue.use(Vuex)
 
 const debug = process.env.NODE_ENV !== 'production'
 
 const store = new Vuex.Store({
+  state,
+  mutations,
   actions,
   getters,
-  modules: {
-    boxes
-  },
   strict: debug
 })
 
 if (module.hot) {
   module.hot.accept([
+    './state',
+    './mutations',
     './getters',
-    './actions',
-    './modules/boxes'
+    './actions'
   ], () => {
     store.hotUpdate({
+      state: require('./state'),
+      mutations: require('./mutations'),
       actions: require('./actions'),
-      getters: require('./getters'),
-      modules: {
-        boxes: require('./modules/boxes')
-      }
+      getters: require('./getters')
     })
   })
 }

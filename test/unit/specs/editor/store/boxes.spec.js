@@ -3,13 +3,21 @@ import Vuex from 'vuex'
 import _ from 'lodash'
 
 import * as types from 'src/editor/store/types'
-import boxesModule from 'src/editor/store/modules/boxes'
+import state from 'src/editor/store/state'
+import mutations from 'src/editor/store/mutations'
+import * as actions from 'src/editor/store/actions'
+import * as getters from 'src/editor/store/getters'
 
-boxesModule.strict = true
-var cleanState = _.cloneDeep(boxesModule.state)
+var cleanState = _.cloneDeep(state)
 
 Vue.use(Vuex)
-var store = new Vuex.Store(boxesModule)
+var store = new Vuex.Store({
+  state,
+  mutations,
+  actions,
+  getters,
+  strict: true
+})
 
 describe('Vue component: Boxes', function () {
   describe('Text contents in boxes', function () {
