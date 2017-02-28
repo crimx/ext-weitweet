@@ -19,12 +19,7 @@ module.exports = {
         options: {
           loaders: {
             'scss': 'vue-style-loader!css-loader!sass-loader'
-          },
-          postcss: [
-            require('autoprefixer')({
-              browsers: ['Chrome >= 52']
-            })
-          ]
+          }
         }
       },
       {
@@ -36,12 +31,12 @@ module.exports = {
         exclude: /node_modules/
       },
       {
-        test: /\.css?$/,
-        loader: 'style-loader!css-loader'
+        test: /\.css$/,
+        use: ['style-loader', 'css-loader', 'postcss-loader']
       },
       {
-        test: /\.scss?$/,
-        loader: 'style-loader!css-loader!sass-loader'
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
       },
       {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
