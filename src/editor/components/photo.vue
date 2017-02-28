@@ -4,7 +4,7 @@
     :class="[classBoxBg]"
     @click="clickSelect('both')"
   >
-    <div class="photo-box" title="Send to All">
+    <div class="photo-box" :title="footer ? '' : 'Send to All'">
       <div class="view-full"
         title="View Photo"
         @click.stop="clickViewFull"
@@ -137,29 +137,16 @@ $color-mixed: rgb(142, 68, 173);
 
 .photo-box-wrap {
   position: relative;
-  width: 139px;
+  width: 100%;
   padding: 6px;
   border-radius: 4px;
   transition: box-shadow $transition-duration;
   cursor: pointer;
-
-  &::after {
-    content: '';
-    position: absolute;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 4px;
-    transition: background-color $transition-duration;
-  }
 }
 
 .photo-box {
   position: relative;
   overflow: hidden;
-  z-index: 10;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
   transition: box-shadow $transition-duration;
 }
@@ -169,7 +156,7 @@ $color-mixed: rgb(142, 68, 173);
   z-index: 10;
   top: 0;
   right: 0;
-  transform: translate(100%, -100%);
+  transform: translate(100%, 0);
   width: 30px;
   height: 30px;
   padding: 5px;
@@ -178,7 +165,7 @@ $color-mixed: rgb(142, 68, 173);
 }
 
 .icon-eye {
-  fill: rgba(255, 255, 255, 0.3);
+  fill: rgba(255, 255, 255, 0.5);
 }
 
 .photo-wrap {
@@ -221,17 +208,8 @@ $color-mixed: rgb(142, 68, 173);
 \*------------------------------------*/
 
 .photo-box-wrap:hover {
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.055);
-
   .view-full {
     transform: translate(0, 0);
-  }
-
-  .photo-box {
-    box-shadow: none;
-  }
-  &::after {
-    background-color: rgba(0, 0, 0, 0.1);
   }
 }
 
