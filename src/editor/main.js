@@ -1,4 +1,3 @@
-import 'bootstrap/dist/css/bootstrap.css'
 import Vue from 'vue'
 import store from './store'
 import editor from './editor'
