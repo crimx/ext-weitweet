@@ -2,6 +2,12 @@
    Global Styles
 \*------------------------------------*/
 
+html {
+  height: 100%;
+  overflow-y: scroll;
+}
+
 body {
+  height: 100%;
   background: #dcf1f5;
 }

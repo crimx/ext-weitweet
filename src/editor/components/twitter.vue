@@ -1,7 +1,9 @@
 <template>
   <div class="twitter-box">
     <box
-      :text="$store.state.boxes.twitter.text"
+      type="twitter"
+      :text="$store.state.twitter.text"
+      :src="$store.state.twitter.photo"
       @text-input="updateText"
     ></box>
   </div>
@@ -25,6 +27,6 @@ export default {
 
 <style lang="scss" scoped>
 .twitter-box {
-  height: 400px;
+  height: 100%;
 }
 </style>

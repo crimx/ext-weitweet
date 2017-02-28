@@ -1,7 +1,9 @@
 <template>
   <div class="weibo-box">
     <box
-      :text="$store.state.boxes.weibo.text"
+      type="weibo"
+      :text="$store.state.weibo.text"
+      :src="$store.state.weibo.photo"
       @text-input="updateText"
     ></box>
   </div>
@@ -25,6 +27,6 @@ export default {
 
 <style lang="scss" scoped>
 .weibo-box {
-  height: 400px;
+  height: 100%;
 }
 </style>

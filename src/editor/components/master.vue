@@ -1,7 +1,10 @@
 <template>
   <div class="master-box">
     <box
-      :text="$store.state.boxes.master.text"
+      type="master"
+      :text="$store.state.master.text"
+      :src="$store.state.master.photo"
+      :disabled="!$store.state.master.isSlavery"
       @text-input="updateText"
     ></box>
   </div>
@@ -28,6 +31,6 @@ export default {
 
 <style lang="scss" scoped>
 .master-box {
-  height: 400px;
+  height: 100%;
 }
 </style>
