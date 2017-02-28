@@ -13,11 +13,15 @@ export default {
   },
   [types.UPDATE_TWITTER_TEXT] (state, {text}) {
     state.twitter.text = text
-    state.isSlavery = false
+    if (state.master.isSlavery) {
+      state.master.isSlavery = false
+    }
   },
   [types.UPDATE_WEIBO_TEXT] (state, {text}) {
     state.weibo.text = text
-    state.isSlavery = false
+    if (state.master.isSlavery) {
+      state.master.isSlavery = false
+    }
   },
   [types.UPDATE_MASTER_PHOTO] (state, {img}) {
     state.master.photo = img
