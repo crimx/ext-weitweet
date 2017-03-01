@@ -1,5 +1,12 @@
 <template>
   <div class="box">
+    <div class="box-header"
+      v-if="type !== 'master'"
+    >
+      <img class="box-header-avatar" :src="$store.state[type].avatar">
+      <p class="box-header-fullname">{{ $store.state[type].fullname }}</p>
+      <small class="box-header-username">@{{ $store.state[type].username }}</small>
+    </div>
     <div class="box-content-container"
       :class="{ 'box-content-container--typing': isTyping }"
     >
@@ -17,6 +24,9 @@
     >{{ btnTitle }}</button>
     <div class="box-photo-container" :class="{'box-photo-container--hide': !src}">
       <photo :src="src || ''" :border="true" :ratio="1.34"></photo>
+    </div>
+    <div class="box-dialog">
+
     </div>
   </div>
 </template>
@@ -73,6 +83,24 @@ $color-mixed: rgb(142, 68, 173);
   height: 100%;
   width: 100%;
   padding-right: 15px;
+}
+
+.box-header {
+  margin-bottom: 10px;
+}
+
+.box-header-avatar {
+  width: 48px;
+  height: 48px;
+  float: left;
+  margin-right: 10px;
+  border-radius: 5px;
+}
+
+.box-header-fullname {
+   margin-bottom: 0;
+   font-size: 1.1rem;
+   font-weight: bold;
 }
 
 .box-content-container {
