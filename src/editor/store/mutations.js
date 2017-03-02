@@ -23,14 +23,39 @@ export default {
       state.master.isSlavery = false
     }
   },
-  [types.UPDATE_MASTER_PHOTO] (state, {img}) {
-    state.master.photo = img
-  },
-  [types.UPDATE_WEIBO_PHOTO] (state, {img}) {
-    state.weibo.photo = img
-  },
-  [types.UPDATE_TWITTER_PHOTO] (state, {img}) {
-    state.twitter.photo = img
+  [types.UPDATE_PHOTO] (state, {type, src}) {
+    if (type === 'master') {
+      if (state.master.photo === src) {
+        // already selected, now cancel it
+        state.master.photo = ''
+        state.twitter.photo = ''
+        state.weibo.photo = ''
+      } else {
+        state.master.photo = src
+        state.twitter.photo = src
+        state.weibo.photo = src
+      }
+    } else if (type === 'twitter') {
+      state.master.photo = ''
+      if (state.twitter.photo === src) {
+        state.twitter.photo = ''
+      } else {
+        state.twitter.photo = src
+        if (state.weibo.photo === src) {
+          state.master.photo = src
+        }
+      }
+    } else if (type === 'weibo') {
+      state.master.photo = ''
+      if (state.weibo.photo === src) {
+        state.weibo.photo = ''
+      } else {
+        state.weibo.photo = src
+        if (state.twitter.photo === src) {
+          state.master.photo = src
+        }
+      }
+    }
   },
   [types.REQUEST_SLAVERY_FINISH] (state, {isSlavery, text}) {
     state.master.isRequestingSlavery = false
