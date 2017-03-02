@@ -2,7 +2,7 @@
   <div class="photo-box-wrap"
     :style="styleFrame"
     :class="[classBoxBg]"
-    @click="clickSelect('both')"
+    @click="clickSelect('master')"
   >
     <div class="photo-box" :title="footer ? '' : 'Send to All'">
       <div class="view-full"
@@ -59,7 +59,7 @@ export default {
   /**
    * Props
    *
-   * @property {string} selected - 'weibo', 'twitter' or 'both'. The part that is selected.
+   * @property {string} selected - 'weibo', 'twitter' or 'master'. The part that is selected.
    * @property {string} src - Image src.
    * @property {string} alt - Image alt.
    * @property {number} ratio - width/height or falsy for no restriction.
@@ -75,17 +75,21 @@ export default {
   },
   methods: {
     /**
-     * @fires Photo#selected
+     * @fires Photo#clicked
      */
-    clickSelect (part) {
+    clickSelect (type) {
       /**
        * Clicked event.
-       * 'weibo', 'twitter' or 'both'
        *
-       * @event Photo#selected
-       * @type {string}
+       * @event Photo#clicked
+       * @type {object}
+       * @property {string} type - 'weibo', 'twitter' or 'master'
+       * @property {string} src - image src
        */
-      this.$emit('selected', part)
+      this.$emit('clicked', {
+        type,
+        src: this.src
+      })
     },
     clickViewFull () {
       // TODO $store.state.viewFUll
@@ -97,7 +101,7 @@ export default {
       switch (this.selected) {
         case 'weibo': return 'photo-box--weibo-selected'
         case 'twitter': return 'photo-box--twitter-selected'
-        case 'both': return 'photo-box--both-selected'
+        case 'master': return 'photo-box--master-selected'
         default: return ''
       }
     },
@@ -140,7 +144,7 @@ $color-mixed: rgb(142, 68, 173);
   width: 100%;
   padding: 6px;
   border-radius: 4px;
-  transition: box-shadow $transition-duration;
+  transition: box-shadow $transition-duration, background $transition-duration / 2;
   cursor: pointer;
 }
 
@@ -219,7 +223,7 @@ $color-mixed: rgb(142, 68, 173);
 .photo-box--twitter-selected {
   background-color: $color-twitter;
 }
-.photo-box--both-selected {
+.photo-box--master-selected {
   background-color: $color-mixed;
 }
 
