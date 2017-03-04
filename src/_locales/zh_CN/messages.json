@@ -1,0 +1,66 @@
+{
+   "extension_name": {
+      "description": "Extension name",
+      "message": "微推 Weitweet"
+   },
+
+   "extension_short_name": {
+      "description": "Extension short name",
+      "message": "Weitweet"
+   },
+
+   "extension_description": {
+      "description": "Description of extension",
+      "message": "一键发送微博和推特，支持网页图片分享"
+   },
+
+   "box_submit_button_master": {
+     "description": "输入框下面的发送按钮",
+      "message": "发送全部"
+   },
+
+   "box_submit_button_twitter": {
+     "description": "输入框下面的发送按钮",
+      "message": "发送推特"
+   },
+
+   "box_submit_button_weibo": {
+     "description": "输入框下面的发送按钮",
+      "message": "发送微博"
+   },
+
+   "photo_button_viewfull": {
+     "description": "查看原图",
+      "message": "查看原图"
+   },
+
+   "photo_button_master": {
+     "description": "将图片传到统一编辑窗口等待上传",
+      "message": "选择图片到推特和微博"
+   },
+
+   "photo_button_twitter": {
+     "description": "将图片传到推特编辑窗口等待上传",
+      "message": "选择图片到推特"
+   },
+
+   "photo_button_weibo": {
+     "description": "将图片传到微博编辑窗口等待上传",
+      "message": "选择图片到微博"
+   },
+
+   "photo_button_upload": {
+     "description": "上传图片按钮",
+      "message": "上传图片"
+   },
+
+   "photo_upload_popover_title": {
+     "description": "上传图片按钮",
+      "message": "上传文件或粘贴链接"
+   },
+
+   "photo_upload_popover_paster": {
+     "description": "粘贴链接",
+      "message": "粘贴到这里"
+   }
+}
