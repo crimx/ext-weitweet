@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import store from './store'
-import editor from './editor'
+import Editor from './editor'
 
 /* eslint-disable no-new */
 new Vue({
@@ -8,6 +8,6 @@ new Vue({
   store,
   template: '<editor/>',
   components: {
-    editor
+    editor: Editor
   }
 })

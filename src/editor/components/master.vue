@@ -12,7 +12,7 @@
 
 <script>
 import * as types from 'src/editor/store/types'
-import box from './box'
+import Box from './box'
 
 export default {
   methods: {
@@ -24,7 +24,7 @@ export default {
     }
   },
   components: {
-    box
+    box: Box
   }
 }
 </script>
