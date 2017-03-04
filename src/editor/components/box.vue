@@ -21,7 +21,7 @@
       :class="[src ? '' : 'btn-submit--extend', 'btn-' + type]"
       :disabled="disabled"
       @click="btnClicked"
-    >{{ btnTitle }}</button>
+    >{{ $store.getters['box_submit_button_' + type] }}</button>
     <div class="box-photo-container" :class="{'box-photo-container--hide': !src}">
       <photo :src="src || ''" :border="true" :ratio="1.34"></photo>
     </div>
@@ -60,11 +60,8 @@ export default {
   },
   computed: {
     btnTitle () {
-      switch (this.type) {
-        case 'weibo': return '发送微博'
-        case 'twitter': return '发送推特'
-        default: return '发送全部'
-      }
+      let that = this
+      console.log(Object.keys(that.$store.getters))
     }
   }
 }

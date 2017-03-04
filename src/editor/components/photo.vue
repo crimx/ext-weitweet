@@ -4,9 +4,9 @@
     :class="[classBoxBg]"
     @click="clickSelect('master')"
   >
-    <div class="photo-box" :title="footer ? '' : 'Send to All'">
+    <div class="photo-box" :title="footer ? $store.getters.photo_button_master : ''">
       <div class="view-full"
-        title="View Photo"
+        :title="$store.getters.viewfull"
         @click.stop="clickViewFull"
       >
         <svg class="icon-eye" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -19,7 +19,7 @@
       </div>
       <div class="photo-footer" v-if="footer">
         <div class="footer-weibo"
-          title="Send to Weibo"
+          :title="$store.getters.photo_button_weibo"
           :class="{ 'footer-weibo--mouseout': !isWeiboMouseover }"
           @mouseover="isWeiboMouseover = true"
           @mouseout="isWeiboMouseover = false"
@@ -37,7 +37,7 @@
           </svg>
         </div>
         <div class="footer-twitter"
-          title="Send to Twitter"
+          :title="$store.getters.photo_button_twitter"
           :class="{ 'footer-twitter--mouseout': !isTwitterMouseover }"
           @mouseover="isTwitterMouseover = true"
           @mouseout="isTwitterMouseover = false"
