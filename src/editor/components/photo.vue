@@ -6,7 +6,7 @@
   >
     <div class="photo-box" :title="footer ? $store.getters.photo_button_master : ''">
       <div class="view-full"
-        :title="$store.getters.viewfull"
+        :title="$store.getters.photo_button_viewfull"
         @click.stop="clickViewFull"
       >
         <svg class="icon-eye" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
@@ -92,8 +92,7 @@ export default {
       })
     },
     clickViewFull () {
-      // TODO $store.state.viewFUll
-      console.log('view full')
+      window.open(this.src, '_blank')
     }
   },
   computed: {
