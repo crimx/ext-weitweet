@@ -2326,6 +2326,10 @@ invert-kv@^1.0.0:
   version "1.0.0"
   resolved "http://registry.npm.taobao.org/invert-kv/download/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
 
+ip-regex@^1.0.1:
+  version "1.0.3"
+  resolved "http://registry.npm.taobao.org/ip-regex/download/ip-regex-1.0.3.tgz#dc589076f659f419c222039a33316f1c7387effd"
+
 ipaddr.js@1.2.0:
   version "1.2.0"
   resolved "http://registry.npm.taobao.org/ipaddr.js/download/ipaddr.js-1.2.0.tgz#8aba49c9192799585bdd643e0ccb50e8ae777ba4"
@@ -4729,6 +4733,12 @@ url-loader@^0.5.7:
   dependencies:
     loader-utils "0.2.x"
     mime "1.2.x"
+
+url-regex@^4.0.0:
+  version "4.0.0"
+  resolved "http://registry.npm.taobao.org/url-regex/download/url-regex-4.0.0.tgz#eb48fbaf380fbf4c952c76ebd2d2ce00f9b4ca32"
+  dependencies:
+    ip-regex "^1.0.1"
 
 url@^0.11.0:
   version "0.11.0"

@@ -2,7 +2,6 @@
   <div class="popover-container">
     <div class="popover-source"
       ref="source"
-      @click.capture.stop="show = !show"
     >
       <slot name="source"></slot>
     </div>
@@ -14,7 +13,7 @@
         v-show="show"
         :class="[`popover-${placement}`]"
       >
-        <h3 v-if="title" class="popover-title">{{ title }}</h3>
+        <h4 v-if="title" class="popover-title">{{ title }}</h4>
         <div class="popover-content">
           <slot name="content"></slot>
         </div>
@@ -39,11 +38,10 @@ export default {
     title: {
       type: String,
       default: ''
-    }
-  },
-  data () {
-    return {
-      show: false
+    },
+    show: {
+      type: Boolean,
+      default: false
     }
   },
   methods: {
@@ -83,6 +81,10 @@ export default {
 
 .popover-source {
   display: inline-block;
+}
+
+.popover {
+  max-width: none;
 }
 
 .fade-enter-active, .fade-leave-active {

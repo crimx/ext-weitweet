@@ -1,6 +1,6 @@
 {
   "name": "crx-weitweet",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Post Weibo and Twitter in one click",
   "author": "CRIMX <straybugs@gmail.com>",
   "private": true,
@@ -17,6 +17,8 @@
     "bootstrap": "4.0.0-alpha.6",
     "imagesloaded": "^4.1.1",
     "masonry-layout": "^4.1.1",
+    "tether": "^1.4.0",
+    "url-regex": "^4.0.0",
     "vue": "^2.1.10",
     "vuex": "^2.1.2"
   },
