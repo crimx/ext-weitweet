@@ -2,6 +2,7 @@
   <div class="popover-container">
     <div class="popover-source"
       ref="source"
+      :style="{display: shrink ? 'inline-block' : false}"
     >
       <slot name="source"></slot>
     </div>
@@ -42,6 +43,10 @@ export default {
     show: {
       type: Boolean,
       default: false
+    },
+    shrink: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {
@@ -77,10 +82,6 @@ export default {
 <style lang="scss" scoped>
 .popover-container {
   display: relative;
-}
-
-.popover-source {
-  display: inline-block;
 }
 
 .popover {

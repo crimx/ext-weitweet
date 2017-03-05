@@ -1,12 +1,30 @@
 <template>
   <div class="box">
-    <div class="box-header"
+    <popover placement="left"
       v-if="type !== 'master'"
+      :show="isRequestAccountChanging"
+      :shrink="false"
     >
-      <img class="box-header-avatar" :src="$store.state[type].asscessToken ? $store.state[type].avatar : ''">
-      <p class="box-header-fullname">{{ $store.state[type].asscessToken ? $store.state[type].fullname : $store.getters[`author_${type}_fullname`]}}</p>
-      <small class="box-header-username">@{{ $store.state[type].asscessToken ? $store.state[type].username : $store.getters[`author_${type}_username`] }}</small>
-    </div>
+      <div class="box-header"
+        slot="source"
+        @click.capture.stop="isRequestAccountChanging = !isRequestAccountChanging"
+      >
+        <img class="box-header-avatar" :src="$store.state[type].asscessToken ? $store.state[type].avatar : ''">
+        <p class="box-header-fullname">{{ $store.state[type].asscessToken ? $store.state[type].fullname : $store.getters[`author_${type}_fullname`]}}</p>
+        <small class="box-header-username">@{{ $store.state[type].asscessToken ? $store.state[type].username : $store.getters[`author_${type}_username`] }}</small>
+      </div>
+      <div class="box-header-popover"
+        slot="content"
+      >
+        <p>{{ $store.getters.change_account_content }}</p>
+        <button type="button" class="btn btn-sm btn-success"
+          @click="isRequestAccountChanging = false"
+        >No</button>
+        <button type="button" class="btn btn-sm btn-danger"
+          @click="changeAccount"
+        >Yes</button>
+      </div>
+    </popover>
     <div class="box-content-container"
       :class="{ 'box-content-container--typing': isTyping }"
     >
@@ -99,6 +117,7 @@ export default {
   props: ['text', 'src', 'type', 'disabled'],
   data () {
     return {
+      isRequestAccountChanging: false,
       isUrlInputShake: false,
       isUploadPanelShow: false,
       isTyping: false
@@ -109,6 +128,14 @@ export default {
     photo: Photo
   },
   methods: {
+    changeAccount () {
+      // hide popover
+      this.isRequestAccountChanging = false
+      // clean asscess token
+      this.$store.commit(types[`UPDATE_${this.type.toUpperCase()}_TOKEN`], {token: ''})
+      // request a new one
+      this.$store.dispatch(types[`LOG_IN_${this.type.toUpperCase()}`])
+    },
     btnClickedSubmit () {
       if (this.disabled) { return }
     },
@@ -160,6 +187,12 @@ $color-mixed: rgb(142, 68, 173);
 
 .box-header {
   margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.box-header-popover {
+  text-align: center;
+  padding: 0 10px;
 }
 
 .box-header-avatar {
