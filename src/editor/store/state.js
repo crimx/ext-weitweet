@@ -10,11 +10,17 @@ export default {
   twitter: {
     text: '',
     photo: '',
-    isLogIn: false
+    fullname: '',
+    username: '',
+    asscessToken: '',
+    isLogingIn: false
   },
   weibo: {
     text: '',
     photo: '',
-    isLogIn: false
+    fullname: '',
+    username: '',
+    asscessToken: '',
+    isLogingIn: false
   }
 }

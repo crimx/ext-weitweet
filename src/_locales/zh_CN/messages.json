@@ -61,6 +61,36 @@
 
    "photo_upload_popover_paster": {
      "description": "粘贴链接",
-      "message": "粘贴到这里"
+      "message": "链接粘贴到这里"
+   },
+
+   "login_twitter": {
+     "description": "登陆推特",
+      "message": "登陆推特"
+   },
+
+   "login_weibo": {
+     "description": "登陆微博",
+      "message": "登陆微博"
+   },
+
+   "author_twitter_fullname": {
+     "description": "我的推特昵称",
+     "message": "CRIMX"
+   },
+
+   "author_twitter_username": {
+     "description": "我的推特用户名",
+     "message": "straybugs"
+   },
+
+   "author_weibo_fullname": {
+     "description": "我的微博昵称",
+     "message": "盒装柠檬水"
+   },
+
+   "author_weibo_username": {
+     "description": "我的微博用户名",
+     "message": "盒装柠檬水"
    }
 }

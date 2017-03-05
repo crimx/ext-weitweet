@@ -3,9 +3,9 @@
     <div class="box-header"
       v-if="type !== 'master'"
     >
-      <img class="box-header-avatar" :src="$store.state[type].avatar">
-      <p class="box-header-fullname">{{ $store.state[type].fullname }}</p>
-      <small class="box-header-username">@{{ $store.state[type].username }}</small>
+      <img class="box-header-avatar" :src="$store.state[type].asscessToken ? $store.state[type].avatar : ''">
+      <p class="box-header-fullname">{{ $store.state[type].asscessToken ? $store.state[type].fullname : $store.getters[`author_${type}_fullname`]}}</p>
+      <small class="box-header-username">@{{ $store.state[type].asscessToken ? $store.state[type].username : $store.getters[`author_${type}_username`] }}</small>
     </div>
     <div class="box-content-container"
       :class="{ 'box-content-container--typing': isTyping }"
@@ -71,15 +71,12 @@
     </div>
     <transition name="animation-photo">
       <div class="box-photo-container"
-        v-if="src"
+        v-if="src && $store.state[type].asscessToken"
         @click="cancelImageSelection"
       >
         <photo :src="src || ''" :border="true" :ratio="1.34"></photo>
       </div>
     </transition>
-    <div class="box-dialog">
-
-    </div>
   </div>
 </template>
 
@@ -272,10 +269,6 @@ $color-mixed: rgb(142, 68, 173);
     outline-color: #d9534f;
     background:hsl(0, 50%, 90%);
   }
-}
-
-#imagefile {
-  display: none;
 }
 
 /*------------------------------------*\

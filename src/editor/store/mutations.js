@@ -66,5 +66,12 @@ export default {
       state.twitter.text = text
       state.weibo.text = text
     }
+  },
+
+  [types.UPDATE_TWITTER_LOGING_IN] (state, {flag}) {
+    state.twitter.isLogingIn = flag
+  },
+  [types.UPDATE_WEIBO_LOGING_IN] (state, {flag}) {
+    state.weibo.isLogingIn = flag
   }
 }
