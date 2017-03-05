@@ -9,9 +9,9 @@
         slot="source"
         @click.capture.stop="isRequestAccountChanging = !isRequestAccountChanging"
       >
-        <img class="box-header-avatar" :src="$store.state[type].asscessToken ? $store.state[type].avatar : ''">
-        <p class="box-header-fullname">{{ $store.state[type].asscessToken ? $store.state[type].fullname : $store.getters[`author_${type}_fullname`]}}</p>
-        <small class="box-header-username">@{{ $store.state[type].asscessToken ? $store.state[type].username : $store.getters[`author_${type}_username`] }}</small>
+        <img class="box-header-avatar" :src="$store.state[type].accessToken ? $store.state[type].avatar : ''">
+        <p class="box-header-fullname">{{ $store.state[type].accessToken ? $store.state[type].fullname : $store.getters[`author_${type}_fullname`]}}</p>
+        <small class="box-header-username">@{{ $store.state[type].accessToken ? $store.state[type].username : $store.getters[`author_${type}_username`] }}</small>
       </div>
       <div class="box-header-popover"
         slot="content"
@@ -89,7 +89,7 @@
     </div>
     <transition name="animation-photo">
       <div class="box-photo-container"
-        v-if="src && $store.state[type].asscessToken"
+        v-if="src && showPhoto"
         @click="cancelImageSelection"
       >
         <photo :src="src || ''" :border="true" :ratio="1.34"></photo>
@@ -113,8 +113,9 @@ export default {
    * @property {string} src - Selected image src.
    * @property {string} type - 'weibo', 'twitter' or 'master'.
    * @property {boolean} disabled - disable the box.
+   * @property {boolean} showPhoto - show the photo.
    */
-  props: ['text', 'src', 'type', 'disabled'],
+  props: ['text', 'src', 'type', 'disabled', 'showPhoto'],
   data () {
     return {
       isRequestAccountChanging: false,

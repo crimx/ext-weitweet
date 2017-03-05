@@ -4,15 +4,16 @@
       type="twitter"
       :text="$store.state.twitter.text"
       :src="$store.state.twitter.photo"
+      :show-photo="$store.state.twitter.accessToken"
       @text-input="updateText"
     ></box>
     <transition name="fade">
       <div class="twitter-login-panel"
-        v-if="!$store.state.twitter.asscessToken"
+        v-if="!$store.state.twitter.accessToken"
       >
         <transition name="fade" mode="out-in">
           <button class="btn btn-success"
-            v-if="!$store.state.twitter.asscessToken && !$store.state.twitter.isLogingIn"
+            v-if="!$store.state.twitter.accessToken && !$store.state.twitter.isLogingIn"
             @click="handleLogin"
           >{{ $store.getters.login_twitter }}</button>
           <loader width="20%" fill="#fff"

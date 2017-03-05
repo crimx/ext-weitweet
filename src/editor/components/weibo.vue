@@ -2,11 +2,11 @@
   <div class="weibo-box">
     <transition name="fade">
       <div class="weibo-login-panel"
-        v-if="!$store.state.weibo.asscessToken"
+        v-if="!$store.state.weibo.accessToken"
       >
         <transition name="fade" mode="out-in">
           <button class="btn btn-success"
-            v-if="!$store.state.weibo.asscessToken && !$store.state.weibo.isLogingIn"
+            v-if="!$store.state.weibo.accessToken && !$store.state.weibo.isLogingIn"
             @click="handleLogin"
           >{{ $store.getters.login_weibo }}</button>
           <loader width="20%" fill="#fff"
@@ -19,6 +19,7 @@
       type="weibo"
       :text="$store.state.weibo.text"
       :src="$store.state.weibo.photo"
+      :show-photo="$store.state.weibo.accessToken"
       @text-input="updateText"
     ></box>
   </div>

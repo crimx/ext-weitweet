@@ -12,7 +12,7 @@ export default {
     photo: '',
     fullname: '',
     username: '',
-    asscessToken: '',
+    accessToken: '',
     isLogingIn: false
   },
   weibo: {
@@ -20,7 +20,7 @@ export default {
     photo: '',
     fullname: '',
     username: '',
-    asscessToken: '',
+    accessToken: '',
     isLogingIn: false
   }
 }

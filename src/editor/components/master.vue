@@ -4,6 +4,7 @@
       type="master"
       :text="$store.state.master.text"
       :src="$store.state.master.photo"
+      :show-photo="!$store.state.master.isRequestingSlavery"
       :disabled="!$store.state.master.isSlavery"
       @text-input="updateText"
     ></box>
