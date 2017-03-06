@@ -12,6 +12,14 @@ body {
   background: #dcf1f5;
 }
 
+@font-face {
+    font-family: 'shadows-into-light';
+    src: url('./assets/shadows-into-light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+// horizontal shaking
 .shake {
   animation: shake 0.4s linear;
 }

@@ -28,6 +28,11 @@
     <div class="box-content-container"
       :class="{ 'box-content-container--typing': isTyping }"
     >
+      <div v-if="type !== 'master'" class="text-count">
+        <h1
+          :style="{color: textCount > $store.state[type].textLength ? '#c0392b' : ''}"
+        >{{ showTextCount }}</h1>
+      </div>
       <textarea class="box-content form-control"
         :value="text"
         @input="$emit('text-input', $event.target.value)"
@@ -109,13 +114,35 @@ export default {
   /**
    * Props
    *
-   * @property {string} text - Input text.
-   * @property {string} src - Selected image src.
-   * @property {string} type - 'weibo', 'twitter' or 'master'.
-   * @property {boolean} disabled - disable the box.
-   * @property {boolean} showPhoto - show the photo.
+   * @property {string} props.text - Input text.
+   * @property {string} props.src - Selected image src.
+   * @property {string} props.type - 'weibo', 'twitter' or 'master'.
+   * @property {boolean} props.disabled - disable the box.
+   * @property {boolean} props.showPhoto - show the photo.
    */
-  props: ['text', 'src', 'type', 'disabled', 'showPhoto'],
+  props: {
+    text: {
+      type: String
+    },
+    src: {
+      type: String
+    },
+    type: {
+      type: String,
+      required: true,
+      validator (value) {
+        return ['weibo', 'twitter', 'master'].indexOf(value) !== -1
+      }
+    },
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    showPhoto: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       isRequestAccountChanging: false,
@@ -167,6 +194,28 @@ export default {
         setTimeout(() => { this.isUrlInputShake = false }, 400)
       }
     }
+  },
+  computed: {
+    textCount () {
+      let text = this.text
+      let len = 0
+      for (let i = 0; i < text.length; i += 1) {
+        if (text.charCodeAt(i) > 0 && text.charCodeAt(i) < 128) {
+          len += 1
+        } else {
+          len += 2
+        }
+      }
+      return len
+    },
+    showTextCount () {
+      let textLength = this.$store.state[this.type].textLength
+      if (this.textCount > textLength) {
+        return textLength - this.textCount
+      } else {
+        return this.textCount > 0 ? this.textCount : ''
+      }
+    }
   }
 }
 </script>
@@ -214,6 +263,14 @@ $color-mixed: rgb(142, 68, 173);
   flex: 1;
   position: relative;
   z-index: 1;
+}
+
+.text-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translate(-0.75rem, -100%);
+  font-family: 'shadows-into-light', -apple-system, system-ui, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 .box-content {

@@ -9,6 +9,7 @@ export default {
   },
   twitter: {
     text: '',
+    textLength: 140,
     photo: '',
     fullname: '',
     username: '',
@@ -17,6 +18,7 @@ export default {
   },
   weibo: {
     text: '',
+    textLength: 2000,
     photo: '',
     fullname: '',
     username: '',
