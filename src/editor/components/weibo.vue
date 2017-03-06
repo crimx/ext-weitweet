@@ -19,7 +19,7 @@
       type="weibo"
       :text="$store.state.weibo.text"
       :src="$store.state.weibo.photo"
-      :show-photo="$store.state.weibo.accessToken"
+      :show-photo="!!$store.state.weibo.accessToken"
       @text-input="updateText"
     ></box>
   </div>

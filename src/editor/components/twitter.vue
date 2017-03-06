@@ -4,7 +4,7 @@
       type="twitter"
       :text="$store.state.twitter.text"
       :src="$store.state.twitter.photo"
-      :show-photo="$store.state.twitter.accessToken"
+      :show-photo="!!$store.state.twitter.accessToken"
       @text-input="updateText"
     ></box>
     <transition name="fade">

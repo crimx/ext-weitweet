@@ -15,8 +15,7 @@
                 :footer="true"
                 :selected="photo.src === $store.state.master.photo ? 'master' :
                   photo.src === $store.state.twitter.photo ? 'twitter' :
-                  photo.src === $store.state.weibo.photo ? 'weibo' :
-                  false"
+                  photo.src === $store.state.weibo.photo ? 'weibo' : ''"
                 @clicked="selectPhoto"
               ></photo>
             </div>
@@ -49,6 +48,7 @@
     name: 'app',
     data () {
       return {
+        isMounted: false,
         masonry: false,
         photos: []
       }
@@ -56,12 +56,43 @@
     methods: {
       selectPhoto (payload) {
         this.$store.commit(types.UPDATE_PHOTO, payload)
+      },
+      createMasonry () {
+        this.masonry = new Masonry('.photo-list', {
+          itemSelector: '.photo-list-item',
+          columnWidth: '.masonry-grid-sizer',
+          gutter: '.masonry-gutter-sizer',
+          percentPosition: true
+        })
+        this.imagesLoaded()
+      },
+      imagesLoaded () {
+        imagesLoaded('.photo-list').on('progress', () => {
+          // layout Masonry after each image loads
+          this.masonry.layout()
+        })
       }
     },
     created () {
+      // get page images
+      chrome.runtime.onMessage.addListener(request => {
+        if (request.msg === 'PHOTOS') {
+          this.photos = request.photos.slice(0, 50)
+          // thrid-party libs need to wait for rendering
+          this.$nextTick(() => {
+            if (this.masonry) {
+              this.imagesLoaded()
+            } else if (this.isMounted) {
+              this.createMasonry()
+            }
+          })
+        }
+      })
+
       // get page title and href
       chrome.runtime.sendMessage({msg: 'REQUEST_SOURCE_TAB'}, response => {
         if (response.tab) {
+          chrome.tabs.sendMessage(response.tab.id, {msg: 'REQUEST_PHOTOS'})
           chrome.tabs.sendMessage(response.tab.id, {
             msg: 'REQUEST_PAGE_INFO'
           }, ({title = '', href = ''}) => {
@@ -73,33 +104,10 @@
       })
     },
     mounted () {
-      // get page images
-      chrome.runtime.onMessage.addListener(request => {
-        if (request.msg === 'PHOTOS') {
-          this.photos = request.photos.slice(0, 50)
-          // thrid-party libs need to wait for rendering
-          this.$nextTick(() => {
-            if (!this.masonry) {
-              this.masonry = new Masonry('.photo-list', {
-                itemSelector: '.photo-list-item',
-                columnWidth: '.masonry-grid-sizer',
-                gutter: '.masonry-gutter-sizer',
-                percentPosition: true
-              })
-            }
-            imagesLoaded('.photo-list').on('progress', () => {
-              // layout Masonry after each image loads
-              this.masonry.layout()
-            })
-          })
-        }
-      })
-
-      chrome.runtime.sendMessage({msg: 'REQUEST_SOURCE_TAB'}, response => {
-        if (response.tab) {
-          chrome.tabs.sendMessage(response.tab.id, {msg: 'REQUEST_PHOTOS'})
-        }
-      })
+      this.isMounted = true
+      if (this.photos.length > 0) {
+        this.createMasonry()
+      }
     },
     components: {
       photo,

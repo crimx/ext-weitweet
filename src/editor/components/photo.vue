@@ -59,14 +59,41 @@ export default {
   /**
    * Props
    *
-   * @property {string} selected - 'weibo', 'twitter' or 'master'. The part that is selected.
-   * @property {string} src - Image src.
-   * @property {string} alt - Image alt.
-   * @property {number} ratio - width/height or falsy for no restriction.
-   * @property {boolean} border - White frame?
-   * @property {boolean} footer - Show footer?
+   * @property {string} props.selected - 'weibo', 'twitter' or 'master'. The part that is selected.
+   * @property {string} props.src - Image src.
+   * @property {string} props.alt - Image alt.
+   * @property {number} props.ratio - width/height or falsy for no restriction.
+   * @property {boolean} props.border - White frame?
+   * @property {boolean} props.footer - Show footer?
    */
-  props: ['selected', 'src', 'alt', 'ratio', 'border', 'footer'],
+  props: {
+    selected: {
+      type: String,
+      default: '',
+      validator (value) {
+        return ['weibo', 'twitter', 'master', ''].indexOf(value) !== -1
+      }
+    },
+    src: {
+      type: String,
+      default: ''
+    },
+    alt: {
+      type: String,
+      default: ''
+    },
+    ratio: {
+      type: Number
+    },
+    border: {
+      type: Boolean,
+      default: false
+    },
+    footer: {
+      type: Boolean,
+      default: false
+    }
+  },
   data () {
     return {
       isWeiboMouseover: false,
