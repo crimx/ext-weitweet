@@ -49,6 +49,7 @@
     name: 'app',
     data () {
       return {
+        masonry: false,
         photos: []
       }
     },
@@ -57,17 +58,47 @@
         this.$store.commit(types.UPDATE_PHOTO, payload)
       }
     },
+    created () {
+      // get page title and href
+      chrome.runtime.sendMessage({msg: 'REQUEST_SOURCE_TAB'}, response => {
+        if (response.tab) {
+          chrome.tabs.sendMessage(response.tab.id, {
+            msg: 'REQUEST_PAGE_INFO'
+          }, ({title = '', href = ''}) => {
+            this.$store.commit(types.UPDATE_MASTER_TEXT, {
+              text: `${title} | ${href}`
+            })
+          })
+        }
+      })
+    },
     mounted () {
-      let msnry = new Masonry('.photo-list', {
-        itemSelector: '.photo-list-item',
-        columnWidth: '.masonry-grid-sizer',
-        gutter: '.masonry-gutter-sizer',
-        percentPosition: true
+      // get page images
+      chrome.runtime.onMessage.addListener(request => {
+        if (request.msg === 'PHOTOS') {
+          this.photos = request.photos.slice(0, 50)
+          // thrid-party libs need to wait for rendering
+          this.$nextTick(() => {
+            if (!this.masonry) {
+              this.masonry = new Masonry('.photo-list', {
+                itemSelector: '.photo-list-item',
+                columnWidth: '.masonry-grid-sizer',
+                gutter: '.masonry-gutter-sizer',
+                percentPosition: true
+              })
+            }
+            imagesLoaded('.photo-list').on('progress', () => {
+              // layout Masonry after each image loads
+              this.masonry.layout()
+            })
+          })
+        }
       })
 
-      imagesLoaded('.photo-list').on('progress', () => {
-        // layout Masonry after each image loads
-        msnry.layout()
+      chrome.runtime.sendMessage({msg: 'REQUEST_SOURCE_TAB'}, response => {
+        if (response.tab) {
+          chrome.tabs.sendMessage(response.tab.id, {msg: 'REQUEST_PHOTOS'})
+        }
       })
     },
     components: {

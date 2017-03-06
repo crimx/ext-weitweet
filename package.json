@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "bootstrap": "4.0.0-alpha.6",
+    "heap": "^0.2.6",
     "imagesloaded": "^4.1.1",
     "masonry-layout": "^4.1.1",
     "tether": "^1.4.0",
