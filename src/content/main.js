@@ -1,7 +1,7 @@
 import Heap from 'heap'
 
-function main () {
-  var heap = new Heap((a, b) => b.width * b.height - a.width * a.height)
+function main (num) {
+  var list = []
   var timeout
 
   function sendResult () {
@@ -9,7 +9,7 @@ function main () {
       msg: 'PHOTOS',
       title: document.title,
       href: window.location.href,
-      photos: heap.toArray()
+      photos: Heap.nlargest(list, num, (a, b) => a.width * a.height - b.width * b.height)
     })
   }
 
@@ -19,8 +19,8 @@ function main () {
       img.onload = function () {
         resolve({
           src: this.src,
-          width: this.width,
-          height: this.height
+          width: this.naturalWidth,
+          height: this.naturalHeight
         })
       }
       img.onerror = (e) => reject(e)
@@ -47,9 +47,9 @@ function main () {
   function entry (doc) {
     gatherImgSrcs(doc).forEach(src => {
       getImgSize(src).then(imgObj => {
-        heap.push(imgObj)
+        list.push(imgObj)
         if (timeout) { clearTimeout(timeout) }
-        timeout = setTimeout(sendResult, 3000)
+        timeout = setTimeout(sendResult, 500)
       }, () => {})
     })
   }
@@ -65,7 +65,7 @@ function main () {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   switch (request.msg) {
-    case 'REQUEST_PHOTOS': return main()
+    case 'REQUEST_PHOTOS': return main(request.num || 80)
     case 'REQUEST_PAGE_INFO': return sendResponse({title: document.title, href: window.location.href})
   }
 })
