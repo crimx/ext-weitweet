@@ -13,6 +13,7 @@ export default {
     photo: '',
     fullname: '',
     username: '',
+    avatar: '',
     accessToken: '',
     isLogingIn: false
   },
@@ -22,6 +23,8 @@ export default {
     photo: '',
     fullname: '',
     username: '',
+    avatar: '',
+    uid: '',
     accessToken: '',
     isLogingIn: false
   }

@@ -73,5 +73,39 @@ export default {
   },
   [types.UPDATE_WEIBO_LOGING_IN] (state, {flag}) {
     state.weibo.isLogingIn = flag
+  },
+
+  [types.UPDATE_TWITTER_TOKEN] (state, {token}) {
+    state.twitter.accessToken = token
+    chrome.storage.local.set({twitter: state.twitter})
+  },
+  [types.UPDATE_WEIBO_TOKEN] (state, {token, uid}) {
+    state.weibo.accessToken = token
+    state.weibo.uid = uid
+    chrome.storage.local.set({weibo: state.weibo})
+  },
+
+  [types.UPDATE_TWITTER_USER_INFO] (state, {fullname, username, avatar}) {
+    state.twitter.fullname = fullname
+    state.twitter.username = username
+    state.twitter.avatar = avatar
+    chrome.storage.local.set({twitter: state.twitter})
+  },
+  [types.UPDATE_WEIBO_USER_INFO] (state, {fullname, username, avatar}) {
+    state.weibo.fullname = fullname
+    state.weibo.username = username
+    state.weibo.avatar = avatar
+    chrome.storage.local.set({weibo: state.weibo})
+  },
+
+  [types.UPDATE_TWITTER_STORAGE] (state, twitterState) {
+    state.twitter = twitterState
+  },
+  [types.UPDATE_WEIBO_STORAGE] (state, {fullname, username, avatar, uid, accessToken}) {
+    state.weibo.fullname = fullname
+    state.weibo.username = username
+    state.weibo.avatar = avatar
+    state.weibo.uid = uid
+    state.weibo.accessToken = accessToken
   }
 }

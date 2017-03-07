@@ -74,6 +74,8 @@
       }
     },
     created () {
+      // get infos from storage
+      this.$store.dispatch(types.UPDATE_STORAGE)
       // get page images
       chrome.runtime.onMessage.addListener(request => {
         if (request.msg === 'PHOTOS') {
