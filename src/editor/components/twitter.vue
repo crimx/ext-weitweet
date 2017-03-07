@@ -5,6 +5,7 @@
       :text="$store.state.twitter.text"
       :src="$store.state.twitter.photo"
       :show-photo="!!$store.state.twitter.accessToken"
+      :disabled="$store.getters.twitterTextCount > $store.state.twitter.textLength"
       @text-input="updateText"
     ></box>
     <transition name="fade">

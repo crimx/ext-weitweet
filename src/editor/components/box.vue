@@ -9,9 +9,9 @@
         slot="source"
         @click.capture.stop="isRequestAccountChanging = !isRequestAccountChanging"
       >
-        <img class="box-header-avatar" :src="$store.state[type].accessToken ? $store.state[type].avatar : ''">
-        <p class="box-header-fullname">{{ $store.state[type].accessToken ? $store.state[type].fullname : $store.getters[`author_${type}_fullname`]}}</p>
-        <small class="box-header-username">@{{ $store.state[type].accessToken ? $store.state[type].username : $store.getters[`author_${type}_username`] }}</small>
+        <img class="box-header-avatar" :src="$store.state[type].avatar">
+        <p class="box-header-fullname">{{ $store.state[type].fullname || $store.getters[`author_${type}_fullname`]}}</p>
+        <small class="box-header-username">@{{ $store.state[type].username || $store.getters[`author_${type}_username`] }}</small>
       </div>
       <div class="box-header-popover"
         slot="content"
@@ -30,8 +30,8 @@
     >
       <div v-if="type !== 'master'" class="text-count">
         <h1
-          :style="{color: textCount > $store.state[type].textLength ? '#c0392b' : ''}"
-        >{{ showTextCount }}</h1>
+          :style="{color: textCount < 0 ? '#c0392b' : ''}"
+        >{{ textCount }}</h1>
       </div>
       <textarea class="box-content form-control"
         :value="text"
@@ -197,23 +197,12 @@ export default {
   },
   computed: {
     textCount () {
-      let text = this.text
-      let len = 0
-      for (let i = 0; i < text.length; i += 1) {
-        if (text.charCodeAt(i) > 0 && text.charCodeAt(i) < 128) {
-          len += 1
-        } else {
-          len += 2
-        }
-      }
-      return len
-    },
-    showTextCount () {
       let textLength = this.$store.state[this.type].textLength
-      if (this.textCount > textLength) {
-        return textLength - this.textCount
+      let textCount = this.$store.getters[`${this.type}TextCount`]
+      if (textCount > textLength) {
+        return textLength - textCount
       } else {
-        return this.textCount > 0 ? this.textCount : ''
+        return textCount > 0 ? textCount : ''
       }
     }
   }

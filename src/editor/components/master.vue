@@ -5,7 +5,7 @@
       :text="$store.state.master.text"
       :src="$store.state.master.photo"
       :show-photo="!$store.state.master.isRequestingSlavery"
-      :disabled="!$store.state.master.isSlavery"
+      :disabled="disabled"
       @text-input="updateText"
     ></box>
     <transition name="fade">
@@ -54,6 +54,13 @@ export default {
       inserted: function (el) {
         el.focus()
       }
+    }
+  },
+  computed: {
+    disabled () {
+      return !this.$store.state.master.isSlavery ||
+        this.$store.getters.twitterTextCount > this.$store.state.twitter.textLength ||
+        this.$store.getters.weiboTextCount > this.$store.state.weibo.textLength
     }
   }
 }

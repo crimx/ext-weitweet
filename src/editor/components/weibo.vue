@@ -20,6 +20,7 @@
       :text="$store.state.weibo.text"
       :src="$store.state.weibo.photo"
       :show-photo="!!$store.state.weibo.accessToken"
+      :disabled="$store.getters.weiboTextCount > $store.state.weibo.textLength"
       @text-input="updateText"
     ></box>
   </div>
