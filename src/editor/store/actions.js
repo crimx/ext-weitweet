@@ -52,11 +52,11 @@ export default {
   [types.POST_WEIBO] ({commit, state, dispatch}) {
     let token = state.weibo.accessToken
     let text = state.weibo.text
-    let src = state.weibo.photo
+    let photo = state.weibo.photo
     if (token && text) {
       commit(types.UPDATE_WEIBO_BOX_STATE, {type: 'loading'})
-      if (src) {
-        accounts.weibo.postWithImage({token, text, src})
+      if (photo.src) {
+        accounts.weibo.postWithImage({token, text, photo})
         .then(() => {
           timeoutBoxStateSuccess(commit, 'weibo')
         }, (error) => {

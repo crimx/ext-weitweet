@@ -3,7 +3,6 @@
     <box
       type="twitter"
       :text="$store.state.twitter.text"
-      :src="$store.state.twitter.photo"
       :show-photo="!!$store.state.twitter.accessToken && !$store.state.twitter.boxState"
       :disabled="$store.getters.twitterTextCount > $store.state.twitter.textLength"
       @text-input="updateText"

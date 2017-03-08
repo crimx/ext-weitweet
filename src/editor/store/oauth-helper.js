@@ -200,9 +200,9 @@ export const weibo = {
       .catch(reject)
     })
   },
-  postWithImage ({token, text, src}) {
+  postWithImage ({token, text, photo}) {
     return new Promise((resolve, reject) => {
-      fetch(src)
+      fetch(photo.src)
         .then(res => res.blob(), reject)
         .then(imgBlob => {
           var formData = new FormData()

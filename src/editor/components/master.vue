@@ -3,7 +3,6 @@
     <box
       type="master"
       :text="$store.state.master.text"
-      :src="$store.state.master.photo"
       :show-photo="!$store.state.master.isRequestingSlavery"
       :disabled="disabled"
       @text-input="updateText"

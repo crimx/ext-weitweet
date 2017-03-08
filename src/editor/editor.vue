@@ -11,11 +11,11 @@
               v-for="photo in photos"
             >
               <photo
-                :src="photo.src"
+                :image="photo"
                 :footer="true"
-                :selected="photo.src === $store.state.master.photo ? 'master' :
-                  photo.src === $store.state.twitter.photo ? 'twitter' :
-                  photo.src === $store.state.weibo.photo ? 'weibo' : ''"
+                :selected="photo.src === $store.state.master.photo.src ? 'master' :
+                  photo.src === $store.state.twitter.photo.src ? 'twitter' :
+                  photo.src === $store.state.weibo.photo.src ? 'weibo' : ''"
                 @clicked="selectPhoto"
               ></photo>
             </div>

@@ -23,36 +23,73 @@ export default {
       state.master.isSlavery = false
     }
   },
-  [types.UPDATE_PHOTO] (state, {type, src}) {
+//                    +-+ selected  +-------+ master.src != src
+//                    |   [deselect all]      [select all]
+//                    |
+//       +-+ master +-+
+//       |            |
+//       |            +-+ unselected
+//       |                [select all]
+//       |
+//       |
+//       |
+// src +-+                                          +-+ sla^e.src.bak == src  +--------+!deselect mode
+//       |                                          |   slave.src.bak == another.src    [deselect another]
+//       |                                          |   [deselect master]               [select self]
+//       |                      +-+ selected     ---+
+//       |                      |  [deselect self]  |
+//       |                      |                   |
+//       |                      |                   |
+//       +-+ slave +-------------------             +-+ slave.src.bak != src +--+ src == another.src
+//           [deselect master]  |                       [select self]         [select master]
+
+//                              +-+ unselected +--------+ src == another.src
+//                                  [select self]         [select master]
+  [types.UPDATE_PHOTO] (state, {type, photo, deselect}) {
+    const master = state.master
+    const twitter = state.twitter
+    const weibo = state.weibo
     if (type === 'master') {
-      if (state.master.photo === src) {
-        // already selected, now cancel it
-        state.master.photo = ''
-        state.twitter.photo = ''
-        state.weibo.photo = ''
-      } else {
-        state.master.photo = src
-        state.twitter.photo = src
-        state.weibo.photo = src
-      }
-    } else if (type === 'twitter') {
-      state.master.photo = ''
-      if (state.twitter.photo === src) {
-        state.twitter.photo = ''
-      } else {
-        state.twitter.photo = src
-        if (state.weibo.photo === src) {
-          state.master.photo = src
+      if (master.photo.src) {
+        if (master.photo.src !== photo.src) {
+          master.photo = twitter.photo = weibo.photo = photo
+        } else {
+          master.photo = twitter.photo = weibo.photo = {}
         }
-      }
-    } else if (type === 'weibo') {
-      state.master.photo = ''
-      if (state.weibo.photo === src) {
-        state.weibo.photo = ''
       } else {
-        state.weibo.photo = src
-        if (state.twitter.photo === src) {
-          state.master.photo = src
+        master.photo = twitter.photo = weibo.photo = photo
+      }
+    } else {
+      master.photo = {}
+      let slave1, slave2
+      if (type === 'twitter') {
+        slave1 = twitter
+        slave2 = weibo
+      } else {
+        slave1 = weibo
+        slave2 = twitter
+      }
+      if (slave1.photo.src) {
+        let slave1src = slave1.photo.src
+        slave1.photo = {}
+        if (slave1src === photo.src) {
+          if (slave1src === slave2.photo.src) {
+            master.photo = {}
+            if (!deselect) {
+              slave2.photo = {}
+              slave1.photo = photo
+            }
+          }
+        } else {
+          slave1.photo = photo
+          if (photo.src === slave2.photo.src) {
+            master.photo = photo
+          }
+        }
+      } else {
+        slave1.photo = photo
+        if (photo.src === slave2.photo.src) {
+          master.photo = photo
         }
       }
     }

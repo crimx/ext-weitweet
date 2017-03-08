@@ -15,7 +15,7 @@
         </svg>
       </div>
       <div class="photo-wrap" :style="stylePhotoWrap">
-        <img :src="src" :alt="alt" :style="styleImg">
+        <img :src="image.src" :alt="alt" :style="styleImg">
       </div>
       <div class="photo-footer" v-if="footer">
         <div class="footer-weibo"
@@ -60,7 +60,7 @@ export default {
    * Props
    *
    * @property {string} props.selected - 'weibo', 'twitter' or 'master'. The part that is selected.
-   * @property {string} props.src - Image src.
+   * @property {Object} props.image - Image.
    * @property {string} props.alt - Image alt.
    * @property {number} props.ratio - width/height or falsy for no restriction.
    * @property {boolean} props.border - White frame?
@@ -74,9 +74,11 @@ export default {
         return ['weibo', 'twitter', 'master', ''].indexOf(value) !== -1
       }
     },
-    src: {
-      type: String,
-      default: ''
+    image: {
+      type: Object,
+      default: {
+        src: ''
+      }
     },
     alt: {
       type: String,
@@ -111,15 +113,15 @@ export default {
        * @event Photo#clicked
        * @type {object}
        * @property {string} type - 'weibo', 'twitter' or 'master'
-       * @property {string} src - image src
+       * @property {string} photo - image
        */
       this.$emit('clicked', {
         type,
-        src: this.src
+        photo: this.image
       })
     },
     clickViewFull () {
-      window.open(this.src, '_blank')
+      window.open(this.image.src, '_blank')
     }
   },
   computed: {

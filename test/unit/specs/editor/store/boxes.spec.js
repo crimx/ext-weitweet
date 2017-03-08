@@ -19,7 +19,7 @@ var store = new Vuex.Store({
   strict: true
 })
 
-describe('Vue component: Boxes', function () {
+describe('Boxes data', function () {
   describe('Text contents in boxes', function () {
     describe('For a master box with two slave boxes', function () {
       it('should control text contents of the slave boxes by default', function () {

@@ -97,7 +97,7 @@
         v-if="src && showPhoto"
         @click="cancelImageSelection"
       >
-        <photo :src="src || ''" :border="true" :ratio="1.34"></photo>
+        <photo :image="this.$store.state[this.type].photo" :border="true" :ratio="1.34"></photo>
       </div>
     </transition>
     <transition name="fade">
@@ -154,16 +154,12 @@ export default {
    * Props
    *
    * @property {string} props.text - Input text.
-   * @property {string} props.src - Selected image src.
    * @property {string} props.type - 'weibo', 'twitter' or 'master'.
    * @property {boolean} props.disabled - disable the box.
    * @property {boolean} props.showPhoto - show the photo.
    */
   props: {
     text: {
-      type: String
-    },
-    src: {
       type: String
     },
     type: {
@@ -211,7 +207,8 @@ export default {
     cancelImageSelection () {
       this.$store.commit(types.UPDATE_PHOTO, {
         type: this.type,
-        src: this.src
+        photo: this.$store.state[this.type].photo,
+        deselect: true
       })
     },
     handleLogin () {
@@ -243,6 +240,9 @@ export default {
     }
   },
   computed: {
+    src () {
+      return this.$store.state[this.type].photo.src
+    },
     textCount () {
       let textLength = this.$store.state[this.type].textLength
       let textCount = this.$store.getters[`${this.type}TextCount`]
@@ -264,7 +264,7 @@ export default {
           return eMsg.error
         }
         if (eMsg.status) {
-          return `Response Status: ${eMsg.status}`
+          return `HTTP Response Status: ${eMsg.status}`
         }
       }
       try {

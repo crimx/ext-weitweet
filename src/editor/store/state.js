@@ -2,7 +2,7 @@ export default {
   master: {
     text: '',
     // selected photo
-    photo: '',
+    photo: {},
     // slave boxes being controlled
     isSlavery: true,
     isRequestingSlavery: false
@@ -10,7 +10,7 @@ export default {
   twitter: {
     text: '',
     textLength: 140,
-    photo: '',
+    photo: {},
     fullname: '',
     username: '',
     avatar: '',
@@ -22,7 +22,7 @@ export default {
   weibo: {
     text: '',
     textLength: 140,
-    photo: '',
+    photo: {},
     fullname: '',
     username: '',
     avatar: '',
