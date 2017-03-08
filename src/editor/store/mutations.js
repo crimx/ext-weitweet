@@ -68,10 +68,18 @@ export default {
     }
   },
 
-  [types.UPDATE_TWITTER_BOX_STATE] (state, {type}) {
+  [types.UPDATE_TWITTER_BOX_STATE] (state, {type, error}) {
+    state.twitter.errMsg = null
+    if (type === 'error' && error) {
+      state.twitter.errMsg = error
+    }
     state.twitter.boxState = type
   },
-  [types.UPDATE_WEIBO_BOX_STATE] (state, {type}) {
+  [types.UPDATE_WEIBO_BOX_STATE] (state, {type, error}) {
+    state.weibo.errMsg = null
+    if (type === 'error' && error) {
+      state.weibo.errMsg = error
+    }
     state.weibo.boxState = type
   },
 

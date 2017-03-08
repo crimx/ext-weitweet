@@ -83,3 +83,17 @@ export const UPDATE_STORAGE = 'UPDATE_STORAGE'
  */
 export const LOG_IN_TWITTER = 'LOG_IN_TWITTER'
 export const LOG_IN_WEIBO = 'LOG_IN_WEIBO'
+
+/**
+ * Check asscess token.
+ * @type Actions
+ */
+export const CHECK_TOKEN = 'CHECK_TOKEN'
+
+/**
+ * Post
+ * @type Actions
+ */
+export const POST_WEIBO = 'POST_WEIBO'
+export const POST_TWITTER = 'POST_TWITTER'
+export const POST_MASTER = 'POST_MASTER'

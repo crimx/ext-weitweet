@@ -44,5 +44,45 @@ export default {
         }
       }, () => commit(types.UPDATE_WEIBO_TOKEN, {token: ''}))
     }
+  },
+
+  [types.POST_WEIBO] ({commit, state}) {
+  },
+
+  [types.POST_WEIBO] ({commit, state, dispatch}) {
+    let token = state.weibo.accessToken
+    let text = state.weibo.text
+    let src = state.weibo.photo
+    if (token && text) {
+      commit(types.UPDATE_WEIBO_BOX_STATE, {type: 'loading'})
+      if (src) {
+        accounts.weibo.postWithImage({token, text, src})
+        .then(() => {
+          timeoutBoxStateSuccess(commit, 'weibo')
+        }, (error) => {
+          commit(types[`UPDATE_WEIBO_BOX_STATE`], {type: 'error', error})
+        })
+      } else {
+        accounts.weibo.post({token, text})
+        .then(() => {
+          timeoutBoxStateSuccess(commit, 'weibo')
+        }, (error) => {
+          commit(types[`UPDATE_WEIBO_BOX_STATE`], {type: 'error', error})
+        })
+      }
+    }
+  },
+
+  [types.POST_MASTER] ({dispatch}) {
+    dispatch(types.POST_TWITTER)
+    dispatch(types.POST_WEIBO)
   }
+}
+
+function timeoutBoxStateSuccess (commit, type) {
+  type = type.toUpperCase()
+  commit(types[`UPDATE_${type}_BOX_STATE`], {type: 'success'})
+  setTimeout(() => {
+    commit(types[`UPDATE_${type}_BOX_STATE`], {type: ''})
+  }, 1700)
 }
