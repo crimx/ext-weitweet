@@ -4,7 +4,7 @@
       type="weibo"
       :text="$store.state.weibo.text"
       :src="$store.state.weibo.photo"
-      :show-photo="!!$store.state.weibo.accessToken"
+      :show-photo="!!$store.state.weibo.accessToken && !$store.state.weibo.boxState"
       :disabled="$store.getters.weiboTextCount > $store.state.weibo.textLength"
       @text-input="updateText"
     ></box>

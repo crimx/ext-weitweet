@@ -107,12 +107,33 @@
       >
         <transition name="fade" mode="out-in">
           <button class="btn btn-success"
+            key="login"
             v-if="!$store.state[type].accessToken && !$store.state[type].boxState"
             @click="handleLogin"
           >{{ $store.getters[`login_${type}`] }}</button>
           <loader width="20%" fill="#fff"
+            key="loading"
             v-if="$store.state[type].boxState === 'loading'"
           />
+          <svg width="90" height="90" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg"
+            key="success"
+            v-else-if="$store.state[type].boxState === 'success'"
+          >
+            <polyline class="icon-stroke" points="10,30 30,50 60,10" />
+          </svg>
+          <div class="error-panel"
+            key='error'
+            v-else-if="$store.state[type].boxState === 'error'"
+            @click.capture.stop="handleErrorPanelClick"
+          >
+            <p>
+              <svg width="90" height="90" viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+                <polyline class="icon-stroke" points="10,10 60,60" />
+                <polyline class="icon-stroke" points="10,60 60,10" />
+              </svg>
+            </p>
+            <p>{{ errorMsg }}</p>
+          </div>
         </transition>
       </div>
     </transition>
@@ -125,6 +146,7 @@ import * as types from 'src/editor/store/types'
 import Photo from './photo'
 import Loader from './loader'
 import urlRegex from 'url-regex'
+import * as oauthAccounts from '../store/oauth-helper'
 
 export default {
   name: 'box',
@@ -215,6 +237,9 @@ export default {
         this.isUrlInputShake = true
         setTimeout(() => { this.isUrlInputShake = false }, 400)
       }
+    },
+    handleErrorPanelClick () {
+      this.$store.commit(types[`UPDATE_${this.type.toUpperCase()}_BOX_STATE`], {type: ''})
     }
   },
   computed: {
@@ -225,6 +250,27 @@ export default {
         return textLength - textCount
       } else {
         return textCount > 0 ? textCount : ''
+      }
+    },
+    errorMsg () {
+      let eMsg = this.$store.state[this.type].errMsg
+      let accountMsg = oauthAccounts[this.type].errMsg
+      if (eMsg) {
+        let code = eMsg.error_code
+        if (code && accountMsg[code]) {
+          return accountMsg[code]
+        }
+        if (eMsg.error) {
+          return eMsg.error
+        }
+        if (eMsg.status) {
+          return `Response Status: ${eMsg.status}`
+        }
+      }
+      try {
+        return JSON.stringify(eMsg)
+      } catch (e) {
+        return ''
       }
     }
   }
@@ -375,6 +421,7 @@ $color-mixed: rgb(142, 68, 173);
 
 .login-panel {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-content: center;
   align-items: center;
@@ -394,6 +441,22 @@ $color-mixed: rgb(142, 68, 173);
 
 .login-panel-weibo {
   background-color: rgba(253, 19, 44, 0.9);
+}
+
+// For click and hide
+.error-panel {
+  @extend .login-panel;
+  color: #fff;
+}
+
+.icon-stroke {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 80;
+  animation: iconStrokeAnimation 0.7s ease-in 1;
 }
 
 
@@ -430,5 +493,10 @@ $color-mixed: rgb(142, 68, 173);
 }
 .fade-enter, .fade-leave-active {
   opacity: 0
+}
+
+@keyframes iconStrokeAnimation {
+  from { stroke-dashoffset: 80; }
+  to { stroke-dashoffset: 0; }
 }
 </style>

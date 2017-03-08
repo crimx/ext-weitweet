@@ -16,7 +16,8 @@ export default {
     avatar: '',
     accessToken: '',
     // success, error, loading
-    boxState: ''
+    boxState: '',
+    errMsg: null
   },
   weibo: {
     text: '',
@@ -28,6 +29,7 @@ export default {
     uid: '',
     accessToken: '',
     // success, error, loading
-    boxState: ''
+    boxState: '',
+    errMsg: null
   }
 }
