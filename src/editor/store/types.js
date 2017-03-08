@@ -38,12 +38,12 @@ export const UPDATE_PHOTO = 'UPDATE_PHOTO'
 export const REQUEST_SLAVERY_FINISH = 'REQUEST_SLAVERY_FINISH'
 
 /**
- * Update isLogingIn
+ * Update box state
  * @type Mutations
- * @param {boolean} payload.flag - true or false
+ * @param {string} payload.type - 'success', 'error', 'loading'
  */
-export const UPDATE_TWITTER_LOGING_IN = 'UPDATE_TWITTER_LOGING_IN'
-export const UPDATE_WEIBO_LOGING_IN = 'UPDATE_WEIBO_LOGING_IN'
+export const UPDATE_TWITTER_BOX_STATE = 'UPDATE_TWITTER_BOX_STATE'
+export const UPDATE_WEIBO_BOX_STATE = 'UPDATE_WEIBO_BOX_STATE'
 
 /**
  * Update user account info
@@ -83,10 +83,3 @@ export const UPDATE_STORAGE = 'UPDATE_STORAGE'
  */
 export const LOG_IN_TWITTER = 'LOG_IN_TWITTER'
 export const LOG_IN_WEIBO = 'LOG_IN_WEIBO'
-
-/**
- * Check asscess token.
- * @type Actions
- */
-
-export const CHECK_TOKEN = 'CHECK_TOKEN'

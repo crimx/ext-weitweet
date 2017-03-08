@@ -100,6 +100,22 @@
         <photo :src="src || ''" :border="true" :ratio="1.34"></photo>
       </div>
     </transition>
+    <transition name="fade">
+      <div class="login-panel"
+        :class="[`login-panel-${type}`]"
+        v-if="type !== 'master' && (!$store.state[type].accessToken || $store.state[type].boxState)"
+      >
+        <transition name="fade" mode="out-in">
+          <button class="btn btn-success"
+            v-if="!$store.state[type].accessToken && !$store.state[type].boxState"
+            @click="handleLogin"
+          >{{ $store.getters[`login_${type}`] }}</button>
+          <loader width="20%" fill="#fff"
+            v-if="$store.state[type].boxState === 'loading'"
+          />
+        </transition>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -107,6 +123,7 @@
 import Popover from './popover'
 import * as types from 'src/editor/store/types'
 import Photo from './photo'
+import Loader from './loader'
 import urlRegex from 'url-regex'
 
 export default {
@@ -152,6 +169,7 @@ export default {
     }
   },
   components: {
+    loader: Loader,
     popover: Popover,
     photo: Photo
   },
@@ -166,12 +184,16 @@ export default {
     },
     btnClickedSubmit () {
       if (this.disabled) { return }
+      this.$store.dispatch(types[`POST_${this.type.toUpperCase()}`])
     },
     cancelImageSelection () {
       this.$store.commit(types.UPDATE_PHOTO, {
         type: this.type,
         src: this.src
       })
+    },
+    handleLogin () {
+      this.$store.dispatch(types[`LOG_IN_${this.type.toUpperCase()}`])
     },
     handleFileUpload (evt) {
       if (evt.target.files.length <= 0) { return }
@@ -299,7 +321,7 @@ $color-mixed: rgb(142, 68, 173);
   border-color: $color-weibo;
 
   &:hover {
-    background-color: lighten($color-weibo, 10%);
+    background-color: darken($color-weibo, 5%);
   }
 }
 
@@ -308,7 +330,7 @@ $color-mixed: rgb(142, 68, 173);
   border-color: $color-twitter;
 
   &:hover {
-    background-color: lighten($color-twitter, 10%);
+    background-color: darken($color-twitter, 5%);
   }
 }
 
@@ -317,7 +339,7 @@ $color-mixed: rgb(142, 68, 173);
   border-color: $color-mixed;
 
   &:hover {
-    background-color: lighten($color-mixed, 10%);
+    background-color: darken($color-mixed, 5%);
   }
 }
 
@@ -351,6 +373,30 @@ $color-mixed: rgb(142, 68, 173);
   }
 }
 
+.login-panel {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+  position: absolute;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  border-radius: 0.25rem;
+}
+
+.login-panel-twitter {
+  background-color: rgba(29, 161, 242, 0.9);
+}
+
+.login-panel-weibo {
+  background-color: rgba(253, 19, 44, 0.9);
+}
+
+
 /*------------------------------------*\
    States
 \*------------------------------------*/
@@ -377,5 +423,12 @@ $color-mixed: rgb(142, 68, 173);
 .animation-photo-leave-active {
   opacity: 0;
   transform: scale(0.5);
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .4s
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
 }
 </style>

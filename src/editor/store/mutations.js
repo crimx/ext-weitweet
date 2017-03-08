@@ -68,11 +68,11 @@ export default {
     }
   },
 
-  [types.UPDATE_TWITTER_LOGING_IN] (state, {flag}) {
-    state.twitter.isLogingIn = flag
+  [types.UPDATE_TWITTER_BOX_STATE] (state, {type}) {
+    state.twitter.boxState = type
   },
-  [types.UPDATE_WEIBO_LOGING_IN] (state, {flag}) {
-    state.weibo.isLogingIn = flag
+  [types.UPDATE_WEIBO_BOX_STATE] (state, {type}) {
+    state.weibo.boxState = type
   },
 
   [types.UPDATE_TWITTER_TOKEN] (state, {token}) {

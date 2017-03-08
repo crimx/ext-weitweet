@@ -15,17 +15,19 @@ export default {
     username: '',
     avatar: '',
     accessToken: '',
-    isLogingIn: false
+    // success, error, loading
+    boxState: ''
   },
   weibo: {
     text: '',
-    textLength: 2000,
+    textLength: 140,
     photo: '',
     fullname: '',
     username: '',
     avatar: '',
     uid: '',
     accessToken: '',
-    isLogingIn: false
+    // success, error, loading
+    boxState: ''
   }
 }

@@ -3,11 +3,11 @@ import * as accounts from './oauth-helper'
 
 export default {
   [types.LOG_IN_TWITTER] ({commit, state}) {
-    commit(types.UPDATE_TWITTER_LOGING_IN, {flag: true})
+    commit(types.UPDATE_TWITTER_BOX_STATE, {type: 'loading'})
   },
 
   [types.LOG_IN_WEIBO] ({commit, state}) {
-    commit(types.UPDATE_WEIBO_LOGING_IN, {flag: true})
+    commit(types.UPDATE_WEIBO_BOX_STATE, {type: 'loading'})
     accounts.weibo.getAccessToken()
     .then(data => {
       commit(types.UPDATE_WEIBO_TOKEN, data)
@@ -23,7 +23,7 @@ export default {
     }, endLoading)
 
     function endLoading () {
-      commit(types.UPDATE_WEIBO_LOGING_IN, {flag: false})
+      commit(types.UPDATE_WEIBO_BOX_STATE, {type: ''})
     }
   },
 
