@@ -33,16 +33,16 @@ export default {
 //       |
 //       |
 //       |
-// src +-+                                          +-+ sla^e.src.bak == src  +--------+!deselect mode
+// src +-+                                          +-+ slave.src.bak == src  +--------+!deselect mode
 //       |                                          |   slave.src.bak == another.src    [deselect another]
 //       |                                          |   [deselect master]               [select self]
-//       |                      +-+ selected     ---+
+//       |                      +-+ selected +------+
 //       |                      |  [deselect self]  |
 //       |                      |                   |
 //       |                      |                   |
-//       +-+ slave +-------------------             +-+ slave.src.bak != src +--+ src == another.src
+//       +-+ slave +------------+                   +-+ slave.src.bak != src +--+ src == another.src
 //           [deselect master]  |                       [select self]         [select master]
-
+//                              |
 //                              +-+ unselected +--------+ src == another.src
 //                                  [select self]         [select master]
   [types.UPDATE_PHOTO] (state, {type, photo, deselect}) {
