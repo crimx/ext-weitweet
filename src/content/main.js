@@ -55,12 +55,16 @@ function main (num) {
   }
 
   entry(document)
+  loopIframes(document)
 
-  // search images in all iframes
-  document.querySelectorAll('iframe')
-    .forEach(el => {
-      entry(el.contentDocument || el.contentWindow.document)
-    })
+  function loopIframes (doc) {
+    // search images in all iframes
+    doc.querySelectorAll('iframe')
+      .forEach(el => {
+        entry(el.contentDocument || el.contentWindow.document)
+        loopIframes(doc)
+      })
+  }
 }
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
