@@ -85,6 +85,7 @@ export default {
 }
 
 .popover {
+  z-index: 99999;
   max-width: none;
 }
 
