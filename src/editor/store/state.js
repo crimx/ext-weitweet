@@ -15,6 +15,7 @@ export default {
     username: '',
     avatar: '',
     accessToken: '',
+    accessSecret: '',
     // success, error, loading
     boxState: '',
     errMsg: null

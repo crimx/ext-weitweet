@@ -1,14 +1,66 @@
 import url from 'url'
 import querystring from 'querystring'
 import clients from './oauth-client'
+import Codebird from 'codebird'
 
 const REDIRECT_URI = `https://${chrome.runtime.id}.chromiumapp.org/provider_cb`
 
+const twitterOauth = new Codebird()
+twitterOauth.setConsumerKey(clients.twitter.id, clients.twitter.secret)
+twitterOauth.setUseProxy(false)
+
 export const twitter = {
   client: clients.twitter,
-  authorize: '',
+  codebird: twitterOauth,
+  getAuthorizeUrl () {
+    return new Promise((resolve, reject) => {
+      twitterOauth.__call('oauth_requestToken', {oauth_callback: 'oob'}, function (reply, rate, err) {
+        if (err) { return reject({error: 'Request token error.'}) }
+        if (reply) {
+          twitterOauth.setToken(reply.oauth_token, reply.oauth_token_secret)
+          twitterOauth.__call('oauth_authorize', {}, function (authUrl) {
+            if (authUrl) {
+              resolve(authUrl)
+            } else {
+              reject({error: 'Authorize url error.'})
+            }
+          })
+        }
+      })
+    })
+  },
+  getAccessToken (pin) {
+    return new Promise((resolve, reject) => {
+      twitterOauth.__call('oauth_accessToken', {oauth_verifier: pin}, function (reply, rate, err) {
+        if (err) { return reject({error: 'Request access token error.'}) }
+        if (reply) {
+          twitterOauth.setToken(reply.oauth_token, reply.oauth_token_secret)
+          return resolve({
+            token: reply.oauth_token,
+            secret: reply.oauth_token_secret,
+            uid: reply.user_id
+          })
+        }
+        reject({error: 'Request access token error.'})
+      })
+    })
+  },
   tokenInfo: '',
-  accessToken: 'https://api.twitter.com/oauth/access_token'
+  getUserInfo () {
+    return new Promise((resolve, reject) => {
+      twitterOauth.__call('account_verifyCredentials', {}, function (reply, rate, err) {
+        if (err) { return reject({error: 'Request verify credentials error.'}) }
+        if (reply) {
+          return resolve({
+            fullname: reply.name,
+            username: reply.screen_name,
+            avatar: reply.profile_image_url_https
+          })
+        }
+        reject({error: 'Request verify credentials error.'})
+      })
+    })
+  }
 }
 
 export const weibo = {
@@ -36,9 +88,11 @@ export const weibo = {
         }),
         interactive: true
       }, responseUrl => {
-        let query = url.parse(responseUrl, true).query
-        if (query.state === state && query.code) {
-          return resolve(query.code)
+        if (typeof responseUrl === 'string') {
+          let query = url.parse(responseUrl, true).query
+          if (query.state === state && query.code) {
+            return resolve(query.code)
+          }
         }
         reject(responseUrl)
       })
@@ -81,6 +135,7 @@ export const weibo = {
         }, reject)
         .catch(reject)
       })
+      .catch(reject)
     })
   },
    /**
@@ -511,7 +566,7 @@ export const weibo = {
     '21964': '地理信息接口查询半径超出范围',
     '21965': '地理信息接口位置ID非法',
     '21966': '地理信息接口缺少参数coordinates',
-    '21971': '地理信息接口中心坐标超出范围',
+    '21971': '地理信息接口中心坐标超出范围'
   }
 }
 

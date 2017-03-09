@@ -134,6 +134,32 @@
             </p>
             <p>{{ errorMsg }}</p>
           </div>
+          <div class="modal-dialog" role="document"
+            key='pin'
+            v-else-if="$store.state[type].boxState === 'pin'"
+          >
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">{{ $store.getters.pin_panel_title }}</h5>
+              </div>
+              <div class="modal-body">
+                <input type="number" class="form-control" size="30"
+                  ref="pininput"
+                  :placeholder="$store.getters.pin_input"
+                  v-focus
+                  @keyup.enter="handlePinPanelConfirm"
+                >
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default"
+                  @click="handlePinPanelCancel"
+                >{{ $store.getters.cancel }}</button>
+                <button type="button" class="btn btn-primary"
+                  @click="handlePinPanelConfirm"
+                >{{ $store.getters.confirm }}</button>
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
         </transition>
       </div>
     </transition>
@@ -198,7 +224,7 @@ export default {
       // clean asscess token
       this.$store.commit(types[`UPDATE_${this.type.toUpperCase()}_TOKEN`], {token: ''})
       // request a new one
-      this.$store.dispatch(types[`LOG_IN_${this.type.toUpperCase()}`])
+      // this.$store.dispatch(types[`LOG_IN_${this.type.toUpperCase()}`])
     },
     btnClickedSubmit () {
       if (this.disabled) { return }
@@ -223,12 +249,22 @@ export default {
       // so that change event fires every time
       evt.target.value = ''
 
-      this.$store.commit(types.UPDATE_PHOTO, {type: this.type, src: URL.createObjectURL(file)})
+      this.$store.commit(types.UPDATE_PHOTO, {
+        type: this.type,
+        photo: {
+          src: URL.createObjectURL(file)
+        }
+      })
       this.isUploadPanelShow = false
     },
     handleFileLink (evt) {
       if (urlRegex().test(evt.target.value)) {
-        this.$store.commit(types.UPDATE_PHOTO, {type: this.type, src: evt.target.value})
+        this.$store.commit(types.UPDATE_PHOTO, {
+          type: this.type,
+          photo: {
+            src: evt.target.value
+          }
+        })
         this.isUploadPanelShow = false
       } else {
         this.isUrlInputShake = true
@@ -237,6 +273,21 @@ export default {
     },
     handleErrorPanelClick () {
       this.$store.commit(types[`UPDATE_${this.type.toUpperCase()}_BOX_STATE`], {type: ''})
+      this.$store.commit(types[`CHECK_${this.type.toUpperCase()}_TOKEN`])
+    },
+    handlePinPanelConfirm () {
+      this.$store.commit(types[`UPDATE_${this.type.toUpperCase()}_BOX_STATE`], {type: 'loading'})
+      this.$store.dispatch(types[`${this.type.toUpperCase()}_PIN`], {pin: this.$refs.pininput.value})
+    },
+    handlePinPanelCancel () {
+      this.$store.commit(types[`UPDATE_${this.type.toUpperCase()}_BOX_STATE`], {type: ''})
+    }
+  },
+  directives: {
+    focus: {
+      inserted: function (el) {
+        el.focus()
+      }
     }
   },
   computed: {

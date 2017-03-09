@@ -120,8 +120,10 @@ export default {
     state.weibo.boxState = type
   },
 
-  [types.UPDATE_TWITTER_TOKEN] (state, {token}) {
+  [types.UPDATE_TWITTER_TOKEN] (state, {token, secret, uid}) {
     state.twitter.accessToken = token
+    state.twitter.accessSecret = secret
+    state.twitter.uid = uid
     chrome.storage.local.set({twitter: state.twitter})
   },
   [types.UPDATE_WEIBO_TOKEN] (state, {token, uid}) {
@@ -143,8 +145,13 @@ export default {
     chrome.storage.local.set({weibo: state.weibo})
   },
 
-  [types.UPDATE_TWITTER_STORAGE] (state, twitterState) {
-    state.twitter = twitterState
+  [types.UPDATE_TWITTER_STORAGE] (state, {fullname, username, avatar, uid, accessToken, accessSecret}) {
+    state.twitter.fullname = fullname
+    state.twitter.username = username
+    state.twitter.avatar = avatar
+    state.twitter.uid = uid
+    state.twitter.accessToken = accessToken
+    state.twitter.accessSecret = accessSecret
   },
   [types.UPDATE_WEIBO_STORAGE] (state, {fullname, username, avatar, uid, accessToken}) {
     state.weibo.fullname = fullname

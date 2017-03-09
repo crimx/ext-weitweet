@@ -56,12 +56,20 @@ export const UPDATE_TWITTER_USER_INFO = 'UPDATE_TWITTER_USER_INFO'
 export const UPDATE_WEIBO_USER_INFO = 'UPDATE_WEIBO_USER_INFO'
 
 /**
- * Update oauth access token
+ * Update twitter access token
+ * @type Mutations
+ * @param {string} payload.token - The access token
+ * @param {string} payload.secret - The access secret
+ * @param {string} payload.uid - User ID
+ */
+export const UPDATE_TWITTER_TOKEN = 'UPDATE_TWITTER_TOKEN'
+
+/**
+ * Update weibo access token
  * @type Mutations
  * @param {string} payload.token - The access token
  * @param {string} payload.uid - User ID
  */
-export const UPDATE_TWITTER_TOKEN = 'UPDATE_TWITTER_TOKEN'
 export const UPDATE_WEIBO_TOKEN = 'UPDATE_WEIBO_TOKEN'
 
 /**
@@ -85,10 +93,18 @@ export const LOG_IN_TWITTER = 'LOG_IN_TWITTER'
 export const LOG_IN_WEIBO = 'LOG_IN_WEIBO'
 
 /**
+ * Get asscess token.
+ * @type Actions
+ * @param {string} payload.pin - pin code
+ */
+export const TWITTER_PIN = 'TWITTER_PIN'
+
+/**
  * Check asscess token.
  * @type Actions
  */
-export const CHECK_TOKEN = 'CHECK_TOKEN'
+export const CHECK_TWITTER_TOKEN = 'CHECK_TWITTER_TOKEN'
+export const CHECK_WEIBO_TOKEN = 'CHECK_WEIBO_TOKEN'
 
 /**
  * Post
