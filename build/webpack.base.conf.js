@@ -12,6 +12,9 @@ module.exports = {
     filename: '[name].js'
   },
   module: {
+    noParse: [
+      /codebird/i
+    ],
     rules: [
       {
         test: /\.vue$/,
