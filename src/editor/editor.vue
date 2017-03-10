@@ -76,10 +76,20 @@
     created () {
       // get infos from storage
       this.$store.dispatch(types.UPDATE_STORAGE)
+
+      // get page title and href
+      chrome.runtime.sendMessage({msg: 'REQUEST_PAGE_INFO'}, response => {
+        if (response) {
+          this.$store.commit(types.UPDATE_MASTER_TEXT, {
+            text: `${response.title} | ${response.href}`
+          })
+        }
+      })
+
       // get page images
-      chrome.runtime.onMessage.addListener(request => {
-        if (request.msg === 'PHOTOS') {
-          this.photos = request.photos.slice(0, 50)
+      chrome.runtime.sendMessage({msg: 'REQUEST_PHOTOS'}, response => {
+        if (response) {
+          this.photos = response.photos
           // thrid-party libs need to wait for rendering
           this.$nextTick(() => {
             if (this.masonry) {
@@ -87,20 +97,6 @@
             } else if (this.isMounted) {
               this.createMasonry()
             }
-          })
-        }
-      })
-
-      // get page title and href
-      chrome.runtime.sendMessage({msg: 'REQUEST_SOURCE_TAB'}, response => {
-        if (response.tab) {
-          chrome.tabs.sendMessage(response.tab.id, {msg: 'REQUEST_PHOTOS'})
-          chrome.tabs.sendMessage(response.tab.id, {
-            msg: 'REQUEST_PAGE_INFO'
-          }, ({title = '', href = ''}) => {
-            this.$store.commit(types.UPDATE_MASTER_TEXT, {
-              text: `${title} | ${href}`
-            })
           })
         }
       })

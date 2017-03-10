@@ -19,6 +19,7 @@
     "heap": "^0.2.6",
     "imagesloaded": "^4.1.1",
     "masonry-layout": "^4.1.1",
+    "probe-image-size": "^3.0.0",
     "querystring": "^0.2.0",
     "tether": "^1.4.0",
     "url": "^0.11.0",
