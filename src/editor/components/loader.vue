@@ -26,7 +26,7 @@ export default {
     },
     height: {
       type: [String, Number],
-      default: this.width
+      default: 40
     },
     fill: {
       type: String,

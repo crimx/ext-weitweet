@@ -111,7 +111,7 @@
             v-if="!$store.state[type].accessToken && !$store.state[type].boxState"
             @click="handleLogin"
           >{{ $store.getters[`login_${type}`] }}</button>
-          <loader width="20%" fill="#fff"
+          <loader width="50%" height="50%" fill="#fff"
             key="loading"
             v-if="$store.state[type].boxState === 'loading'"
           />

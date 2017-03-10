@@ -20,6 +20,14 @@
               ></photo>
             </div>
           </div>
+          <transition name="fade">
+            <div class="text-center"
+              key="loading"
+              v-if="!photos"
+            >
+              <loader width="50%" height="50%" fill="#fff"/>
+            </div>
+          </transition>
         </div>
       </div>
       <div class="slave-panel col-6">
@@ -39,10 +47,11 @@
 
   import * as types from 'src/editor/store/types'
 
-  import master from './components/master'
-  import twitter from './components/twitter'
-  import weibo from './components/weibo'
-  import photo from './components/photo'
+  import Master from './components/master'
+  import Twitter from './components/twitter'
+  import Weibo from './components/weibo'
+  import Photo from './components/photo'
+  import Loader from './components/loader'
 
   export default {
     name: 'app',
@@ -50,7 +59,7 @@
       return {
         isMounted: false,
         masonry: false,
-        photos: []
+        photos: null
       }
     },
     methods: {
@@ -98,20 +107,23 @@
               this.createMasonry()
             }
           })
+        } else {
+          this.photos = []
         }
       })
     },
     mounted () {
       this.isMounted = true
-      if (this.photos.length > 0) {
+      if (this.photos && this.photos.length > 0) {
         this.createMasonry()
       }
     },
     components: {
-      photo,
-      master,
-      twitter,
-      weibo
+      photo: Photo,
+      master: Master,
+      twitter: Twitter,
+      weibo: Weibo,
+      loader: Loader
     }
   }
 </script>
@@ -152,5 +164,12 @@ $grid-width: 33%;
 
 .masonry-gutter-sizer {
   width: (100% - $grid-width * 3) / 2;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .4s
+}
+.fade-enter, .fade-leave-active {
+  opacity: 0
 }
 </style>
