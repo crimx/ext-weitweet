@@ -72,7 +72,9 @@ export default {
     chrome.storage.local.get(['twitter', 'weibo'], ({twitter, weibo}) => {
       if (twitter) {
         commit(types.UPDATE_TWITTER_STORAGE, twitter)
-        accounts.twitter.codebird.setToken(twitter.accessToken, twitter.accessSecret)
+        if (twitter.accessToken) {
+          accounts.twitter.codebird.setToken(twitter.accessToken, twitter.accessSecret)
+        }
       }
       if (weibo) { commit(types.UPDATE_WEIBO_STORAGE, weibo) }
       // dispatch(types.WEIBO_)
@@ -111,6 +113,26 @@ export default {
   },
 
   [types.POST_TWITTER] ({commit, state}) {
+    let text = state.twitter.text
+    let photo = state.twitter.photo
+    if (text && state.twitter.accessToken) {
+      commit(types.UPDATE_TWITTER_BOX_STATE, {type: 'loading'})
+      if (photo.src) {
+        accounts.twitter.postWithImage({text, photo})
+          .then(() => {
+            timeoutBoxStateSuccess(commit, 'twitter')
+          }, error => {
+            commit(types.UPDATE_TWITTER_BOX_STATE, {type: 'error', error})
+          })
+      } else {
+        accounts.twitter.post({text})
+          .then(() => {
+            timeoutBoxStateSuccess(commit, 'twitter')
+          }, (error) => {
+            commit(types.UPDATE_TWITTER_BOX_STATE, {type: 'error', error})
+          })
+      }
+    }
   },
 
   [types.POST_WEIBO] ({commit, state, dispatch}) {

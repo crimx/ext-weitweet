@@ -45,7 +45,6 @@ export const twitter = {
       })
     })
   },
-  tokenInfo: '',
   getUserInfo () {
     return new Promise((resolve, reject) => {
       twitterOauth.__call('account_verifyCredentials', {}, function (reply, rate, err) {
@@ -59,6 +58,43 @@ export const twitter = {
         }
         reject({error: 'Request verify credentials error.'})
       })
+    })
+  },
+  post ({text, mediaId}) {
+    let params = {status: toRfc3986(text)}
+    if (mediaId) { params.media_ids = mediaId }
+    return new Promise((resolve, reject) => {
+      twitterOauth.__call('statuses_update', params, function (reply, rate, err) {
+        if (err) { return reject({error: 'Tweet posting error.'}) }
+        if (reply && reply.created_at) {
+          return resolve(reply)
+        }
+        reject({error: 'Tweet posting error.'})
+      })
+    })
+  },
+  postWithImage ({text, photo}) {
+    var self = this
+    return new Promise((resolve, reject) => {
+      fetch(photo.src)
+        .then(res => res.blob(), reject)
+        .then(imgBlob => {
+          var reader = new FileReader()
+          reader.onload = () => {
+            var base64 = reader.result.split(',')[1]
+            twitterOauth.__call('media_upload', {media_data: base64}, (reply, rate, err) => {
+              if (err) { return reject({error: 'Image upload error.'}) }
+              if (reply && reply.media_id_string) {
+                self.post({text, mediaId: reply.media_id_string})
+                  .then(resolve, reject)
+              } else {
+                reject({error: 'Image upload error.'})
+              }
+            })
+          }
+          reader.readAsDataURL(imgBlob)
+        })
+        .catch(reject)
     })
   }
 }
@@ -568,15 +604,6 @@ export const weibo = {
     '21966': '地理信息接口缺少参数coordinates',
     '21971': '地理信息接口中心坐标超出范围'
   }
-}
-
-function cover2jpg (photo) {
-  var canvas = document.createElement('canvas')
-  var ctx = canvas.getContext('2d')
-  canvas.width = photo.width
-  canvas.height = photo.height
-  ctx.drawImage(photo, 0, 0)
-  return canvas.toDataURL('image/jpeg')
 }
 
 function toRfc3986 (val) {
