@@ -120,6 +120,21 @@ export default {
     state.weibo.boxState = type
   },
 
+  [types.UPDATE_TWITTER_LAST_CHECK] (state, {date}) {
+    state.twitter.lastCheck = date
+    chrome.storage.local.set({twitter: state.twitter})
+  },
+  [types.UPDATE_WEIBO_LAST_CHECK] (state, {date}) {
+    state.weibo.lastCheck = date
+    chrome.storage.local.set({weibo: state.weibo})
+  },
+
+  [types.UPDATE_TWITTER_URL_LENGTH] (state, {http, https}) {
+    state.twitter.shortUrlLength = http
+    state.twitter.shortUrlLengthHttps = https
+    chrome.storage.local.set({twitter: state.twitter})
+  },
+
   [types.UPDATE_TWITTER_TOKEN] (state, {token, secret, uid}) {
     state.twitter.accessToken = token
     state.twitter.accessSecret = secret

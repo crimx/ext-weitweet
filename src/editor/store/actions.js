@@ -74,14 +74,22 @@ export default {
         commit(types.UPDATE_TWITTER_STORAGE, twitter)
         if (twitter.accessToken) {
           accounts.twitter.codebird.setToken(twitter.accessToken, twitter.accessSecret)
+          dispatch(types.CHECK_TWITTER_TOKEN)
         }
+        dispatch(types.GET_TWITTER_CONFIG)
       }
-      if (weibo) { commit(types.UPDATE_WEIBO_STORAGE, weibo) }
-      // dispatch(types.WEIBO_)
+      if (weibo) {
+        commit(types.UPDATE_WEIBO_STORAGE, weibo)
+        dispatch(types.CHECK_WEIBO_TOKEN)
+      }
     })
   },
 
   [types.CHECK_TWITTER_TOKEN] ({commit, state}) {
+    var date = new Date()
+    date = `${date.getUTCDate()}${date.getUTCMonth()}${date.getUTCFullYear()}`
+    if (date === state.twitter.lastCheck) { return }
+    commit(types.UPDATE_TWITTER_LAST_CHECK, {date})
     if (state.twitter.accessToken) {
       accounts.twitter.getUserInfo()
         .then(info => commit(types.UPDATE_TWITTER_USER_INFO, info))
@@ -89,7 +97,27 @@ export default {
     }
   },
 
+  [types.GET_TWITTER_CONFIG] ({commit, state}) {
+    var date = new Date()
+    date = `${date.getUTCDate()}${date.getUTCMonth()}${date.getUTCFullYear()}`
+    if (date === state.twitter.lastCheck) { return }
+    commit(types.UPDATE_TWITTER_LAST_CHECK, {date})
+    accounts.twitter.getConfig()
+      .then(data => {
+        if (data.short_url_length && data.short_url_length_https) {
+          commit(types.UPDATE_TWITTER_URL_LENGTH, {
+            http: data.short_url_length,
+            https: data.short_url_length_https
+          })
+        }
+      }, () => {})
+  },
+
   [types.CHECK_WEIBO_TOKEN] ({commit, state}) {
+    var date = new Date()
+    date = `${date.getUTCDate()}${date.getUTCMonth()}${date.getUTCFullYear()}`
+    if (date === state.weibo.lastCheck) { return }
+    commit(types.UPDATE_WEIBO_LAST_CHECK, {date})
     if (state.weibo.accessToken) {
       accounts.weibo.checkToken(state.weibo.accessToken)
         .then(expireIn => {

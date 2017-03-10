@@ -10,6 +10,8 @@ export default {
   twitter: {
     text: '',
     textLength: 140,
+    shortUrlLength: 23,
+    shortUrlLengthHttps: 23,
     photo: {},
     fullname: '',
     username: '',
@@ -18,11 +20,14 @@ export default {
     accessSecret: '',
     // success, error, loading
     boxState: '',
-    errMsg: null
+    errMsg: null,
+    lastCheck: null
   },
   weibo: {
     text: '',
     textLength: 140,
+    shortUrlLength: 20,
+    shortUrlLengthHttps: 20,
     photo: {},
     fullname: '',
     username: '',
@@ -31,6 +36,7 @@ export default {
     accessToken: '',
     // success, error, loading
     boxState: '',
-    errMsg: null
+    errMsg: null,
+    lastCheck: null
   }
 }

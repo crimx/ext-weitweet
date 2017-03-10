@@ -1,11 +1,30 @@
 import messages from 'src/_locales/zh_CN/messages.json'
+import tText from 'twitter-text'
 
 let getters = {
   twitterTextCount (state) {
-    return textCount(state.twitter.text)
+    return tText.getTweetLength(state.twitter.text, {
+      short_url_length: state.twitter.shortUrlLength,
+      short_url_length_https: state.twitter.shortUrlLengthHttps
+    })
   },
   weiboTextCount (state) {
-    return textCount(state.weibo.text)
+    var shortUrlLength = state.weibo.shortUrlLength
+    var shortUrlLengthHttps = state.weibo.shortUrlLengthHttps
+    var textLength = textCount(state.weibo.text)
+    var urlsWithIndices = tText.extractUrlsWithIndices(state.weibo.text)
+    for (var i = 0; i < urlsWithIndices.length; i++) {
+      // Subtract the length of the original URL
+      textLength += urlsWithIndices[i].indices[0] - urlsWithIndices[i].indices[1]
+
+      // Add 23 characters for URL starting with https://
+      if (tText.regexen.urlHasHttps.test(urlsWithIndices[i].url)) {
+        textLength += shortUrlLengthHttps
+      } else {
+        textLength += shortUrlLength
+      }
+    }
+    return textLength
   }
 }
 

@@ -60,8 +60,19 @@ export const twitter = {
       })
     })
   },
+  getConfig () {
+    return new Promise((resolve, reject) => {
+      twitterOauth.__call('help_configuration', {}, function (reply, rate, err) {
+        if (err) { return reject({error: err}) }
+        if (reply) {
+          return resolve(reply)
+        }
+        reject({error: err})
+      })
+    })
+  },
   post ({text, mediaId}) {
-    let params = {status: toRfc3986(text)}
+    let params = {status: text}
     if (mediaId) { params.media_ids = mediaId }
     return new Promise((resolve, reject) => {
       twitterOauth.__call('statuses_update', params, function (reply, rate, err) {

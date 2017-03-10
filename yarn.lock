@@ -5050,6 +5050,10 @@ tweetnacl@^0.14.3, tweetnacl@~0.14.0:
   version "0.14.5"
   resolved "http://registry.npm.taobao.org/tweetnacl/download/tweetnacl-0.14.5.tgz#5ae68177f192d4456269d108afa93ff8743f4f64"
 
+twitter-text@^1.14.3:
+  version "1.14.3"
+  resolved "http://registry.npm.taobao.org/twitter-text/download/twitter-text-1.14.3.tgz#72af718ba672d829a6e70eaefa8e18528cf49062"
+
 type-check@~0.3.2:
   version "0.3.2"
   resolved "http://registry.npm.taobao.org/type-check/download/type-check-0.3.2.tgz#5884cab512cf1d355e3fb784f30804b2b520db72"

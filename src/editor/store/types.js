@@ -86,6 +86,19 @@ export const UPDATE_WEIBO_STORAGE = 'UPDATE_WEIBO_STORAGE'
 export const UPDATE_STORAGE = 'UPDATE_STORAGE'
 
 /**
+ * update last check date
+ * @type Mutations
+ */
+export const UPDATE_TWITTER_LAST_CHECK = 'UPDATE_TWITTER_LAST_CHECK'
+export const UPDATE_WEIBO_LAST_CHECK = 'UPDATE_WEIBO_LAST_CHECK'
+
+/**
+ * update twitter length
+ * @type Mutations
+ */
+export const UPDATE_TWITTER_URL_LENGTH = 'UPDATE_TWITTER_URL_LENGTH'
+
+/**
  * Get asscess token.
  * @type Actions
  */
@@ -105,6 +118,12 @@ export const TWITTER_PIN = 'TWITTER_PIN'
  */
 export const CHECK_TWITTER_TOKEN = 'CHECK_TWITTER_TOKEN'
 export const CHECK_WEIBO_TOKEN = 'CHECK_WEIBO_TOKEN'
+
+/**
+ * Get short url length.
+ * @type Actions
+ */
+export const GET_TWITTER_CONFIG = 'GET_TWITTER_CONFIG'
 
 /**
  * Post
