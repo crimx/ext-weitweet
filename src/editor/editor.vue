@@ -35,6 +35,7 @@
         <div class="box-container"><weibo></weibo></div>
       </div>
     </div>
+    <coffee/>
   </div>
 </template>
 
@@ -52,6 +53,7 @@
   import Weibo from './components/weibo'
   import Photo from './components/photo'
   import Loader from './components/loader'
+  import Coffee from './components/coffee'
 
   export default {
     name: 'app',
@@ -119,6 +121,7 @@
       }
     },
     components: {
+      coffee: Coffee,
       photo: Photo,
       master: Master,
       twitter: Twitter,

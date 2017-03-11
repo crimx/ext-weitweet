@@ -5,3 +5,4 @@ npm-debug.log
 test/unit/coverage
 yarn-error.log
 oauth-client.js
+qrcode/
