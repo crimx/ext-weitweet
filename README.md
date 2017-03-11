@@ -3,7 +3,7 @@
 A chrome extension written in Vue & Vuex. Post Weibo and Twitter in one click.
 
 <p align="center">
-  <a href="https://chrome.google.com/webstore/detail/jcgjbjbbcjgkpdanbnafdbdlbjacdkln" target="_blank"><img src="assets/1400x560.jpg" /></a>
+  <a href="https://chrome.google.com/webstore/detail/jcgjbjbbcjgkpdanbnafdbdlbjacdkln" target="_blank"><img src="assets/1400x560.png" /></a>
 </p>
 
 # Downloads
