@@ -200,6 +200,7 @@ $color-mixed: rgb(142, 68, 173);
   fill: rgba(255, 255, 255, 0.5);
 }
 
+$chessboard-cube-width: 10px;
 .photo-wrap {
   position: relative;
   width: 100%;
@@ -210,7 +211,17 @@ $color-mixed: rgb(142, 68, 173);
     width: 100%;
     height: 100%;
     object-fit: cover;
-    background-color: #ddd;
+
+    // chessboard background pattern for transparent images, based on Lea Verou's work
+    // http://lea.verou.me/2011/02/checkerboard-pattern-with-css3/
+    background-image:
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, #ccc), color-stop(.25, transparent)),
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.25, #ccc), color-stop(.25, transparent)),
+      -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.75, transparent), color-stop(.75, #ccc)),
+      -webkit-gradient(linear, 0 0, 100% 100%, color-stop(.75, transparent), color-stop(.75, #ccc));
+    background-size:($chessboard-cube-width * 2) ($chessboard-cube-width * 2 + 1); /* shitty webkit */
+    background-position:0 0, $chessboard-cube-width 0, $chessboard-cube-width (-$chessboard-cube-width), 0px $chessboard-cube-width;
+    background-color: #fff;
   }
 }
 
