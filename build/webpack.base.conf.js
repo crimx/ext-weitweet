@@ -17,36 +17,11 @@ module.exports = {
     ],
     rules: [
       {
-        test: /\.vue$/,
-        loader: 'vue-loader',
-        options: {
-          loaders: {
-            'scss': 'vue-style-loader!css-loader!sass-loader'
-          }
-        }
-      },
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        // include: [
-        //   path.resolve(__dirname, '../src')
-        // ]
-        exclude: /node_modules\/(?!(get-stream|url-regex)\/).*/
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader']
-      },
-      {
-        test: /\.scss$/,
-        use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader']
-      },
-      {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: '[name].[ext]'
+          name: 'assets/[name].[ext]'
         }
       },
       {
@@ -54,7 +29,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: '[name].[ext]'
+          name: 'assets/[name].[ext]'
         }
       }
     ]

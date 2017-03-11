@@ -5,7 +5,7 @@ var baseWebpackConfig = require('./webpack.base.conf')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 
-var webpackConfig = merge.smart(baseWebpackConfig, {
+var webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: [
       {
@@ -23,6 +23,11 @@ var webpackConfig = merge.smart(baseWebpackConfig, {
             })
           }
         }
+      },
+      {
+        test: /\.js$/,
+        loader: 'babel-loader',
+        exclude: /node_modules\/(?!(get-stream|url-regex)\/).*/
       },
       {
         test: /\.css$/,

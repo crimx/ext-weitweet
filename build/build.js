@@ -17,7 +17,7 @@ var spinner = ora('building for production...')
 spinner.start()
 
 var distPath = path.resolve(__dirname, '../dist')
-var assetsPath = path.resolve(distPath, 'images')
+var assetsPath = path.resolve(distPath, 'assets')
 shell.rm('-rf', distPath)
 shell.mkdir('-p', distPath)
 // shell.rm('-rf', assetsPath)
