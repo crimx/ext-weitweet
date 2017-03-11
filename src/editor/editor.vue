@@ -144,6 +144,12 @@
   padding-top: 20px;
 }
 
+@media (min-width: 1300px) {
+  #app {
+    width: 1200px;
+  }
+}
+
 .box-container {
   height: 45%;
   margin-bottom: 30px;
