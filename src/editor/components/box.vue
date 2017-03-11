@@ -258,6 +258,10 @@ export default {
       this.isUploadPanelShow = false
     },
     handleFileLink (evt) {
+      let src = evt.target.value
+      if (src.length > 400) {
+        return this.shankeInputBox()
+      }
       if (urlRegex().test(evt.target.value)) {
         this.$store.commit(types.UPDATE_PHOTO, {
           type: this.type,
@@ -267,9 +271,12 @@ export default {
         })
         this.isUploadPanelShow = false
       } else {
-        this.isUrlInputShake = true
-        setTimeout(() => { this.isUrlInputShake = false }, 400)
+        this.shankeInputBox()
       }
+    },
+    shankeInputBox () {
+      this.isUrlInputShake = true
+      setTimeout(() => { this.isUrlInputShake = false }, 400)
     },
     handleErrorPanelClick () {
       this.$store.commit(types[`UPDATE_${this.type.toUpperCase()}_BOX_STATE`], {type: ''})
