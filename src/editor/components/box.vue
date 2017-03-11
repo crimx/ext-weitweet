@@ -508,7 +508,7 @@ $color-mixed: rgb(142, 68, 173);
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-dasharray: 80;
-  animation: iconStrokeAnimation 0.7s ease-in 1;
+  animation: icon-stroke-animation 0.7s ease-in 1;
 }
 
 
@@ -547,7 +547,7 @@ $color-mixed: rgb(142, 68, 173);
   opacity: 0
 }
 
-@keyframes iconStrokeAnimation {
+@keyframes icon-stroke-animation {
   from { stroke-dashoffset: 80; }
   to { stroke-dashoffset: 0; }
 }
