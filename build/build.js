@@ -2,10 +2,12 @@
 const shell = require('shelljs')
 shell.env.NODE_ENV = 'production'
 
+var fs = require('fs')
 var path = require('path')
 var ora = require('ora')
 var webpack = require('webpack')
 var webpackConfig = require('./webpack.prod.conf')
+var packageConfig = require('../package.json')
 
 console.log(
   '  Tip:\n' +
@@ -25,7 +27,11 @@ shell.mkdir('-p', assetsPath)
 shell.cp('-R', 'assets/static/*', assetsPath)
 // shell.cp('-R', 'src/_locales/*', distPath)
 shell.cp('-R', 'src/_locales', distPath)
-shell.cp('src/manifest.json', distPath)
+// shell.cp('src/manifest.json', distPath)
+var manifest = require(path.join(__dirname, '../src/manifest.json'))
+manifest.version = packageConfig.version
+delete manifest.key
+fs.writeFile(path.join(distPath, 'manifest.json'), JSON.stringify(manifest, '\t'))
 
 webpack(webpackConfig, function (err, stats) {
   spinner.stop()
