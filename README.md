@@ -8,10 +8,10 @@ A chrome extension written in Vue & Vuex.
 
 <h2></h2>
 
-一键编辑发送推特与微博。
+一键编辑发送推特与微博。<br/>
 Post Weibo and Twitter in one click.
 
-开源安全，不收集任何数据，不占后台。
+开源安全，不收集任何数据，不占后台。<br/>
 Open source. No data collection. Low background memory and CPU footprint.
 
 <h2></h2>
