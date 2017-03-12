@@ -377,6 +377,7 @@ $color-mixed: rgb(142, 68, 173);
 
 .box-content-container {
   flex: 1;
+  display: flex;
   position: relative;
   z-index: 1;
 }
@@ -390,7 +391,6 @@ $color-mixed: rgb(142, 68, 173);
 }
 
 .box-content {
-  height: 100%;
   resize: none;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
