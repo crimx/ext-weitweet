@@ -2,13 +2,13 @@
   <a href="https://chrome.google.com/webstore/detail/jcgjbjbbcjgkpdanbnafdbdlbjacdkln" target="_blank"><img src="assets/1400x560.png" /></a>
 </p>
 
-# 微推 WeiTweet
+# 小推 WeiTweet
 
 A chrome extension written in Vue & Vuex.
 
 <h2></h2>
 
-一键编辑发送推特与微博。<br/>
+非官方一键编辑发送推特与微博。<br/>
 Post Weibo and Twitter in one click.
 
 开源安全，不收集任何数据，不占后台。<br/>

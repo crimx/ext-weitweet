@@ -1,7 +1,7 @@
 {
    "extension_name": {
       "description": "Extension name",
-      "message": "微推 Weitweet"
+      "message": "小推Weitweet"
    },
 
    "extension_short_name": {
@@ -11,7 +11,7 @@
 
    "extension_description": {
       "description": "Description of extension",
-      "message": "一鍵發送微博和推特，支持網頁圖片分享"
+      "message": "非官方一鍵發送微博和推特，支持網頁圖片分享"
    },
 
    "wechat": {
