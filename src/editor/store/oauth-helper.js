@@ -309,13 +309,12 @@ export const weibo = {
         .then(imgBlob => {
           var formData = new FormData()
           formData.append('access_token', token)
-          formData.append('status', text)
+          formData.append('status', toRfc3986(text))
           formData.append('pic', imgBlob)
           fetch(`https://upload.api.weibo.com/2/statuses/upload.json`, {
             method: 'post',
             headers: {
-              'Accept': 'application/json',
-              'Content-type': 'multipart/form-data'
+              'Accept': 'application/json'
             },
             body: formData
           })
