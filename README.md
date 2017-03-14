@@ -8,11 +8,8 @@ A chrome extension written in Vue & Vuex.
 
 <h2></h2>
 
-非官方一键编辑发送推特与微博。<br/>
+一键编辑发送推特与微博。<br/>
 Post Weibo and Twitter in one click.
-
-开源安全，不收集任何数据，不占后台。<br/>
-Open source. No data collection. Low background memory and CPU footprint.
 
 <h2></h2>
 
@@ -28,6 +25,11 @@ Open source. No data collection. Low background memory and CPU footprint.
 - Image upload. Url pasting.
 
 <h2></h2>
+
+理论上支持所有 Chrome 系浏览器，已测试 Google Chrome、猎豹、360se、360Chrome、QQ浏览器。（猎豹上使用图片抓取需要勾选允许访问敏感信息）
+
+开源，不收集任何数据，不占后台。<br/>
+Open source. No data collection. Low background memory and CPU footprint.
 
 # Downloads
 
