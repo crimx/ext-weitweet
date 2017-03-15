@@ -13,16 +13,16 @@ Post Weibo and Twitter in one click.
 
 <h2></h2>
 
-- 统一编辑、一键分享
+- 统一编辑，也可以分开编辑
 - 网页图片自动抓取
-- 支持本地图片、图片链接
+- 支持本地图片、图片链接、图片直接粘贴（v0.3.3）
 
 <h2></h2>
 
 - Multi-editing.
 - One click to send them all.
 - Auto extracts images from page.
-- Image upload. Url pasting.
+- Image upload. Url pasting. Image pasting(v0.3.3)
 
 <h2></h2>
 
@@ -35,6 +35,18 @@ Open source. No data collection. Low background memory and CPU footprint.
 
 - Chrome Web Store: <https://chrome.google.com/webstore/detail/jcgjbjbbcjgkpdanbnafdbdlbjacdkln>
 - crx: <https://github.com/crimx/crx-weitweet/releases/>
+
+# Changelog
+
+- v0.3.3
+  - 支持 base64 图片
+  - 支持编辑框直接粘贴图片
+- v0.1.3
+  - 应微博平台要求修改名字和 LOGO
+- v0.1.2
+  - 修复微博图片发送问题
+- v0.1.1
+  - 修复在旧版本 Blink 上的 Flex bug，影响编辑框的高度
 
 # Privacy Policy & Terms of Service
 
