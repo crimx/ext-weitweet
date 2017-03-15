@@ -1,5 +1,6 @@
 import Heap from 'heap'
 import probe from 'probe-image-size'
+import {imgToPng, base64ToBinary, base64ToBlob} from 'src/helpers/img'
 
 var tabs = {}
 
@@ -7,7 +8,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.msg === 'REQUEST_PAGE_INFO') {
     sendResponse(tabs[sender.tab.id].pageInfo)
   } else if (request.msg === 'REQUEST_PHOTOS') {
-    if (!tabs[sender.tab.id]) { return }
+    if (!tabs[sender.tab.id]) {
+      return sendResponse({photo: []})
+    }
     let photos = tabs[sender.tab.id].photos
     if (photos) {
       sendResponse({photos})
@@ -30,7 +33,15 @@ chrome.browserAction.onClicked.addListener(sourceTab => {
       photoSendResponse: null
     }
     chrome.tabs.sendMessage(sourceTab.id, {msg: 'REQUEST_PHOTOS'}, response => {
-      if (!response) { return }
+      if (!response) {
+        if (tabs[editorTab.id].photoSendResponse) {
+          tabs[editorTab.id].photoSendResponse({photos: []})
+          tabs[editorTab.id] = null
+        } else {
+          tabs[editorTab.id].photos = []
+        }
+        return
+      }
       loadImgAll(response.photos, 1000)
         .then(photos => {
           photos = photos.filter(photo => photo.width > 100 && photo.height > 100)
@@ -52,26 +63,37 @@ chrome.browserAction.onClicked.addListener(sourceTab => {
 
 function loadImg (photo, timeout = 500) {
   return new Promise((resolve, reject) => {
-    probe(photo.src, {retries: 1, timeout})
-      .then(result => {
-        if (/image\/(jpeg|png|gif)/i.test(result.mime)) {
-          resolve({
+    var src = photo.src
+    if (/^data:image/i.test(src)) {
+      let bin = base64ToBinary(src)
+      src = base64ToBlob(src)
+      try {
+        probeResult(probe.sync(bin))
+      } catch (e) { reject(e) }
+    } else {
+      probe(src, {retries: 1, timeout})
+        .then(probeResult)
+        .catch(e => reject(e))
+    }
+
+    function probeResult (result) {
+      if (/image\/(jpeg|png|gif)/i.test(result.mime)) {
+        resolve({
+          source: photo.source,
+          src,
+          width: result.width,
+          height: result.height
+        })
+      } else {
+        imgToPng(src)
+          .then(src => resolve({
             source: photo.source,
-            src: photo.src,
+            src,
             width: result.width,
             height: result.height
-          })
-        } else {
-          cover2png(photo)
-            .then(src => resolve({
-              source: photo.source,
-              src,
-              width: result.width,
-              height: result.height
-            }))
-        }
-      })
-      .catch(error => reject({error}))
+          }))
+      }
+    }
   })
 }
 
@@ -82,23 +104,5 @@ function loadImgAll (photoList, timeout = 500) {
         .map(photo => loadImg(photo, timeout))
         .map(p => p.catch(e => false))
     ).then(results => resolve(results.filter(r => r)))
-  })
-}
-
-function cover2png (photo) {
-  return new Promise((resolve, reject) => {
-    var canvas = document.createElement('canvas')
-    var ctx = canvas.getContext('2d')
-    var img = new Image()
-    img.onload = function () {
-      canvas.width = img.naturalWidth
-      canvas.height = img.naturalHeight
-      ctx.drawImage(img, 0, 0)
-      canvas.toBlob(blob => {
-        resolve(URL.createObjectURL(blob))
-      })
-    }
-    img.onerror = error => reject({error})
-    img.src = photo.src
   })
 }
