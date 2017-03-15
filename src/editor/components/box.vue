@@ -38,6 +38,7 @@
         @input="$emit('text-input', $event.target.value)"
         @focus="isTyping = true"
         @blur="isTyping = false"
+        @paste="handleTextareaPaste"
       ></textarea>
     </div>
     <div class="box-btn-container">
@@ -239,6 +240,22 @@ export default {
     },
     handleLogin () {
       this.$store.dispatch(types[`LOG_IN_${this.type.toUpperCase()}`])
+    },
+    handleTextareaPaste (evt) {
+      Array.from(evt.clipboardData.items)
+        .some(item => {
+          if (/image/i.test(item.type)) {
+            var blob = item.getAsFile()
+            this.$store.commit(types.UPDATE_PHOTO, {
+              type: this.type,
+              photo: {
+                src: URL.createObjectURL(blob)
+              }
+            })
+            evt.preventDefault()
+            return true
+          }
+        })
     },
     handleFileUpload (evt) {
       if (evt.target.files.length <= 0) { return }
