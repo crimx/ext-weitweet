@@ -88,7 +88,7 @@
             :class="{ shake: isUrlInputShake }"
             size="30"
             :placeholder="$store.getters.photo_upload_popover_paster"
-            @keyup.enter="handleFileLink"
+            @change="handleFileLink"
           >
         </div>
       </popover>
@@ -174,6 +174,7 @@ import Photo from './photo'
 import Loader from './loader'
 import urlRegex from 'url-regex'
 import * as oauthAccounts from '../store/oauth-helper'
+import {imgToPng, base64ToBlob} from 'src/helpers/img'
 
 export default {
   name: 'box',
@@ -276,19 +277,26 @@ export default {
     },
     handleFileLink (evt) {
       let src = evt.target.value
-      if (src.length > 400) {
+      if (/^data:image/i.test(src)) {
+        src = base64ToBlob(src)
+      } else if (src.length > 400 || !urlRegex().test(src)) {
         return this.shankeInputBox()
       }
-      if (urlRegex().test(evt.target.value)) {
+
+      let commitChange = (src) => {
         this.$store.commit(types.UPDATE_PHOTO, {
           type: this.type,
-          photo: {
-            src: evt.target.value
-          }
+          photo: {src}
         })
         this.isUploadPanelShow = false
+      }
+
+      if (/\.(gif|jpg|jpeg|png)$/.test(src)) {
+        commitChange(src)
       } else {
-        this.shankeInputBox()
+        imgToPng(src).then(src => {
+          commitChange(src)
+        })
       }
     },
     shankeInputBox () {
