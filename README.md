@@ -1,10 +1,10 @@
+# 小推WeiTweet v0.3.3
+
+A chrome extension written in Vue & Vuex.
+
 <p align="center">
   <a href="https://chrome.google.com/webstore/detail/jcgjbjbbcjgkpdanbnafdbdlbjacdkln" target="_blank"><img src="assets/1400x560.png" /></a>
 </p>
-
-# 小推WeiTweet
-
-A chrome extension written in Vue & Vuex.
 
 <h2></h2>
 
@@ -15,14 +15,14 @@ Post Weibo and Twitter in one click.
 
 - 统一编辑，也可以分开编辑
 - 网页图片自动抓取
-- 支持本地图片、图片链接、图片直接粘贴（v0.3.3）
+- 支持本地图片、图片链接、图片直接粘贴
 
 <h2></h2>
 
 - Multi-editing.
 - One click to send them all.
 - Auto extracts images from page.
-- Image upload. Url pasting. Image pasting(v0.3.3)
+- Image upload. Url pasting. Image pasting
 
 <h2></h2>
 
