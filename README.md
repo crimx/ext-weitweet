@@ -1,4 +1,4 @@
-# 小推WeiTweet v0.3.3
+# 小推WeiTweet v0.3.4
 
 A chrome extension written in Vue & Vuex.
 
@@ -38,6 +38,8 @@ Open source. No data collection. Low background memory and CPU footprint.
 
 # Changelog
 
+- v0.3.4
+  - 微博字数限制改为 2000
 - v0.3.3
   - 支持 base64 图片
   - 支持编辑框直接粘贴图片
