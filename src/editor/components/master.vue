@@ -57,8 +57,7 @@ export default {
   },
   computed: {
     disabled () {
-      return !this.$store.state.master.isSlavery ||
-        this.$store.getters.twitterTextCount > this.$store.state.twitter.textLength ||
+      return this.$store.getters.twitterTextCount > this.$store.state.twitter.textLength ||
         this.$store.getters.weiboTextCount > this.$store.state.weibo.textLength
     }
   }

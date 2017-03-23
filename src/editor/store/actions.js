@@ -140,7 +140,9 @@ export default {
     }
   },
 
-  [types.POST_TWITTER] ({commit, state}) {
+  [types.POST_TWITTER] ({commit, state, getters}) {
+    if (getters.twitterTextCount > state.twitter.textLength) { return }
+
     let text = state.twitter.text
     let photo = state.twitter.photo
     if (text && state.twitter.accessToken) {
@@ -163,7 +165,9 @@ export default {
     }
   },
 
-  [types.POST_WEIBO] ({commit, state, dispatch}) {
+  [types.POST_WEIBO] ({commit, state, dispatch, getters}) {
+    if (getters.weiboTextCount > state.weibo.textLength) { return }
+
     let token = state.weibo.accessToken
     let text = state.weibo.text
     let photo = state.weibo.photo
