@@ -24,7 +24,7 @@
       </ul>
       <div class="payment-content">
         <transition name="fade">
-          <div class="payment-pane" key="wechat"      v-if="active === 'wechat'"><img src="../assets/qrcode/wechat.png" alt="wechat qrcode"><p> </p></div>
+          <div class="payment-pane" key="wechat"      v-if="active === 'wechat'"><img src="../assets/qrcode/wechat.png" alt="wechat qrcode"><p><small>{{ $store.getters.buy_me_a_coffee }}</small></p></div>
           <div class="payment-pane" key="alipay" v-else-if="active === 'alipay'"><img src="../assets/qrcode/alipay.png" alt="alipay qrcode"><p> </p></div>
           <div class="payment-pane" key="paypal" v-else-if="active === 'paypal'"><img src="../assets/qrcode/paypal.png" alt="paypal qrcode"><p><a href="https://www.paypal.me/crimx" target="_blank">https://www.paypal.me/crimx</a></p></div>
           <div class="payment-pane" key="bitcoin" v-else-if="active === 'bitcoin'"><img src="../assets/qrcode/bitcoin.png" alt="bitcoin qrcode"><p><small>1LkSPTYg3xFTZp39XxQJHqA77rskkENDyX</small></p></div>
