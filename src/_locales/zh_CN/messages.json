@@ -14,6 +14,16 @@
       "message": "一键编辑发送推特与微博，网页内容直达无需上传图片。"
    },
 
+   "cantact_author": {
+    "description": "Contact Author",
+    "message": "联系作者"
+  },
+
+  "report_issue": {
+    "description": "Report Issue",
+    "message": "反馈问题"
+  },
+
    "wechat": {
       "description": "微信",
       "message": "微信"

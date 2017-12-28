@@ -2,6 +2,7 @@ import url from 'url'
 import querystring from 'querystring'
 import clients from './oauth-client'
 import Codebird from 'codebird'
+import tText from 'twitter-text'
 
 const REDIRECT_URI = `https://${chrome.runtime.id}.chromiumapp.org/provider_cb`
 
@@ -283,52 +284,38 @@ export const weibo = {
    * ad {object} array 微博流内的推广微博ID
    */
   post ({token, text}) {
-    return new Promise((resolve, reject) => {
-      fetch(`https://api.weibo.com/2/statuses/update.json`, {
+    return replaceUrls(text, token)
+      .then(text => fetch('https://api.weibo.com/2/statuses/share.json', {
         method: 'post',
         headers: {
           'Accept': 'application/json',
           'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
         },
-        body: `access_token=${token}&status=${toRfc3986(text)}`
-      })
-      .then(res => res.json(), reject)
-      .then(data => {
-        if (data.created_at) {
-          resolve(data)
-        }
-        reject(data)
-      }, reject)
-      .catch(reject)
-    })
+        body: `access_token=${token}&status=${text}`
+      }))
+      .then(res => res.json())
+      .then(data => data.created_at ? data : Promise.reject(data))
   },
   postWithImage ({token, text, photo}) {
-    return new Promise((resolve, reject) => {
-      fetch(photo.src)
-        .then(res => res.blob(), reject)
-        .then(imgBlob => {
-          var formData = new FormData()
-          formData.append('access_token', token)
-          formData.append('status', toRfc3986(text))
-          formData.append('pic', imgBlob)
-          fetch(`https://upload.api.weibo.com/2/statuses/upload.json`, {
-            method: 'post',
-            headers: {
-              'Accept': 'application/json'
-            },
-            body: formData
-          })
-          .then(res => res.json(), reject)
-          .then(data => {
-            if (data.created_at) {
-              resolve(data)
-            }
-            reject(data)
-          }, reject)
-          .catch(reject)
-        }, reject)
-        .catch(reject)
+    return Promise.all([
+      fetch(photo.src).then(res => res.blob()),
+      replaceUrls(text, token)
+    ])
+    .then(([imgBlob, formattedText]) => {
+      const formData = new FormData()
+      formData.append('access_token', token)
+      formData.append('status', formattedText)
+      formData.append('pic', imgBlob)
+      return fetch(`https://api.weibo.com/2/statuses/share.json`, {
+        method: 'post',
+        headers: {
+          'Accept': 'application/json'
+        },
+        body: formData
+      })
     })
+    .then(res => res.json)
+    .then(data => data.created_at ? data : Promise.reject(data))
   },
   errMsg: {
     '10001': '系统错误',
@@ -345,7 +332,7 @@ export const weibo = {
     '10013': '不合法的微博用户',
     '10014': '第三方应用访问api接口权限受限制',
     '10016': '错误:缺失必选参数:%s，请参考API文档',
-    '10017': '错误:参数值非法,希望得到 (%s),实际得到 (%s)，请参考API文档',
+    '10017': '错误:分享必须带网址',
     '10018': '请求长度超过限制',
     '10020': '接口不存在',
     '10021': '请求的HTTP METHOD不支持',
@@ -614,6 +601,35 @@ export const weibo = {
     '21966': '地理信息接口缺少参数coordinates',
     '21971': '地理信息接口中心坐标超出范围'
   }
+}
+
+function replaceUrls (text, token) {
+  return shortenUrls(tText.extractUrlsWithIndices(text), token)
+    .then(entities => {
+      let result = ''
+      let beginIndex = 0
+      entities.sort((a, b) => a.indices[0] - b.indices[0])
+
+      for (let i = 0; i < entities.length; i++) {
+        const entity = entities[i]
+        result += text.substring(beginIndex, entity.indices[0])
+        result += entity.url
+        beginIndex = entity.indices[1]
+      }
+      result += text.substring(beginIndex, text.length)
+      return toRfc3986(result)
+    })
+}
+
+function shortenUrls (urlsWithIndices, token) {
+  if (!Array.isArray(urlsWithIndices)) {
+    return Promise.resolve([])
+  }
+  const urls = urlsWithIndices.map(({url}) => 'url_long=' + toRfc3986(url)).join('&')
+  return fetch(`https://api.weibo.com/2/short_url/shorten.json?access_token=${token}&${urls}`)
+    .then(response => response.json())
+    .then(({urls}) => urls.map((u, i) => ({ url: u.url_short, indices: urlsWithIndices[i].indices })))
+    .catch(() => [])
 }
 
 function toRfc3986 (val) {

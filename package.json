@@ -1,6 +1,6 @@
 {
   "name": "crx-weitweet",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "Post Weibo and Twitter in one click",
   "author": "CRIMX <straybugs@gmail.com>",
   "private": true,
@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
+    "dev-build": "node build/dev-build.js",
     "unit-single": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js",
     "test": "npm run unit-single",
