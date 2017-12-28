@@ -305,7 +305,7 @@ export default {
     },
     handleErrorPanelClick () {
       this.$store.commit(types[`UPDATE_${this.type.toUpperCase()}_BOX_STATE`], {type: ''})
-      this.$store.commit(types[`CHECK_${this.type.toUpperCase()}_TOKEN`])
+      this.$store.dispatch(types[`CHECK_${this.type.toUpperCase()}_TOKEN`])
     },
     handlePinPanelConfirm () {
       this.$store.commit(types[`UPDATE_${this.type.toUpperCase()}_BOX_STATE`], {type: 'loading'})

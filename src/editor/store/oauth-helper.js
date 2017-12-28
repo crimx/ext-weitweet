@@ -314,7 +314,7 @@ export const weibo = {
         body: formData
       })
     })
-    .then(res => res.json)
+    .then(res => res.json())
     .then(data => data.created_at ? data : Promise.reject(data))
   },
   errMsg: {
@@ -625,11 +625,12 @@ function shortenUrls (urlsWithIndices, token) {
   if (!Array.isArray(urlsWithIndices)) {
     return Promise.resolve([])
   }
-  const urls = urlsWithIndices.map(({url}) => 'url_long=' + toRfc3986(url)).join('&')
-  return fetch(`https://api.weibo.com/2/short_url/shorten.json?access_token=${token}&${urls}`)
-    .then(response => response.json())
-    .then(({urls}) => urls.map((u, i) => ({ url: u.url_short, indices: urlsWithIndices[i].indices })))
-    .catch(() => [])
+  return Promise.all(urlsWithIndices.map(({url}) =>
+    fetch('http://tinyurl.com/api-create.php?url=' + url)
+    .then(response => response.text())
+  ))
+  .then(urls => urls.map((url, i) => ({ url, indices: urlsWithIndices[i].indices })))
+  .catch(() => Promise.reject({error: 'Shorten URLs failed'}))
 }
 
 function toRfc3986 (val) {

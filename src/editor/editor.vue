@@ -92,7 +92,7 @@
       chrome.runtime.sendMessage({msg: 'REQUEST_PAGE_INFO'}, response => {
         if (response) {
           this.$store.commit(types.UPDATE_MASTER_TEXT, {
-            text: `${response.title} | ${response.href}`
+            text: ` | ${response.title} ${response.href} `
           })
         }
       })
