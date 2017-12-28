@@ -155,11 +155,6 @@
   margin-bottom: 30px;
 }
 
-.photo-list-container {
-  // display: flex;
-  // justify-content: center;
-}
-
 .photo-list {
   margin-left: -6px;
   margin-right: 15px - 6px;
