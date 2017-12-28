@@ -1,6 +1,6 @@
 {
   "name": "crx-weitweet",
-  "version": "0.3.3",
+  "version": "0.3.5",
   "description": "Post Weibo and Twitter in one click",
   "author": "CRIMX <straybugs@gmail.com>",
   "private": true,
