@@ -37,4 +37,17 @@ Open source. No data collection. Low background memory and CPU footprint.
 # Development
 
 - `yarn install`(recommended) or `npm install`
+- add `src/editor/store/oauth-client.js`
+  ```javascript
+  export default {
+    twitter: {
+      id: 'xxx',
+      secret: 'xxx'
+    },
+    weibo: {
+      id: 'xxx',
+      secret: 'xxx'
+    }
+  }
+  ```
 - check package.json for npm scripts
