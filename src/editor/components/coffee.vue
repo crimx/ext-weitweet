@@ -1,7 +1,7 @@
 <template>
 <div>
   <div class="buy-me-coffee" @click="showPayment = !showPayment" :title="$store.getters.buy_me_a_coffee">
-    <svg viewBox="0 0 32.273 37.388" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
+    <svg width="80" height="80" viewBox="0 0 32.273 37.388" xmlns="http://www.w3.org/2000/svg" xmlns:bx="https://boxy-svg.com">
       <g transform="translate(-1.158 6.833) scale(1.01513)">
         <path d="M28.595 8.638c0 .073-.017.146-.052.218l-.84 3.15c2.255.007 4.077.746 4.63 2.49.89 2.8-1.832 7.137-5.805 8.4-.615.195-1.23.33-1.83.408l-1.24 4.653h-.056c.002.012.003.025.003.037 0 .84-3.72 1.52-8.31 1.52-4.587 0-8.307-.68-8.307-1.52 0-.023.002-.047.008-.07L1.714 8.834c-.028-.065-.042-.13-.042-.196 0-1.36 6.027-2.462 13.462-2.462 7.434 0 13.46 1.102 13.46 2.462zm-1.214 4.58l-2.42 9.095c.283-.06.57-.135.858-.227 3.342-1.062 5.592-4.724 4.844-7.08-.454-1.428-1.658-1.885-3.28-1.787z" fill="#EDEDED" style="fill:#fff"/>
         <ellipse cx="15.12" cy="8.694" rx="11.983" ry="2.08" bx:origin="0.5 0.47" fill="#452C1A"/>
@@ -16,23 +16,38 @@
   </div>
   <transition name="fade">
     <div class="payment-panel" v-if="showPayment">
-      <ul class="payment-tabs">
-        <li class="payment-item" :class="{active: active === 'wechat'}" @mouseover="active = 'wechat'"><img class="payment-icon icon-wechat" src="../assets/wechat.svg">{{ $store.getters.wechat }}</li>
-        <li class="payment-item" :class="{active: active === 'alipay'}" @mouseover="active = 'alipay'"><img class="payment-icon icon-alipay" src="../assets/alipay.svg">{{ $store.getters.alipay }}</li>
-        <li class="payment-item" :class="{active: active === 'paypal'}" @mouseover="active = 'paypal'"><img class="payment-icon icon-paypal" src="../assets/paypal.svg">PayPal</li>
-        <li class="payment-item" :class="{active: active === 'bitcoin'}" @mouseover="active = 'bitcoin'"><img class="payment-icon icon-bitcoin" src="../assets/bitcoin.svg">{{ $store.getters.bitcoin }}</li>
-      </ul>
+      <div class="payment-aside">
+        <ul class="payment-tabs">
+          <li class="payment-item" :class="{active: active === 'wechat'}" @mouseover="active = 'wechat'"><img class="payment-icon icon-wechat" src="../assets/wechat.svg">{{ $store.getters.wechat }}</li>
+          <li class="payment-item" :class="{active: active === 'alipay'}" @mouseover="active = 'alipay'"><img class="payment-icon icon-alipay" src="../assets/alipay.svg">{{ $store.getters.alipay }}</li>
+          <li class="payment-item" :class="{active: active === 'paypal'}" @mouseover="active = 'paypal'"><img class="payment-icon icon-paypal" src="../assets/ko-fi.svg">PayPal</li>
+          <li class="payment-item disabled"><img class="payment-icon icon-bitcoin" src="../assets/bitcoin.svg">{{ $store.getters.bitcoin }}</li>
+        </ul>
+        <div>
+          <p class="coffee-social-media-wrap">
+            <a href="mailto:straybugs@gmail.com" @mouseover="isShowSocial = true" @click.prevent="void 0">{{ $store.getters.cantact_author }}</a>
+            <transition name="fade">
+              <div class="coffee-social-media" v-if="isShowSocial" @mouseleave="isShowSocial = false">
+                <social-media />
+              </div>
+            </transition>
+          </p>
+          <p><a href="https://github.com/crimx/crx-weitweet/issues" target="_blank" rel="noopener">{{ $store.getters.report_issue }}</a></p>
+        </div>
+        <div class="payment-title">
+          <div>
+            <p>BUY ME A</p>
+            <p>COFFEE <svg class="icon-heart" viewBox="0 0 32 32"><path d="M23.6 2c-3.363 0-6.258 2.736-7.599 5.594-1.342-2.858-4.237-5.594-7.601-5.594-4.637 0-8.4 3.764-8.4 8.401 0 9.433 9.516 11.906 16.001 21.232 6.13-9.268 15.999-12.1 15.999-21.232 0-4.637-3.763-8.401-8.4-8.401z"/></svg></p>
+          </div>
+        </div>
+      </div>
       <div class="payment-content">
         <transition name="fade">
-          <div class="payment-pane" key="wechat"      v-if="active === 'wechat'"><img src="../assets/qrcode/wechat.png" alt="wechat qrcode"><p> </p></div>
+          <div class="payment-pane" key="wechat"      v-if="active === 'wechat'"><img src="../assets/qrcode/wechat.png" alt="wechat qrcode"><p><small>{{ $store.getters.buy_me_a_coffee }}</small></p></div>
           <div class="payment-pane" key="alipay" v-else-if="active === 'alipay'"><img src="../assets/qrcode/alipay.png" alt="alipay qrcode"><p> </p></div>
-          <div class="payment-pane" key="paypal" v-else-if="active === 'paypal'"><img src="../assets/qrcode/paypal.png" alt="paypal qrcode"><p><a href="https://www.paypal.me/crimx" target="_blank">https://www.paypal.me/crimx</a></p></div>
+          <div class="payment-pane" key="paypal" v-else-if="active === 'paypal'"><img src="../assets/qrcode/ko-fi.png" alt="ko-fi qrcode"><p><a href="https://ko-fi.com/crimxcoffee" target="_blank">https://ko-fi.com/crimxcoffee</a></p></div>
           <div class="payment-pane" key="bitcoin" v-else-if="active === 'bitcoin'"><img src="../assets/qrcode/bitcoin.png" alt="bitcoin qrcode"><p><small>1LkSPTYg3xFTZp39XxQJHqA77rskkENDyX</small></p></div>
         </transition>
-      </div>
-      <div class="payment-title">
-        <p>BUY ME A</p>
-        <p>COFFEE <svg class="icon-heart" viewBox="0 0 32 32"><path d="M23.6 2c-3.363 0-6.258 2.736-7.599 5.594-1.342-2.858-4.237-5.594-7.601-5.594-4.637 0-8.4 3.764-8.4 8.401 0 9.433 9.516 11.906 16.001 21.232 6.13-9.268 15.999-12.1 15.999-21.232 0-4.637-3.763-8.401-8.4-8.401z"/></svg></p>
       </div>
     </div>
   </transition>
@@ -40,32 +55,50 @@
 </template>
 
 <script>
+import SocialMedia from './SocialMedia'
 export default {
   data () {
     return {
       showPayment: false,
-      active: 'wechat'
+      active: 'wechat',
+      isShowSocial: false
     }
   },
   methods: {
     coffeeMouseover () {
       this.showPayment = true
-    },
-    paymentMouseleave () {
-      // this.showPayment = false
     }
+  },
+  components: {
+    SocialMedia
   }
 }
 </script>
 
+<style>
+@font-face {
+  font-family: 'shadows-into-light';
+  src: url('../assets/shadows-into-light.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+</style>
+
 <style lang="scss" scoped>
 $coffee-gutter: 14px;
-$coffee-width: 64px;
+$coffee-width: 100px;
 .buy-me-coffee {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed;
   left: $coffee-gutter;
-  top: 20px;
+  bottom: 20px;
   width: $coffee-width;
+  height: $coffee-width;
+  background-color: #66cc99;
+  border: 5px solid #66cc99;
+  border-radius: 10px;
   cursor: pointer;
 }
 
@@ -73,18 +106,18 @@ $coffee-width: 64px;
   display: flex;
   position: fixed;
   left: $coffee-gutter * 2 + $coffee-width;
-  top: 20px;
+  bottom: 20px;
   z-index: 99999;
   padding: 15px;
+  font-size: 14px;
   background-color: #fff;
   border-radius: 15px;
   box-shadow: 3px 4px 31px -8px rgba(0,0,0,0.8);
 }
 
 .payment-title {
-  position: absolute;
-  bottom: 15px;
-  left: 15px;
+  display: flex;
+  justify-content: space-between;
 
   p {
     margin-bottom: 0;
@@ -95,8 +128,14 @@ $coffee-width: 64px;
 
 .icon-heart {
   fill: #dd4b39;
-  height: 1rem;
+  height: 14px;
   vertical-align: middle;
+}
+
+.payment-aside {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .payment-tabs {
@@ -112,11 +151,16 @@ $coffee-width: 64px;
   &.active {
     background-color: darken(#fff, 10%);
   }
+
+  &.disabled {
+    filter: grayscale(100%);
+    color: #aaa;
+  }
 }
 
 .payment-icon {
-  height: 1.5rem;
-  margin-right: 0.7rem;
+  height: 21px;
+  margin-right: 9.8px;
   vertical-align: bottom;
 }
 
@@ -136,6 +180,17 @@ $coffee-width: 64px;
   img {
     max-width: 100%;
   }
+}
+
+.coffee-social-media-wrap {
+  position: relative;
+}
+
+.coffee-social-media {
+  position: absolute;
+  z-index: 10;
+  left: 80%;
+  bottom: -100%;
 }
 
 .coffee-steam1,
@@ -168,6 +223,59 @@ $coffee-width: 64px;
   0%   { stroke-dashoffset:  20; opacity: 0; transform: translate(0, 0); }
   10%  { stroke-dashoffset:   0; opacity: 1; }
   100% { stroke-dashoffset: -20; opacity: 0; transform: translate(5px, -4px); }
+}
+
+@keyframes shake {
+   2% { transform: translate(-.5px, .5px) rotate(-.5deg) }
+   4% { transform: translate(2.5px, .5px) rotate(-.5deg) }
+   6% { transform: translate(-.5px, 1.5px) rotate(1.5deg) }
+   8% { transform: translate(.5px, .5px) rotate(-.5deg) }
+  10% { transform: translate(-.5px, -1.5px) rotate(-.5deg) }
+  12% { transform: translate(.5px, -.5px) rotate(1.5deg) }
+  14% { transform: translate(1.5px, 2.5px) rotate(-.5deg) }
+  16% { transform: translate(-.5px, -.5px) rotate(.5deg) }
+  18% { transform: translate(2.5px, .5px) rotate(.5deg) }
+  20% { transform: translate(.5px, -1.5px) rotate(-.5deg) }
+  22% { transform: translate(2.5px, 2.5px) rotate(-.5deg) }
+  24% { transform: translate(2.5px, 1.5px) rotate(1.5deg) }
+  26% { transform: translate(.5px, 1.5px) rotate(-.5deg) }
+  28% { transform: translate(1.5px, .5px) rotate(.5deg) }
+  30% { transform: translate(-1.5px, 2.5px) rotate(1.5deg) }
+  32% { transform: translate(.5px, .5px) rotate(.5deg) }
+  34% { transform: translate(.5px, 1.5px) rotate(1.5deg) }
+  36% { transform: translate(2.5px, -.5px) rotate(1.5deg) }
+  38% { transform: translate(.5px, 1.5px) rotate(1.5deg) }
+  40% { transform: translate(2.5px, 1.5px) rotate(1.5deg) }
+  42% { transform: translate(2.5px, -1.5px) rotate(.5deg) }
+  44% { transform: translate(.5px, -.5px) rotate(.5deg) }
+  46% { transform: translate(1.5px, -1.5px) rotate(.5deg) }
+  48% { transform: translate(-1.5px, -.5px) rotate(.5deg) }
+  50% { transform: translate(2.5px, -1.5px) rotate(1.5deg) }
+  52% { transform: translate(.5px, 1.5px) rotate(.5deg) }
+  54% { transform: translate(2.5px, -.5px) rotate(.5deg) }
+  56% { transform: translate(2.5px, 2.5px) rotate(.5deg) }
+  58% { transform: translate(2.5px, 1.5px) rotate(-.5deg) }
+  60% { transform: translate(1.5px, 1.5px) rotate(-.5deg) }
+  62% { transform: translate(-.5px, .5px) rotate(-.5deg) }
+  64% { transform: translate(2.5px, 1.5px) rotate(-.5deg) }
+  66% { transform: translate(-1.5px, .5px) rotate(1.5deg) }
+  68% { transform: translate(1.5px, -1.5px) rotate(.5deg) }
+  70% { transform: translate(.5px, .5px) rotate(-.5deg) }
+  72% { transform: translate(-.5px, 1.5px) rotate(1.5deg) }
+  74% { transform: translate(-1.5px, 1.5px) rotate(1.5deg) }
+  76% { transform: translate(2.5px, -.5px) rotate(.5deg) }
+  78% { transform: translate(2.5px, 2.5px) rotate(.5deg) }
+  80% { transform: translate(-1.5px, 2.5px) rotate(.5deg) }
+  82% { transform: translate(-1.5px, -.5px) rotate(.5deg) }
+  84% { transform: translate(.5px, 1.5px) rotate(-.5deg) }
+  86% { transform: translate(-.5px, 2.5px) rotate(.5deg) }
+  88% { transform: translate(2.5px, 2.5px) rotate(1.5deg) }
+  90% { transform: translate(-.5px, -1.5px) rotate(-.5deg) }
+  92% { transform: translate(1.5px, .5px) rotate(.5deg) }
+  94% { transform: translate(-.5px, -.5px) rotate(.5deg) }
+  96% { transform: translate(1.5px, .5px) rotate(1.5deg) }
+  98% { transform: translate(.5px, -.5px) rotate(1.5deg) }
+  0%,100% { transform: translate(0, 0) rotate(0) }
 }
 
 .fade-enter-active, .fade-leave-active {

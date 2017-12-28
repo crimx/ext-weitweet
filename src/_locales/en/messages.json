@@ -14,6 +14,16 @@
       "message": "Post Weibo and Twitter in one click."
    },
 
+   "cantact_author": {
+    "description": "Contact Author",
+    "message": "Contact Author"
+  },
+
+  "report_issue": {
+    "description": "Report Issue",
+    "message": "Report Issue"
+  },
+
    "wechat": {
       "description": "微信",
       "message": "Wechat"
