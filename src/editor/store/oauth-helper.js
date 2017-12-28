@@ -314,7 +314,7 @@ export const weibo = {
         body: formData
       })
     })
-    .then(res => res.json)
+    .then(res => res.json())
     .then(data => data.created_at ? data : Promise.reject(data))
   },
   errMsg: {
