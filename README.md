@@ -1,12 +1,10 @@
-# 小推WeiTweet v0.3.4
+# 小推 WeiTweet
 
 A chrome extension written in Vue & Vuex.
 
 <p align="center">
   <a href="https://chrome.google.com/webstore/detail/jcgjbjbbcjgkpdanbnafdbdlbjacdkln" target="_blank"><img src="assets/1400x560.png" /></a>
 </p>
-
-<h2></h2>
 
 一键编辑发送推特与微博。<br/>
 Post Weibo and Twitter in one click.
