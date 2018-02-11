@@ -25,7 +25,7 @@ export default {
   },
   weibo: {
     text: '',
-    textLength: 140,
+    textLength: 2000,
     shortUrlLength: 20,
     shortUrlLengthHttps: 20,
     photo: {},

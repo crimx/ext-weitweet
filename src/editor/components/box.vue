@@ -327,8 +327,7 @@ export default {
       return this.$store.state[this.type].photo.src
     },
     textCount () {
-      // let textLength = this.$store.state[this.type].textLength
-      let textLength = 140
+      let textLength = this.$store.state[this.type].textLength
       let textCount = this.$store.getters[`${this.type}TextCount`]
       if (textCount > textLength) {
         return textLength - textCount
