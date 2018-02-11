@@ -36,6 +36,8 @@ Open source. No data collection. Low background memory and CPU footprint.
 
 # Changelog
 
+- v0.3.7
+  - 微博字数 2000
 - v0.3.6
   - 修复微博新 api 问题
 - v0.3.3
