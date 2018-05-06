@@ -9,7 +9,7 @@ export default {
   },
   twitter: {
     text: '',
-    textLength: 140,
+    textLength: 280,
     shortUrlLength: 23,
     shortUrlLengthHttps: 23,
     photo: {},
