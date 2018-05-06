@@ -30,8 +30,9 @@ export default {
 
 <style lang="scss" scoped>
 .loader-slide {
-  animation: loader-spin 0.5s linear infinite;
-  transform-origin: 0% 308%;
+  animation: loader-spin 0.7s linear infinite;
+  transform-origin: 50% 50%;
+  will-change: transform;
 }
 
 @keyframes loader-spin {
