@@ -36,6 +36,9 @@ Open source. No data collection. Low background memory and CPU footprint.
 
 # Changelog
 
+- v0.3.9
+  - Twitter 字数 280
+  - 修复 spinner 样式
 - v0.3.7
   - 微博字数 2000
 - v0.3.6
