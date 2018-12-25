@@ -1,0 +1,20 @@
+{
+  "extension_name": {
+    "description": "Extension name",
+    "zh_CN": "小推Weitweet",
+    "zh_TW": "小推Weitweet",
+    "en": "Weitweet"
+  },
+  "extension_short_name": {
+    "description": "Extension short name",
+    "zh_CN": "Weitweet",
+    "zh_TW": "Weitweet",
+    "en": "Weitweet"
+  },
+  "extension_description": {
+    "description": "Description of extension",
+    "zh_CN": "一键编辑发送饭否、推特与微博，并可抓取页面全部图片。",
+    "zh_TW": "一鍵編輯傳送飯否、推特與微博，並可抓取頁面全部圖片。",
+    "en": "Post Fanfou, Weibo and Twitter in one click."
+  }
+}
