@@ -11,10 +11,9 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": [
-      "webpack-env",
-      "mocha",
-      "chai"
+    "typeRoots": [
+      "node_modules/@types",
+      "node_modules/web-ext-types"
     ],
     "paths": {
       "@/*": [
