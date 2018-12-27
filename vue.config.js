@@ -8,7 +8,7 @@ const DEV_BG_ENV = fs.readFileSync(
 module.exports = {
   baseUrl: './',
   outputDir: 'dist',
-  indexPath: 'popup.html',
+  indexPath: 'editor.html',
   filenameHashing: false,
   devServer: {
     // bug @see https://github.com/vuejs/vue-cli/issues/3174
@@ -70,6 +70,16 @@ function chainWebpackDev (config) {
 }
 
 function chainWebpackProd (config) {
+  // disable chunk splitting
+  config.optimization.delete('splitChunks')
+
   config.entry('background').add(path.join(__dirname, 'src/background'))
   config.entry('content').add(path.join(__dirname, 'src/content'))
+
+  config
+    .entry('extractor_twitter')
+    .add(path.join(__dirname, 'src/services/twitter/extractor.ts'))
+  config
+    .entry('extractor_fanfou')
+    .add(path.join(__dirname, 'src/services/fanfou/extractor.ts'))
 }

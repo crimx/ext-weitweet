@@ -16,5 +16,23 @@
     "zh_CN": "一键编辑发送饭否、推特与微博，并可抓取页面全部图片。",
     "zh_TW": "一鍵編輯傳送飯否、推特與微博，並可抓取頁面全部圖片。",
     "en": "Post Fanfou, Weibo and Twitter in one click."
+  },
+  "err_request_token": {
+    "description": "Unable to obtain OAuth request token",
+    "zh_CN": "无法获取请求令牌。",
+    "zh_TW": "無法獲取請求令牌。",
+    "en": "Unable to obtain OAuth request token."
+  },
+  "err_no_request_token": {
+    "description": "Missing OAuth access token",
+    "zh_CN": "缺失请求令牌。",
+    "zh_TW": "缺失請求令牌。",
+    "en": "Missing OAuth request token."
+  },
+  "err_no_access_token": {
+    "description": "Missing OAuth access token",
+    "zh_CN": "缺失访问令牌。",
+    "zh_TW": "缺失訪問令牌。",
+    "en": "Missing OAuth access token."
   }
 }
