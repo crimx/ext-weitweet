@@ -10,6 +10,11 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@types/crypto-js": "^3.1.43",
+    "@types/twitter-text": "^2.0.0",
+    "crypto-js": "^3.1.9-1",
+    "oauth-1.0a": "^2.2.5",
+    "twitter-text": "^3.0.0",
     "vue": "^2.5.17",
     "vue-class-component": "^6.0.0",
     "vue-property-decorator": "^7.0.0",
