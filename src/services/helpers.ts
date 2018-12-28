@@ -11,9 +11,9 @@ type StorageObject = { [k in ServiceIds]: ServiceStorage }
 export async function getServiceStorage (
   serviceId: ServiceIds
 ): Promise<ServiceStorage | undefined> {
-  const response = await browser.storage.local.get<StorageObject>(serviceId)
+  const response = await browser.storage.local.get<any>(serviceId)
   if (response) {
-    return response[serviceId]
+    return JSON.parse(decodeURIComponent(atob(response[serviceId])))
   }
 }
 
@@ -22,6 +22,6 @@ export function setServiceStorage (
   serviceStorage: ServiceStorage
 ): Promise<void> {
   return browser.storage.local.set({
-    [serviceId]: serviceStorage
+    [serviceId]: btoa(encodeURIComponent(JSON.stringify(serviceStorage)))
   })
 }
