@@ -1,25 +1,17 @@
-import { ServiceIds, User } from './types'
-import { Token } from './OAuth1a'
+import { ServiceIds } from './types'
 
-type ServiceStorage = {
-  user?: User
-  token?: Token | null
-}
-
-type StorageObject = { [k in ServiceIds]: ServiceStorage }
-
-export async function getServiceStorage (
+export async function getServiceStorage<T = {}> (
   serviceId: ServiceIds
-): Promise<ServiceStorage | undefined> {
+): Promise<T | undefined> {
   const response = await browser.storage.local.get<any>(serviceId)
   if (response) {
     return JSON.parse(decodeURIComponent(atob(response[serviceId])))
   }
 }
 
-export function setServiceStorage (
+export function setServiceStorage<T = any> (
   serviceId: ServiceIds,
-  serviceStorage: ServiceStorage
+  serviceStorage: T
 ): Promise<void> {
   return browser.storage.local.set({
     [serviceId]: btoa(encodeURIComponent(JSON.stringify(serviceStorage)))
