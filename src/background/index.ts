@@ -5,15 +5,6 @@ browser.runtime.onMessage.addListener(
     switch (data.type) {
       case MsgType.OpenUrl:
         return openUrl(data as MsgOpenUrl)
-      case MsgType.PinCode:
-        const editorTabId = await getEditorTabId()
-        if (editorTabId) {
-          await browser.tabs.sendMessage(editorTabId, data)
-        }
-        if (sender.tab && sender.tab.id) {
-          await browser.tabs.remove(sender.tab.id)
-        }
-        break
       default:
         break
     }
