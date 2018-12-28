@@ -1,7 +1,12 @@
 import { MsgType, MsgOpenUrl } from '@/background/types'
 import { Service, User } from '../types'
-import { OAuth1a } from '../OAuth1a'
-import { setServiceStorage } from '../helpers'
+import { OAuth1a, Token } from '../OAuth1a'
+import { setServiceStorage, getServiceStorage } from '../helpers'
+
+interface ServiceStorage {
+  user?: User
+  token?: Token | null
+}
 
 export class Fanfou implements Service {
   oauth = new OAuth1a({
@@ -12,6 +17,18 @@ export class Fanfou implements Service {
   })
   user: User = null
   maxWordCount = 140
+  constructor () {
+    getServiceStorage<ServiceStorage>('fanfou').then(storage => {
+      if (storage) {
+        if (storage.user) {
+          this.user = storage.user
+        }
+        if (storage.token) {
+          this.oauth.accessToken = storage.token
+        }
+      }
+    })
+  }
   countWords (text: string) {
     return text.length
   }
@@ -47,16 +64,18 @@ export class Fanfou implements Service {
       'http://api.fanfou.com/account/verify_credentials.json'
     )
 
-    this.user = {
-      id: json.screen_name,
-      name: json.name,
-      avatar: json.profile_image_url_large
-    }
+    if (json && json.profile_image_url_large) {
+      this.user = {
+        id: json.screen_name,
+        name: json.name,
+        avatar: json.profile_image_url_large
+      }
 
-    await setServiceStorage('fanfou', {
-      user: this.user,
-      token: this.oauth.accessToken
-    })
+      await setServiceStorage<ServiceStorage>('fanfou', {
+        user: this.user,
+        token: this.oauth.accessToken
+      })
+    }
   }
   async postContent (text: string, img?: string | Blob) {
     const formData = new FormData()

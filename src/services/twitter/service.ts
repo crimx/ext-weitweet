@@ -1,8 +1,13 @@
 import tText from 'twitter-text'
 import { MsgType, MsgOpenUrl } from '@/background/types'
 import { Service, User } from '../types'
-import { setServiceStorage } from '../helpers'
-import { OAuth1a } from '../OAuth1a'
+import { setServiceStorage, getServiceStorage } from '../helpers'
+import { OAuth1a, Token } from '../OAuth1a'
+
+interface ServiceStorage {
+  user?: User
+  token?: Token | null
+}
 
 export class Twitter implements Service {
   oauth = new OAuth1a({
@@ -13,8 +18,20 @@ export class Twitter implements Service {
   })
   user: User = null
   maxWordCount = 280
+  constructor () {
+    getServiceStorage<ServiceStorage>('twitter').then(storage => {
+      if (storage) {
+        if (storage.user) {
+          this.user = storage.user
+        }
+        if (storage.token) {
+          this.oauth.accessToken = storage.token
+        }
+      }
+    })
+  }
   countWords (text: string) {
-    return tText.getTweetLength('', {
+    return tText.getTweetLength(text, {
       short_url_length: 23,
       short_url_length_https: 23
     })
@@ -52,16 +69,18 @@ export class Twitter implements Service {
       'https://api.twitter.com/1.1/account/verify_credentials.json'
     )
 
-    this.user = {
-      id: json.screen_name,
-      name: json.name,
-      avatar: json.profile_image_url_https
-    }
+    if (json && json.profile_image_url_https) {
+      this.user = {
+        id: json.screen_name,
+        name: json.name,
+        avatar: json.profile_image_url_https
+      }
 
-    await setServiceStorage('twitter', {
-      user: this.user,
-      token: this.oauth.accessToken
-    })
+      await setServiceStorage<ServiceStorage>('twitter', {
+        user: this.user,
+        token: this.oauth.accessToken
+      })
+    }
   }
   async postContent (text: string, img?: string | Blob) {
     let mediaStr: string = ''
