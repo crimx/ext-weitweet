@@ -24,5 +24,5 @@ export interface Service {
   authorize: () => void
   obtainAccessToken: (code: string) => Promise<void>
   checkAccessToken: () => Promise<void>
-  postContent: (imgSrc?: string) => Promise<void>
+  postContent: (text: string, img?: string | Blob) => Promise<void>
 }
