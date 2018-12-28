@@ -13,7 +13,11 @@
   "content_scripts": [
     {
       "js": ["js/browser-polyfill.min.js", "js/extractor_twitter.js"],
-      "matches": ["https://api.twitter.com/oauth/authorize"]
+      "matches": ["*://api.twitter.com/oauth/authorize*"]
+    },
+    {
+      "js": ["js/browser-polyfill.min.js", "js/extractor_fanfou.js"],
+      "matches": ["*://fanfou.com/oauth/authorize*"]
     }
   ],
   "browser_action": {
