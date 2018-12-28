@@ -69,13 +69,22 @@ export class OAuth1a {
     return this.accessToken
   }
 
-  async send<T = any> (requestData: OAuth.RequestOptions): Promise<T> {
+  async send<T = any> (url: string, requestInit: RequestInit = {}): Promise<T> {
     if (!this.accessToken) {
       throw new Error('err_no_access_token')
     }
 
-    const response = await fetch(requestData.url, {
-      method: requestData.method,
+    const requestData = {
+      url,
+      method: (requestInit.method || 'GET').toUpperCase(),
+      data: requestInit.headers
+    }
+
+    const response = await fetch(url, {
+      ...requestInit,
+      // remove cookies
+      credentials: 'omit',
+      referrer: 'no-referrer',
       headers: {
         ...this.oauth.toHeader(
           this.oauth.authorize(requestData, this.accessToken)
@@ -86,4 +95,4 @@ export class OAuth1a {
   }
 }
 
-export default OAuth
+export default OAuth1a
