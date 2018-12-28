@@ -48,10 +48,9 @@ export class Twitter implements Service {
     await this.checkAccessToken()
   }
   async checkAccessToken () {
-    const json = await this.oauth.send({
-      url: 'https://api.twitter.com/1.1/account/verify_credentials.json',
-      method: 'GET'
-    })
+    const json = await this.oauth.send(
+      'https://api.twitter.com/1.1/account/verify_credentials.json'
+    )
 
     this.user = {
       id: json.screen_name,
@@ -59,13 +58,42 @@ export class Twitter implements Service {
       avatar: json.profile_image_url_https
     }
 
-    setServiceStorage('twitter', {
+    await setServiceStorage('twitter', {
       user: this.user,
       token: this.oauth.accessToken
     })
   }
-  async postContent (imgSrc?: string) {
-    // @todo
+  async postContent (text: string, img?: string | Blob) {
+    let mediaStr: string = ''
+    if (img) {
+      const formData = new FormData()
+      if (typeof img === 'string') {
+        const response = await fetch(img)
+        img = await response.blob()
+      }
+      formData.append('media', img)
+      const response = await this.oauth.send(
+        'https://upload.twitter.com/1.1/media/upload.json',
+        {
+          method: 'POST',
+          body: formData
+        }
+      )
+      if (response) {
+        mediaStr = response.media_id_string
+      }
+    }
+    const json = await this.oauth.send(
+      'https://api.twitter.com/1.1/statuses/update.json' +
+        `?status=${encodeURIComponent(text)}` +
+        (mediaStr ? `&media_ids=${mediaStr}` : ''),
+      {
+        method: 'POST'
+      }
+    )
+    if (!json || !json.created_at) {
+      return Promise.reject()
+    }
   }
 }
 
