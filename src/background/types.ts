@@ -1,6 +1,10 @@
+import { ServiceId } from '@/services/types'
+
 export const enum MsgType {
   OpenUrl,
-  PinCode
+  PinCode,
+  IMGs,
+  ExtractorReady
 }
 
 export interface Message {
@@ -16,7 +20,12 @@ export interface MsgOpenUrl extends Message {
 
 export interface MsgPinCode extends Message {
   type: MsgType.PinCode
-  service: 'twitter' | 'fanfou'
+  service: ServiceId
   /** PIN code */
   code: string
+}
+
+export interface MsgIMGs extends Message {
+  type: MsgType.IMGs
+  col: { [index: string]: number }
 }

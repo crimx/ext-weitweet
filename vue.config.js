@@ -63,7 +63,6 @@ function chainWebpackDev (config) {
   config
     .entry('app')
     .prepend(path.join(__dirname, 'src/background'))
-    .prepend(path.join(__dirname, 'src/content'))
     .prepend(path.join(__dirname, 'node_modules/webextension-polyfill'))
     .prepend(path.join(__dirname, 'scripts/dev-env/webextension-page'))
 
@@ -92,7 +91,9 @@ function chainWebpackProd (config) {
   config.optimization.delete('splitChunks')
 
   config.entry('background').add(path.join(__dirname, 'src/background'))
-  config.entry('content').add(path.join(__dirname, 'src/content'))
+  config
+    .entry('img-extractor')
+    .add(path.join(__dirname, 'src/content/img-extractor'))
 
   config
     .entry('extractor_twitter')
