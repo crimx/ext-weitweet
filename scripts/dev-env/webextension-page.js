@@ -5,6 +5,8 @@
  */
 import _ from 'lodash'
 
+const locales = require('@/_locales/messages.json')
+
 const platform =
   navigator.userAgent.indexOf('Chrome') !== -1 ? 'chrome' : 'firefox'
 
@@ -15,6 +17,9 @@ window.msgBackgroundListeners = window.msgBackgroundListeners || []
 
 window.browser = {
   browserAction: {
+    onClicked: {
+      addListener () {}
+    },
     setTitle () {},
     setBadgeText () {},
     getBadgeText (x, cb) {
@@ -47,7 +52,7 @@ window.browser = {
   },
   i18n: {
     getMessage (k) {
-      return k
+      return locales[k] ? locales[k].zh_CN : k
     },
     getUILanguage () {
       return 'en'
@@ -209,8 +214,12 @@ function sendMessage (extensionId, message) {
 function genStorageApis () {
   /* global storageData */
   window['storageData'] = {
-    local: {},
-    sync: {},
+    local: process.env.VUE_APP_STORAGE_LOCAL
+      ? JSON.parse(process.env.VUE_APP_STORAGE_LOCAL)
+      : {},
+    sync: process.env.VUE_APP_STORAGE_SYNC
+      ? JSON.parse(process.env.VUE_APP_STORAGE_SYNC)
+      : {},
     listeners: []
   }
 
