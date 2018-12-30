@@ -12,22 +12,28 @@ browser.runtime.onMessage.addListener(
 )
 
 browser.browserAction.onClicked.addListener(async sourceTab => {
-  const editorTab = await browser.tabs.create({
+  const { tab, isNew } = await openUrl({
     url: browser.extension.getURL(
       `editor.html` +
         `?title=${encodeURIComponent(sourceTab.title || '')}` +
         `&url=${encodeURIComponent(sourceTab.url || '')}`
     )
   })
-  if (editorTab && editorTab.id) {
-    await setEditorTabId(editorTab.id)
+  if (isNew && tab && tab.id) {
+    await setEditorTabId(tab.id)
   }
 })
 
 /**
  * Open a url on new tab or highlight a existing tab if already opened
  */
-async function openUrl ({ url, self }: MsgOpenUrl): Promise<void> {
+async function openUrl ({
+  url,
+  self
+}: {
+url: string
+self?: boolean
+}): Promise<{ tab: browser.tabs.Tab; isNew: boolean }> {
   if (self) {
     url = browser.runtime.getURL(url)
   }
@@ -40,8 +46,9 @@ async function openUrl ({ url, self }: MsgOpenUrl): Promise<void> {
     if (highlight) {
       await highlight({ tabs: index, windowId })
     }
+    return { tab: tabs[0], isNew: false }
   } else {
-    await browser.tabs.create({ url })
+    return { tab: await browser.tabs.create({ url }), isNew: true }
   }
 }
 
