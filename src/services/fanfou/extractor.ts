@@ -1,20 +1,14 @@
-/**
- * OAuth PIN code extractor
- */
+import { setupExtractor } from '../helpers'
 
-import { MsgType, MsgPinCode } from '@/background/types'
-
-const interval = setInterval(() => {
+setupExtractor(() => {
   const el = document.querySelector<HTMLDivElement>('.pin')
   if (el) {
     const code = el.innerText.trim()
     if (code) {
-      clearInterval(interval)
-      browser.runtime.sendMessage<MsgPinCode>({
-        type: MsgType.PinCode,
+      return {
         service: 'fanfou',
         code
-      })
+      }
     }
   }
-}, 100)
+})

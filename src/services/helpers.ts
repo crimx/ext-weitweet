@@ -1,3 +1,4 @@
+import { MsgType, MsgPinCode, Message } from '@/background/types'
 import { ServiceId } from './types'
 
 export async function getServiceStorage<T = {}> (
@@ -18,4 +19,29 @@ export function setServiceStorage<T = any> (
   return browser.storage.local.set({
     [serviceId]: btoa(encodeURIComponent(JSON.stringify(serviceStorage)))
   })
+}
+
+/**
+ * OAuth PIN code extractor
+ * @param callback is PIN code extracted successfully
+ */
+export async function setupExtractor (
+  callback: () => { service: ServiceId; code: string } | void
+) {
+  const proceed = browser.runtime.sendMessage<Message>({
+    type: MsgType.ExtractorReady
+  })
+  if (proceed) {
+    const interval = setInterval(() => {
+      const result = callback()
+      if (result) {
+        clearInterval(interval)
+        browser.runtime.sendMessage<MsgPinCode>({
+          type: MsgType.PinCode,
+          service: result.service,
+          code: result.code
+        })
+      }
+    }, 100)
+  }
 }
