@@ -1,38 +1,116 @@
 {
-  "extension_name": {
-    "description": "Extension name",
-    "zh_CN": "小推Weitweet",
-    "zh_TW": "小推Weitweet",
-    "en": "Weitweet"
-  },
-  "extension_short_name": {
-    "description": "Extension short name",
-    "zh_CN": "Weitweet",
-    "zh_TW": "Weitweet",
-    "en": "Weitweet"
-  },
-  "extension_description": {
-    "description": "Description of extension",
-    "zh_CN": "一键编辑发送饭否、推特与微博，并可抓取页面全部图片。",
-    "zh_TW": "一鍵編輯傳送飯否、推特與微博，並可抓取頁面全部圖片。",
-    "en": "Post Fanfou, Weibo and Twitter in one click."
-  },
-  "err_request_token": {
-    "description": "Unable to obtain OAuth request token",
-    "zh_CN": "无法获取请求令牌。",
-    "zh_TW": "無法獲取請求令牌。",
-    "en": "Unable to obtain OAuth request token."
-  },
-  "err_no_request_token": {
-    "description": "Missing OAuth access token",
-    "zh_CN": "缺失请求令牌。",
-    "zh_TW": "缺失請求令牌。",
-    "en": "Missing OAuth request token."
+  "err_access_token": {
+    "description": "Unable to obtain OAuth access token",
+    "en": "Unable to obtain OAuth access token.",
+    "zh_CN": "无法获取访问令牌。",
+    "zh_TW": "無法獲取訪問令牌。"
   },
   "err_no_access_token": {
     "description": "Missing OAuth access token",
+    "en": "Missing OAuth access token.",
     "zh_CN": "缺失访问令牌。",
-    "zh_TW": "缺失訪問令牌。",
-    "en": "Missing OAuth access token."
+    "zh_TW": "缺失訪問令牌。"
+  },
+  "err_no_request_token": {
+    "description": "Missing OAuth access token",
+    "en": "Missing OAuth request token.",
+    "zh_CN": "缺失请求令牌。",
+    "zh_TW": "缺失請求令牌。"
+  },
+  "err_request_token": {
+    "description": "Unable to obtain OAuth request token",
+    "en": "Unable to obtain OAuth request token.",
+    "zh_CN": "无法获取请求令牌。",
+    "zh_TW": "無法獲取請求令牌。"
+  },
+  "err_shorten_urls": {
+    "description": "Unable to shorten urls",
+    "en": "Unable to shorten urls.",
+    "zh_CN": "缩短链接失败。",
+    "zh_TW": "縮短連結失敗。"
+  },
+  "err_post": {
+    "description": "Post failed.",
+    "en": "Post failed.",
+    "zh_CN": "发送失败。",
+    "zh_TW": "傳送失敗。"
+  },
+  "extension_description": {
+    "description": "Description of extension",
+    "en": "Post Fanfou, Weibo and Twitter in one click.",
+    "zh_CN": "一键编辑发送饭否、推特与微博，并可抓取页面全部图片。",
+    "zh_TW": "一鍵編輯傳送飯否、推特與微博，並可抓取頁面全部圖片。"
+  },
+  "extension_name": {
+    "description": "Extension name",
+    "en": "Weitweet",
+    "zh_CN": "小推Weitweet",
+    "zh_TW": "小推Weitweet"
+  },
+  "extension_short_name": {
+    "description": "Extension short name",
+    "en": "Weitweet",
+    "zh_CN": "Weitweet",
+    "zh_TW": "Weitweet"
+  },
+  "fanfou": {
+    "description": "饭否",
+    "en": "Fanfou",
+    "zh_CN": "饭否",
+    "zh_TW": "飯否"
+  },
+  "loggingin": {
+    "description": "Logging in...",
+    "en": "Logging in...",
+    "zh_CN": "登录中...",
+    "zh_TW": "登入中..."
+  },
+  "login": {
+    "description": "Login",
+    "en": "Login",
+    "zh_CN": "登录",
+    "zh_TW": "登入"
+  },
+  "not_login": {
+    "description": "Not login",
+    "en": "Not login",
+    "zh_CN": "尚未登录",
+    "zh_TW": "尚未登入"
+  },
+  "post": {
+    "description": "Send",
+    "en": "Send",
+    "zh_CN": "发送",
+    "zh_TW": "傳送"
+  },
+  "posting": {
+    "description": "Posting...",
+    "en": "Posting...",
+    "zh_CN": "发送中...",
+    "zh_TW": "傳送中..."
+  },
+  "toggle_service": {
+    "description": "Toggle service",
+    "en": "Toggle service",
+    "zh_CN": "是否用此账户发送",
+    "zh_TW": "是否用此賬戶傳送"
+  },
+  "twitter": {
+    "description": "推特",
+    "en": "Twitter",
+    "zh_CN": "推特",
+    "zh_TW": "推特"
+  },
+  "unknown_error": {
+    "description": "Unknown error occurred.",
+    "en": "Unknown error occurred.",
+    "zh_CN": "未知错误。",
+    "zh_TW": "未知錯誤。"
+  },
+  "weibo": {
+    "description": "微博",
+    "en": "Weibo",
+    "zh_CN": "微博",
+    "zh_TW": "微博"
   }
 }
