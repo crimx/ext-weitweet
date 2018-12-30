@@ -1,69 +1,62 @@
 import tText from 'twitter-text'
 import { MsgType, MsgOpenUrl } from '@/background/types'
-import { Service, User } from '../types'
-import { setServiceStorage, getServiceStorage } from '../helpers'
+import { Service } from '../service'
 import { OAuth1a, Token } from '../OAuth1a'
+import { encodeError } from '@/helpers/error'
 
-interface ServiceStorage {
-  user?: User
-  token?: Token | null
-}
+export class Twitter extends Service {
+  constructor () {
+    super('twitter')
+  }
 
-export class Twitter implements Service {
-  oauth = new OAuth1a({
+  readonly maxWordCount = 280
+
+  private readonly oauth = new OAuth1a({
     consumer: {
       key: process.env.VUE_APP_TWITTER_CONSUMER_KEY,
       secret: process.env.VUE_APP_TWITTER_CONSUMER_SECRET
-    }
+    },
+    accessToken: this.token
   })
-  user: User = null
-  maxWordCount = 280
-  constructor () {
-    getServiceStorage<ServiceStorage>('twitter').then(storage => {
-      if (storage) {
-        if (storage.user) {
-          this.user = storage.user
-        }
-        if (storage.token) {
-          this.oauth.accessToken = storage.token
-        }
-      }
-    })
-  }
+
+  protected token: Token | null = null
+
   countWords (text: string) {
     return tText.getTweetLength(text, {
       short_url_length: 23,
       short_url_length_https: 23
     })
   }
-  authorize () {
-    this.oauth
-      .obtainRequestToken({
-        url: 'https://api.twitter.com/oauth/request_token',
-        method: 'POST',
-        data: { oauth_callback: 'oob' }
-      })
-      .then(requestToken => {
-        if (!requestToken) {
-          throw new Error('err_request_token')
-        }
 
-        browser.runtime.sendMessage<MsgOpenUrl>({
-          type: MsgType.OpenUrl,
-          url: `https://api.twitter.com/oauth/authorize?oauth_token=${
-            requestToken.key
-          }`
-        })
-      })
+  async authorize () {
+    const requestToken = await this.oauth.obtainRequestToken({
+      url: 'https://api.twitter.com/oauth/request_token',
+      method: 'POST',
+      data: { oauth_callback: 'oob' }
+    })
+    if (!requestToken) {
+      throw new Error(encodeError('request_token'))
+    }
+
+    await browser.runtime.sendMessage<MsgOpenUrl>({
+      type: MsgType.OpenUrl,
+      url: `https://api.twitter.com/oauth/authorize?oauth_token=${
+        requestToken.key
+      }`
+    })
+
+    return true
   }
+
   async obtainAccessToken (code: string) {
-    await this.oauth.obtainAccessToken({
+    this.token = await this.oauth.obtainAccessToken({
       url: 'https://api.twitter.com/oauth/access_token',
       method: 'POST',
       data: { oauth_verifier: code }
     })
     await this.checkAccessToken()
   }
+
   async checkAccessToken () {
     const json = await this.oauth.send(
       'https://api.twitter.com/1.1/account/verify_credentials.json'
@@ -76,12 +69,10 @@ export class Twitter implements Service {
         avatar: json.profile_image_url_https
       }
 
-      await setServiceStorage<ServiceStorage>('twitter', {
-        user: this.user,
-        token: this.oauth.accessToken
-      })
+      await this.setStorage()
     }
   }
+
   async postContent (text: string, img?: string | Blob) {
     let mediaStr: string = ''
     if (img) {
@@ -111,7 +102,7 @@ export class Twitter implements Service {
       }
     )
     if (!json || !json.created_at) {
-      return Promise.reject()
+      return Promise.reject(new Error())
     }
   }
 }

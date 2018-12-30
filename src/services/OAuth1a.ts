@@ -1,12 +1,11 @@
 import OAuth from 'oauth-1.0a'
 import hmacSHA1 from 'crypto-js/hmac-sha1'
 import Base64 from 'crypto-js/enc-base64'
+import { encodeError } from '@/helpers/error'
 
 export interface OAuthConfig {
-  consumer: {
-    key: string
-    secret: string
-  }
+  consumer: Token
+  accessToken: Token | null
 }
 
 export type Token = {
@@ -33,6 +32,7 @@ export class OAuth1a {
       }
     })
     this.consumerToken = config.consumer
+    this.accessToken = config.accessToken
   }
 
   async obtainToken (
@@ -52,7 +52,7 @@ export class OAuth1a {
       this.accessToken = { key, secret }
       return this.accessToken
     }
-    return Promise.reject()
+    return Promise.reject(new Error())
   }
 
   async obtainRequestToken (requestData: OAuth.RequestOptions): Promise<Token> {
@@ -62,7 +62,7 @@ export class OAuth1a {
 
   async obtainAccessToken (requestData: OAuth.RequestOptions): Promise<Token> {
     if (!this.requestToken) {
-      throw new Error('err_no_request_token')
+      throw new Error(encodeError('no_request_token'))
     }
 
     this.accessToken = await this.obtainToken(requestData, this.requestToken)
@@ -71,7 +71,7 @@ export class OAuth1a {
 
   async send<T = any> (url: string, requestInit: RequestInit = {}): Promise<T> {
     if (!this.accessToken) {
-      throw new Error('err_no_access_token')
+      throw new Error(encodeError('no_access_token'))
     }
 
     const requestData = {

@@ -1,60 +1,44 @@
 import tText from 'twitter-text'
-import { Service, User } from '../types'
-import { setServiceStorage, getServiceStorage } from '../helpers'
+import { Service } from '../service'
 
-interface ServiceStorage {
-  user?: User
-  accessToken?: string
-  uid?: string
-}
+import { encodeError } from '@/helpers/error'
 
-export class Weibo implements Service {
-  consumer = {
-    key: process.env.VUE_APP_WEIBO_CONSUMER_KEY,
-    secret: process.env.VUE_APP_WEIBO_CONSUMER_SECRET
-  }
-  accessToken = ''
-  uid = ''
-  user: User = null
-  maxWordCount = 2000
+const errMsg = require('./error.json')
+
+export class Weibo extends Service {
   constructor () {
-    getServiceStorage<ServiceStorage>('weibo').then(storage => {
-      if (storage) {
-        if (storage.user) {
-          this.user = storage.user
-        }
-        if (storage.accessToken) {
-          this.accessToken = storage.accessToken
-        }
-        if (storage.uid) {
-          this.uid = storage.uid
-        }
-      }
-    })
+    super('weibo')
   }
+
+  readonly maxWordCount = 2000
+
   countWords (text: string) {
     return tText.getTweetLength(text, {
       short_url_length: 20,
       short_url_length_https: 20
     })
   }
+
   async authorize () {
     const state = `weitweet-${Date.now()}`
     const responseUrl = await browser.identity.launchWebAuthFlow({
       url:
         'https://api.weibo.com/oauth2/authorize' +
-        `?client_id=${this.consumer.key}` +
+        `?client_id=${process.env.VUE_APP_WEIBO_CONSUMER_KEY}` +
         `&redirect_uri=${process.env.VUE_APP_REDIRECT_URI}` +
         `&state=${state}` +
         '&response_type=code&forcelogin=true',
-      interactive: false
+      interactive: true
     })
     const url = new URL(responseUrl)
     const code = url.searchParams.get('code')
     if (code && state === url.searchParams.get('state')) {
-      return this.obtainAccessToken(code)
+      await this.obtainAccessToken(code)
     }
+
+    return false
   }
+
   async obtainAccessToken (code: string) {
     const response = await fetch(`https://api.weibo.com/oauth2/access_token`, {
       method: 'POST',
@@ -63,8 +47,8 @@ export class Weibo implements Service {
         'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
       },
       body:
-        `client_id=${this.consumer.key}` +
-        `&client_secret=${this.consumer.secret}` +
+        `client_id=${process.env.VUE_APP_WEIBO_CONSUMER_KEY}` +
+        `&client_secret=${process.env.VUE_APP_WEIBO_CONSUMER_SECRET}` +
         `&code=${code}` +
         `&redirect_uri=${encodeURIComponent(
           process.env.VUE_APP_REDIRECT_URI
@@ -72,19 +56,21 @@ export class Weibo implements Service {
         `&grant_type=authorization_code`
     })
     const json = await response.json()
-    if (json.access_token) {
-      this.accessToken = json.access_token
+    if (json.access_token && json.uid) {
+      this.token = {
+        accessToken: json.access_token,
+        uid: json.uid
+      }
     }
-    if (json.uid) {
-      this.uid = json.uid
-    }
+
     await this.checkAccessToken()
   }
+
   async checkAccessToken () {
     const response = await fetch(
       `https://api.weibo.com/2/users/show.json?access_token=${
-        this.accessToken
-      }&uid=${this.uid}`
+        this.token.accessToken
+      }&uid=${this.token.uid}`
     )
     const json = await response.json()
     if (json && json.avatar_large) {
@@ -93,17 +79,14 @@ export class Weibo implements Service {
         name: json.name,
         avatar: json.avatar_large.replace(/^http:/, 'https:')
       }
-      await setServiceStorage<ServiceStorage>('weibo', {
-        user: this.user,
-        accessToken: this.accessToken,
-        uid: this.uid
-      })
+      await this.setStorage()
     }
   }
+
   async postContent (text: string, img?: string | Blob) {
     const formattedText = await replaceUrls(text)
     const formData = new FormData()
-    formData.append('access_token', this.accessToken)
+    formData.append('access_token', this.token.accessToken)
     formData.append('status', formattedText)
     if (img) {
       if (typeof img === 'string') {
@@ -112,7 +95,6 @@ export class Weibo implements Service {
       }
       formData.append('pic', img)
     }
-
     const response = await fetch(
       `https://api.weibo.com/2/statuses/share.json`,
       {
@@ -125,7 +107,11 @@ export class Weibo implements Service {
     )
     const json = await response.json()
     if (!json || !json.created_at) {
-      return Promise.reject()
+      let err = ''
+      if (json && json.error_code) {
+        err = errMsg[json.error_code]
+      }
+      return Promise.reject(new Error(err))
     }
   }
 }
@@ -167,7 +153,7 @@ function shortenUrls (urlsWithIndices: tText.UrlWithIndices[]) {
     .then(urls =>
       urls.map((url, i) => ({ url, indices: urlsWithIndices[i].indices }))
     )
-    .catch(() => Promise.reject({ error: 'Shorten URLs failed' }))
+    .catch(() => Promise.reject(new Error(encodeError('shorten_urls'))))
 }
 
 function toRfc3986 (val: string): string {

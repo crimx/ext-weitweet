@@ -1,64 +1,51 @@
 import { MsgType, MsgOpenUrl } from '@/background/types'
-import { Service, User } from '../types'
+import { Service } from '../service'
 import { OAuth1a, Token } from '../OAuth1a'
-import { setServiceStorage, getServiceStorage } from '../helpers'
+import { encodeError } from '@/helpers/error'
 
-interface ServiceStorage {
-  user?: User
-  token?: Token | null
-}
+export class Fanfou extends Service {
+  constructor () {
+    super('fanfou')
+  }
 
-export class Fanfou implements Service {
-  oauth = new OAuth1a({
+  readonly maxWordCount = 140
+
+  private oauth = new OAuth1a({
     consumer: {
       key: process.env.VUE_APP_FANFOU_CONSUMER_KEY,
       secret: process.env.VUE_APP_FANFOU_CONSUMER_SECRET
-    }
+    },
+    accessToken: this.token
   })
-  user: User = null
-  maxWordCount = 140
-  constructor () {
-    getServiceStorage<ServiceStorage>('fanfou').then(storage => {
-      if (storage) {
-        if (storage.user) {
-          this.user = storage.user
-        }
-        if (storage.token) {
-          this.oauth.accessToken = storage.token
-        }
-      }
-    })
-  }
-  countWords (text: string) {
-    return text.length
-  }
-  authorize () {
-    this.oauth
-      .obtainRequestToken({
-        url: 'http://fanfou.com/oauth/request_token',
-        method: 'GET'
-      })
-      .then(requestToken => {
-        if (!requestToken) {
-          throw new Error('err_request_token')
-        }
 
-        browser.runtime.sendMessage<MsgOpenUrl>({
-          type: MsgType.OpenUrl,
-          url: `https://fanfou.com/oauth/authorize?oauth_callback=oob&oauth_token=${
-            requestToken.key
-          }`
-        })
-      })
+  async authorize () {
+    const requestToken = await this.oauth.obtainRequestToken({
+      url: 'http://fanfou.com/oauth/request_token',
+      method: 'GET'
+    })
+    if (!requestToken) {
+      throw new Error(encodeError('request_token'))
+    }
+
+    await browser.runtime.sendMessage<MsgOpenUrl>({
+      type: MsgType.OpenUrl,
+      url: `https://fanfou.com/oauth/authorize?oauth_callback=oob&oauth_token=${
+        requestToken.key
+      }`
+    })
+
+    return true
   }
+
   async obtainAccessToken (code: string) {
-    await this.oauth.obtainAccessToken({
+    this.token = await this.oauth.obtainAccessToken({
       url: 'http://fanfou.com/oauth/access_token',
       method: 'GET',
       data: { oauth_verifier: code }
     })
     await this.checkAccessToken()
   }
+
   async checkAccessToken () {
     const json = await this.oauth.send(
       'http://api.fanfou.com/account/verify_credentials.json'
@@ -71,12 +58,10 @@ export class Fanfou implements Service {
         avatar: json.profile_image_url_large
       }
 
-      await setServiceStorage<ServiceStorage>('fanfou', {
-        user: this.user,
-        token: this.oauth.accessToken
-      })
+      await this.setStorage()
     }
   }
+
   async postContent (text: string, img?: string | Blob) {
     const formData = new FormData()
     formData.append('status', text)
@@ -92,7 +77,7 @@ export class Fanfou implements Service {
       body: formData
     })
     if (!json || !json.created_at) {
-      return Promise.reject()
+      return Promise.reject(new Error())
     }
   }
 }
