@@ -13,26 +13,43 @@ module.exports = {
   devServer: {
     // bug @see https://github.com/vuejs/vue-cli/issues/3174
     disableHostCheck: true,
-    contentBase: [
-      path.join(__dirname, './node_modules/webextension-polyfill/dist'),
-      path.join(__dirname, './public')
-    ],
-    proxy: {
-      '/js': {
-        target: '/js',
-        bypass: req => {
-          if (req.url.indexOf('/js/browser-polyfill.min.js') !== -1) {
-            return req.url.replace(
-              '/js/browser-polyfill.min.js',
-              '/browser-polyfill.min.js'
-            )
-          }
-        }
-      }
-    }
+    contentBase: [path.join(__dirname, './public')]
   },
   chainWebpack: config => {
     config.resolve.extensions.add('ts')
+
+    // only hash assets to avoid collision
+    config.module
+      .rule('images')
+      .use('url-loader')
+      .tap(options => {
+        options.fallback.options.name = 'img/[hash].[ext]'
+        return options
+      })
+
+    config.module
+      .rule('svg')
+      .use('file-loader')
+      .tap(options => {
+        options.name = 'img/[hash].[ext]'
+        return options
+      })
+
+    config.module
+      .rule('media')
+      .use('url-loader')
+      .tap(options => {
+        options.fallback.options.name = 'media/[hash].[ext]'
+        return options
+      })
+
+    config.module
+      .rule('fonts')
+      .use('url-loader')
+      .tap(options => {
+        options.fallback.options.name = 'fonts/[hash].[ext]'
+        return options
+      })
 
     if (process.env.NODE_ENV === 'development') {
       chainWebpackDev(config)
@@ -47,6 +64,7 @@ function chainWebpackDev (config) {
     .entry('app')
     .prepend(path.join(__dirname, 'src/background'))
     .prepend(path.join(__dirname, 'src/content'))
+    .prepend(path.join(__dirname, 'node_modules/webextension-polyfill'))
     .prepend(path.join(__dirname, 'scripts/dev-env/webextension-page'))
 
   // // example entry with html
