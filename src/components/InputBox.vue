@@ -82,10 +82,12 @@ export default class InputBox extends Vue {
     ) => {
       switch (data.type) {
         case MsgType.PinCode: // OAuth 1a
+          const platform = this.platforms[(data as MsgPinCode).service]
+          if (!platform.loggingin) { return }
+
           if (sender.tab && sender.tab.id) {
             browser.tabs.remove(sender.tab.id)
           }
-          const platform = this.platforms[(data as MsgPinCode).service]
           try {
             await platform.service.obtainAccessToken((data as MsgPinCode).code)
           } catch (err) {
