@@ -12,16 +12,16 @@ browser.runtime.onMessage.addListener(
 )
 
 browser.browserAction.onClicked.addListener(async sourceTab => {
-  const { tab, isNew } = await openUrl({
+  await openUrl({
     url: browser.extension.getURL(
       `editor.html` +
         `?title=${encodeURIComponent(sourceTab.title || '')}` +
-        `&url=${encodeURIComponent(sourceTab.url || '')}`
+        `&url=${encodeURIComponent(sourceTab.url || '')}` +
+        `&id=${encodeURIComponent(
+          sourceTab.id != null ? String(sourceTab.id) : ''
+        )}`
     )
   })
-  if (isNew && tab && tab.id) {
-    await setEditorTabId(tab.id)
-  }
 })
 
 /**
@@ -33,7 +33,7 @@ async function openUrl ({
 }: {
 url: string
 self?: boolean
-}): Promise<{ tab: browser.tabs.Tab; isNew: boolean }> {
+}): Promise<browser.tabs.Tab> {
   if (self) {
     url = browser.runtime.getURL(url)
   }
@@ -46,18 +46,8 @@ self?: boolean
     if (highlight) {
       await highlight({ tabs: index, windowId })
     }
-    return { tab: tabs[0], isNew: false }
+    return tabs[0]
   } else {
-    return { tab: await browser.tabs.create({ url }), isNew: true }
+    return browser.tabs.create({ url })
   }
-}
-
-function setEditorTabId (editorTabId: number) {
-  return browser.storage.local.set({ editorTabId })
-}
-
-async function getEditorTabId (): Promise<number> {
-  return (await browser.storage.local.get<{ editorTabId: number }>(
-    'editorTabId'
-  )).editorTabId
 }
