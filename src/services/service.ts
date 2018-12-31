@@ -1,4 +1,8 @@
-import { setServiceStorage, getServiceStorage } from './helpers'
+import {
+  setServiceStorage,
+  getServiceStorage,
+  clearServiceStorage
+} from './helpers'
 import { User, ServiceId } from './types'
 
 export interface ServiceStorage {
@@ -54,18 +58,23 @@ export abstract class Service {
   }
 
   async getStorage () {
-    const storage = await getServiceStorage<ServiceStorage>(this.id)
-    if (storage) {
-      if (storage.user != null) {
-        this.user = storage.user
-      }
-      if (storage.token != null) {
-        this.token = storage.token
-      }
-      if (storage.enable != null) {
-        this.enable = storage.enable
-      }
+    const storage: ServiceStorage = (await getServiceStorage<ServiceStorage>(
+      this.id
+    )) || {
+      enable: true,
+      user: null,
+      token: null
     }
+    this.enable = !!storage.enable
+    this.user = storage.user != null ? storage.user : null
+    this.token = storage.token != null ? storage.token : null
+  }
+
+  async clearStorage () {
+    await clearServiceStorage(this.id)
+    this.enable = true
+    this.user = null
+    this.token = null
   }
 }
 

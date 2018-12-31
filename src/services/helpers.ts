@@ -21,6 +21,10 @@ export function setServiceStorage<T = any> (
   })
 }
 
+export function clearServiceStorage (serviceId: ServiceId): Promise<void> {
+  return browser.storage.local.remove(serviceId)
+}
+
 /**
  * OAuth PIN code extractor
  * @param callback is PIN code extracted successfully

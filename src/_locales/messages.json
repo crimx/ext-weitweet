@@ -17,6 +17,12 @@
     "zh_CN": "缺失请求令牌。",
     "zh_TW": "缺失請求令牌。"
   },
+  "err_post": {
+    "description": "Post failed.",
+    "en": "Post failed.",
+    "zh_CN": "发送失败。",
+    "zh_TW": "傳送失敗。"
+  },
   "err_request_token": {
     "description": "Unable to obtain OAuth request token",
     "en": "Unable to obtain OAuth request token.",
@@ -29,11 +35,11 @@
     "zh_CN": "缩短链接失败。",
     "zh_TW": "縮短連結失敗。"
   },
-  "err_post": {
-    "description": "Post failed.",
-    "en": "Post failed.",
-    "zh_CN": "发送失败。",
-    "zh_TW": "傳送失敗。"
+  "logout_confirm": {
+    "description": "Logout account: ",
+    "en": "Logout account: ",
+    "zh_CN": "退出账户：",
+    "zh_TW": "退出賬戶："
   },
   "extension_description": {
     "description": "Description of extension",
@@ -58,6 +64,12 @@
     "en": "Fanfou",
     "zh_CN": "饭否",
     "zh_TW": "飯否"
+  },
+  "gallery_empty": {
+    "description": "No image.",
+    "en": "No image.",
+    "zh_CN": "没有图片。",
+    "zh_TW": "沒有圖片。"
   },
   "loggingin": {
     "description": "Logging in...",

@@ -1,7 +1,7 @@
 <template>
   <div>
     <Card :bordered="true" class="ib-card">
-      <cell-group @on-click="login">
+      <cell-group>
         <cell
           v-for="(platform, id) in platforms"
           :key="id"
@@ -9,10 +9,15 @@
           :title="$i18n(id)"
           :label="(platform.service.user && platform.service.user.name) || $i18n('not_login')"
         >
-          <avatar
+          <a
+            href="#"
             slot="icon"
-            :src="(platform.service.user && platform.service.user.avatar) || require(`@/services/${platform.service.id}/logo.svg`)"
-          />
+            @click.prevent="platform.service.user ? logout(platform) : login(platform)"
+          >
+            <avatar
+              :src="(platform.service.user && platform.service.user.avatar) || require(`@/services/${platform.service.id}/logo.svg`)"
+            />
+          </a>
           <p slot="extra">
             <transition name="ib-fade">
               <icon
@@ -27,10 +32,10 @@
               <span v-if="platform.service.user" key="switch" :title="$i18n('toggle_service')">
                 <i-switch v-model="platform.service.enable" :disabled="platform.loggingin"/>
               </span>
-              <span v-else key="arrow">
+              <a v-else key="arrow" href="#" @click.prevent="login(platform)">
                 {{ $i18n('login') }}
                 <icon type="ios-arrow-forward" size="16"/>
-              </span>
+              </a>
             </transition>
           </p>
         </cell>
@@ -116,9 +121,8 @@ export default class InputBox extends Vue {
     })
   }
 
-  async login (id: ServiceId) {
-    const platform = this.platforms[id]
-    if (platform.service.user || platform.loggingin) { return }
+  async login (platform: ReturnType<typeof genPlatform>) {
+    if (platform.service.user || platform.loggingin || platform.posting) { return }
     platform.loggingin = true
     let isOAuth1a: boolean | undefined
     try {
@@ -144,6 +148,14 @@ export default class InputBox extends Vue {
       }
     }
     platform.loggingin = false
+  }
+
+  async logout (platform: ReturnType<typeof genPlatform>) {
+    if (!platform.service.user || platform.loggingin || platform.posting) { return }
+    if (window.confirm(this.$i18n('logout_confirm') + this.$i18n(platform.service.id))) {
+      await this.$nextTick() // skip cell group event listener
+      platform.service.clearStorage()
+    }
   }
 
   post () {
