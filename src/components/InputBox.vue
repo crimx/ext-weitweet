@@ -35,7 +35,11 @@
             </transition>
             <transition name="ib-fade" mode="out-in">
               <span v-if="platform.service.user" key="switch" :title="$i18n('toggle_service')">
-                <i-switch v-model="platform.service.enable" :disabled="platform.loggingin"/>
+                <i-switch
+                  v-model="platform.service.enable"
+                  :disabled="platform.loggingin"
+                  @on-change="platform.service.setStorage()"
+                />
               </span>
               <a v-else key="arrow" href="#" @click.prevent="login(platform)">
                 {{ $i18n('login') }}

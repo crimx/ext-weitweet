@@ -33,14 +33,7 @@ export abstract class Service {
   abstract checkAccessToken(): Promise<void>
   abstract postContent(text: string, img?: string | Blob): Promise<void>
 
-  private _enable = true
-  get enable () {
-    return this._enable
-  }
-  set enable (val: boolean) {
-    this._enable = val
-    this.setStorage()
-  }
+  enable = true
 
   user: User | null = null
   protected token: any = null
