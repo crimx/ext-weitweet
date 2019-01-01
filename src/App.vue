@@ -2,7 +2,7 @@
   <div id="app">
     <row class="site-row" :gutter="20">
       <i-col span="12">
-        <InputBox :img="img"/>
+        <InputBox :img="img" @select="selectImg"/>
       </i-col>
       <i-col span="12">
         <Gallery @select="selectImg"/>

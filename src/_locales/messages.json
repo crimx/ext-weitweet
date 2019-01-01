@@ -35,12 +35,6 @@
     "zh_CN": "缩短链接失败。",
     "zh_TW": "縮短連結失敗。"
   },
-  "logout_confirm": {
-    "description": "Logout account: ",
-    "en": "Logout account: ",
-    "zh_CN": "退出账户：",
-    "zh_TW": "退出賬戶："
-  },
   "extension_description": {
     "description": "Description of extension",
     "en": "Post Fanfou, Weibo and Twitter in one click.",
@@ -83,6 +77,12 @@
     "zh_CN": "登录",
     "zh_TW": "登入"
   },
+  "logout_confirm": {
+    "description": "Logout account: ",
+    "en": "Logout account: ",
+    "zh_CN": "退出账户：",
+    "zh_TW": "退出賬戶："
+  },
   "not_login": {
     "description": "Not login",
     "en": "Not login",
@@ -94,6 +94,12 @@
     "en": "Send",
     "zh_CN": "发送",
     "zh_TW": "傳送"
+  },
+  "post_success": {
+    "description": "Message successfully delivered",
+    "en": ": successfully delivered",
+    "zh_CN": "：发布成功",
+    "zh_TW": "：傳送成功"
   },
   "posting": {
     "description": "Posting...",
@@ -118,6 +124,18 @@
     "en": "Unknown error occurred.",
     "zh_CN": "未知错误。",
     "zh_TW": "未知錯誤。"
+  },
+  "upload_area": {
+    "description": "Click or drag image files here to upload",
+    "en": "Click or drag image files here to upload",
+    "zh_CN": "点击或拖拽图片文件到此上传",
+    "zh_TW": "點選或拖拽圖片檔案到此上傳"
+  },
+  "upload_link": {
+    "description": "Enter or paste image URL",
+    "en": "Enter or paste image URL",
+    "zh_CN": "输入或粘贴图片链接",
+    "zh_TW": "輸入或貼上圖片連結"
   },
   "weibo": {
     "description": "微博",

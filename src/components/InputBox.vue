@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Card :bordered="true" class="ib-card">
+    <Card bordered class="ib-card">
       <cell-group>
         <cell
           v-for="(platform, id) in platforms"
@@ -50,9 +50,50 @@
         </cell>
       </cell-group>
     </Card>
-    <Card :bordered="true" class="ib-card">
-      <i-input v-model="content" class="ib-textarea" type="textarea" :autosize="{ minRows: 6 }"/>
+    <Card bordered class="ib-card">
+      <i-input
+        v-model="content"
+        class="ib-textarea"
+        type="textarea"
+        :autosize="{ minRows: 6 }"
+        @paste="handleTextareaPaste"
+      />
       <i-button type="success" long @click="post">{{ $i18n('post') }}</i-button>
+    </Card>
+    <Card bordered class="ib-card">
+      <div class="ib-upload">
+        <div class="ib-upload-inputs">
+          <upload
+            type="drag"
+            action="#"
+            accept=".jpg, .jpeg, .png, .gif"
+            :before-upload="handleUpload"
+          >
+            <div style="padding: 20px 0">
+              <icon type="ios-cloud-upload" size="52" style="color: #3399ff"></icon>
+              <p>{{ $i18n('upload_area') }}</p>
+            </div>
+          </upload>
+          <i-input
+            search
+            type="url"
+            :placeholder="$i18n('upload_link')"
+            prefix="md-image"
+            style="width: 100%"
+            @on-search="$emit('select', $event)"
+          />
+        </div>
+        <transition name="ib-img-preview">
+          <div
+            v-if="img"
+            :style="{'background-image': `url('${img}')`}"
+            class="ib-upload-preview"
+            role="img"
+          >
+            <i-button shape="circle" size="small" icon="md-close" @click="$emit('select', '')"></i-button>
+          </div>
+        </transition>
+      </div>
     </Card>
   </div>
 </template>
@@ -97,21 +138,21 @@ export default class InputBox extends Vue {
   }
 
   created () {
-    browser.runtime.onMessage.addListener(async (
+    browser.runtime.onMessage.addListener((
       data: Partial<Message>,
       sender: browser.runtime.MessageSender
     ) => {
-      switch (data.type) {
-        case MsgType.PinCode: // OAuth 1a
-          const platform = this.platforms[(data as MsgPinCode).service]
-          if (!platform.loggingin) { return }
+      if (data.type === MsgType.PinCode) {
+        // OAuth 1a
+        const platform = this.platforms[(data as MsgPinCode).service]
+        if (!platform.loggingin) { return null }
 
-          if (sender.tab && sender.tab.id) {
-            browser.tabs.remove(sender.tab.id)
-          }
-          try {
-            await platform.service.obtainAccessToken((data as MsgPinCode).code)
-          } catch (err) {
+        if (sender.tab && sender.tab.id) {
+          browser.tabs.remove(sender.tab.id)
+        }
+
+        return platform.service.obtainAccessToken((data as MsgPinCode).code)
+          .catch(err => {
             const title = this.$i18n(encodeError('access_token'))
             this.$Notice.error({
               title,
@@ -119,22 +160,25 @@ export default class InputBox extends Vue {
               duration: 10
             })
             platform.loggingin = false
-            return
-          }
-          if (!platform.service.user) {
-            const title = this.$i18n(encodeError('access_token'))
-            this.$Notice.error({
-              title,
-              desc: `${title} ${this.$i18n('unknown_error')}`,
-              duration: 10
-            })
-          }
-          platform.loggingin = false
-          break
-        default:
-          break
+          })
+          .then(() => {
+            if (!platform.service.user) {
+              const title = this.$i18n(encodeError('access_token'))
+              this.$Notice.error({
+                title,
+                desc: `${title} ${this.$i18n('unknown_error')}`,
+                duration: 10
+              })
+            }
+            platform.loggingin = false
+          })
       }
     })
+
+    const searchUrl = new URL(document.URL)
+    this.content =
+      decodeURIComponent(searchUrl.searchParams.get('title') || '') +
+      decodeURIComponent(searchUrl.searchParams.get('url') || '')
   }
 
   async login (platform: ReturnType<typeof genPlatform>) {
@@ -162,8 +206,8 @@ export default class InputBox extends Vue {
           duration: 10
         })
       }
+      platform.loggingin = false
     }
-    platform.loggingin = false
   }
 
   async logout (platform: ReturnType<typeof genPlatform>) {
@@ -172,6 +216,24 @@ export default class InputBox extends Vue {
       await this.$nextTick() // skip cell group event listener
       platform.service.clearStorage()
     }
+  }
+
+  handleUpload (file: File): false {
+    this.$emit('select', URL.createObjectURL(file))
+    return false
+  }
+
+  handleTextareaPaste (evt: ClipboardEvent) {
+    Array.from(evt.clipboardData.items)
+      .some(item => {
+        if (/image/i.test(item.type)) {
+          var blob = item.getAsFile()
+          this.$emit('select', URL.createObjectURL(blob))
+          evt.preventDefault()
+          return true
+        }
+        return false
+      })
   }
 
   post () {
@@ -191,6 +253,7 @@ export default class InputBox extends Vue {
         })
       }
       platform.posting = false
+      this.$Message.success(this.$i18n(service.id) + this.$i18n('post_success'))
     })
   }
 }
@@ -211,6 +274,22 @@ export default class InputBox extends Vue {
 
 .ib-textarea {
   margin-bottom: 10px;
+}
+
+.ib-upload {
+  display: flex;
+}
+
+.ib-upload-inputs {
+  flex: 1;
+}
+
+.ib-upload-preview {
+  width: 40%;
+  margin-left: 10px;
+  padding: 5px;
+  text-align: right;
+  background: #f5f5f5 no-repeat center / contain;
 }
 
 .ib-wordcount {
@@ -248,6 +327,16 @@ export default class InputBox extends Vue {
 }
 .ib-fade-enter,
 .ib-fade-leave-to {
+  opacity: 0;
+}
+
+.ib-img-preview-enter-active,
+.ib-img-preview-leave-active {
+  transition: width 0.5s, opacity 0.5s;
+}
+.ib-img-preview-enter,
+.ib-img-preview-leave-to {
+  width: 0;
   opacity: 0;
 }
 </style>
