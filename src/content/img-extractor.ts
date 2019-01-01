@@ -16,12 +16,14 @@ function searchDom (doc: Document): { [index: string]: number } {
     // match `url(...)`
     const match = srcChecker.exec(prop)
     if (match) {
-      collection[match[1]] = 0
+      collection[match[1].replace(/^\/(?!\/)/, location.origin)] = 0
     }
 
     if (/^img$/i.test(node.tagName) && (node as HTMLImageElement).src) {
       // src from img tag
-      collection[(node as HTMLImageElement).src] = 1
+      collection[
+        (node as HTMLImageElement).src.replace(/^\/(?!\/)/, location.origin)
+      ] = 1
     } else if (/^frame$/i.test(node.tagName)) {
       // iframe
       const iframe = node as HTMLIFrameElement
