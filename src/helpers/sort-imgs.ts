@@ -16,7 +16,7 @@ export async function sortImgs (col: Col = {}): Promise<string[]> {
       const dimension = await getImgDimension(src)
       if (dimension && dimension.width >= 100 && dimension.height >= 100) {
         list.push({
-          src: /(jpeg|png|gif)$/i.test(src) ? src : await imgToPng(src),
+          src: /(jpg|jpeg|png|gif)$/i.test(src) ? src : await imgToPng(src),
           weight: col[src],
           width: dimension.width,
           height: dimension.height
