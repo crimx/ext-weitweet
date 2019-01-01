@@ -16,7 +16,7 @@
     "crypto-js": "^3.1.9-1",
     "iview": "^3.2.1",
     "oauth-1.0a": "^2.2.5",
-    "twitter-text": "^3.0.0",
+    "twitter-text": "1.x",
     "vue": "^2.5.17",
     "vue-class-component": "^6.0.0",
     "vue-masonry-css": "^1.0.3",

@@ -6,9 +6,14 @@
           v-for="(platform, id) in platforms"
           :key="id"
           :name="id"
-          :title="$i18n(id)"
           :label="(platform.service.user && platform.service.user.name) || $i18n('not_login')"
         >
+          <span>{{ $i18n(id) }}</span>
+          <span
+            v-if="platform.service.user"
+            class="ib-wordcount"
+            :class="{'ib-wordcount--overlength': platform.wordCount > platform.service.maxWordCount}"
+          >{{ platform.wordCount }}</span>
           <a
             href="#"
             slot="icon"
@@ -49,7 +54,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator'
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Message, MsgType, MsgPinCode } from '@/background/types'
 import { Service } from '@/services/service'
 import { Fanfou } from '@/services/fanfou/service'
@@ -78,6 +83,13 @@ export default class InputBox extends Vue {
     fanfou: genPlatform(new Fanfou()),
     twitter: genPlatform(new Twitter()),
     weibo: genPlatform(new Weibo())
+  }
+
+  @Watch('content', { immediate: true })
+  onContentChanged (val: string) {
+    this.platforms.fanfou.wordCount = this.platforms.fanfou.service.countWords(val)
+    this.platforms.twitter.wordCount = this.platforms.twitter.service.countWords(val)
+    this.platforms.weibo.wordCount = this.platforms.weibo.service.countWords(val)
   }
 
   created () {
@@ -182,12 +194,31 @@ export default class InputBox extends Vue {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+@font-face {
+  font-family: "shadows-into-light";
+  src: url("../assets/shadows-into-light.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 .ib-card {
   margin-bottom: 15px;
 }
 
 .ib-textarea {
   margin-bottom: 10px;
+}
+
+.ib-wordcount {
+  margin-left: 10px;
+  font-size: 1.1em;
+  color: #000;
+  font-family: "shadows-into-light", -apple-system, system-ui,
+    BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+.ib-wordcount--overlength {
+  color: red;
 }
 
 .ib-service--loading {
