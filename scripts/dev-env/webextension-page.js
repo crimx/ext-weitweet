@@ -212,14 +212,14 @@ function sendMessage (extensionId, message) {
  * For both sync and local
  */
 function genStorageApis () {
+  const accounts = JSON.parse(process.env.VUE_APP_ACCOUNTS)
+  Object.keys(accounts).forEach(key => {
+    accounts[key] = btoa(encodeURIComponent(accounts[key]))
+  })
   /* global storageData */
   window['storageData'] = {
-    local: process.env.VUE_APP_STORAGE_LOCAL
-      ? JSON.parse(process.env.VUE_APP_STORAGE_LOCAL)
-      : {},
-    sync: process.env.VUE_APP_STORAGE_SYNC
-      ? JSON.parse(process.env.VUE_APP_STORAGE_SYNC)
-      : {},
+    local: accounts,
+    sync: {},
     listeners: []
   }
 
