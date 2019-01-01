@@ -17,7 +17,7 @@ browser.browserAction.onClicked.addListener(async sourceTab => {
       `editor.html` +
         `?title=${encodeURIComponent(sourceTab.title || '')}` +
         `&url=${encodeURIComponent(sourceTab.url || '')}` +
-        `&id=${encodeURIComponent(
+        `&tabid=${encodeURIComponent(
           sourceTab.id != null ? String(sourceTab.id) : ''
         )}`
     )
