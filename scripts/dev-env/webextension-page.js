@@ -214,7 +214,8 @@ function sendMessage (extensionId, message) {
 function genStorageApis () {
   const accounts = JSON.parse(process.env.VUE_APP_ACCOUNTS)
   Object.keys(accounts).forEach(key => {
-    accounts[key] = btoa(encodeURIComponent(accounts[key]))
+    accounts[key].enable = true
+    accounts[key] = btoa(encodeURIComponent(JSON.stringify(accounts[key])))
   })
   /* global storageData */
   window['storageData'] = {
