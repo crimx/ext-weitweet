@@ -69,8 +69,12 @@ export class OAuth1a {
     return this.accessToken
   }
 
-  async send<T = any> (url: string, requestInit: RequestInit = {}): Promise<T> {
-    if (!this.accessToken) {
+  async send<T = any> (
+    url: string,
+    accessToken: Token | null,
+    requestInit: RequestInit = {}
+  ): Promise<T> {
+    if (!accessToken) {
       throw new Error(encodeError('no_access_token'))
     }
 
@@ -86,9 +90,7 @@ export class OAuth1a {
       credentials: 'omit',
       referrer: 'no-referrer',
       headers: {
-        ...this.oauth.toHeader(
-          this.oauth.authorize(requestData, this.accessToken)
-        )
+        ...this.oauth.toHeader(this.oauth.authorize(requestData, accessToken))
       }
     })
     return response.json()

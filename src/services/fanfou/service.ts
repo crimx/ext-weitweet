@@ -1,6 +1,7 @@
 import { MsgType, MsgOpenUrl } from '@/background/types'
 import { Service } from '../service'
-import { OAuth1a, Token } from '../OAuth1a'
+import { OAuth1a } from '../OAuth1a'
+import tText from 'twitter-text'
 import { encodeError } from '@/helpers/error'
 
 export class Fanfou extends Service {
@@ -17,6 +18,13 @@ export class Fanfou extends Service {
     },
     accessToken: this.token
   })
+
+  countWords (text: string) {
+    return tText.getTweetLength(text, {
+      short_url_length: 23,
+      short_url_length_https: 23
+    })
+  }
 
   async authorize () {
     const requestToken = await this.oauth.obtainRequestToken({
@@ -48,7 +56,8 @@ export class Fanfou extends Service {
 
   async checkAccessToken () {
     const json = await this.oauth.send(
-      'http://api.fanfou.com/account/verify_credentials.json'
+      'http://api.fanfou.com/account/verify_credentials.json',
+      this.token
     )
 
     if (json && json.profile_image_url_large) {
@@ -72,12 +81,16 @@ export class Fanfou extends Service {
       }
       formData.append('photo', img)
     }
-    const json = await this.oauth.send(`http://rest.fanfou.com/statuses/`, {
-      method: 'POST',
-      body: formData
-    })
+    const json = await this.oauth.send(
+      `http://api.fanfou.com/${img ? 'photos/upload' : 'statuses/update'}.json`,
+      this.token,
+      {
+        method: 'POST',
+        body: formData
+      }
+    )
     if (!json || !json.created_at) {
-      return Promise.reject(new Error())
+      return Promise.reject(new Error(json))
     }
   }
 }

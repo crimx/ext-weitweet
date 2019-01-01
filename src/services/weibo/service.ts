@@ -84,23 +84,32 @@ export class Weibo extends Service {
 
   async postContent (text: string, img?: string | Blob) {
     const formattedText = await replaceUrls(text)
-    const formData = new FormData()
-    formData.append('access_token', this.token.accessToken)
-    formData.append('status', formattedText)
+    const { accessToken } = this.token
+    let formData: FormData | string
+    const headers: Record<string, string> = {
+      Accept: 'application/json'
+    }
+
     if (img) {
+      formData = new FormData()
+      formData.append('access_token', accessToken)
+      formData.append('status', formattedText)
       if (typeof img === 'string') {
         const response = await fetch(img)
         img = await response.blob()
       }
       formData.append('pic', img)
+    } else {
+      formData = `access_token=${accessToken}&status=${formattedText}`
+      headers['Content-type'] =
+        'application/x-www-form-urlencoded; charset=UTF-8'
     }
+
     const response = await fetch(
       `https://api.weibo.com/2/statuses/share.json`,
       {
         method: 'post',
-        headers: {
-          Accept: 'application/json'
-        },
+        headers,
         body: formData
       }
     )

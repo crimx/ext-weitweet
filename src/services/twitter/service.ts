@@ -59,7 +59,8 @@ export class Twitter extends Service {
 
   async checkAccessToken () {
     const json = await this.oauth.send(
-      'https://api.twitter.com/1.1/account/verify_credentials.json'
+      'https://api.twitter.com/1.1/account/verify_credentials.json',
+      this.token
     )
 
     if (json && json.profile_image_url_https) {
@@ -84,6 +85,7 @@ export class Twitter extends Service {
       formData.append('media', img)
       const response = await this.oauth.send(
         'https://upload.twitter.com/1.1/media/upload.json',
+        this.token,
         {
           method: 'POST',
           body: formData
@@ -97,6 +99,7 @@ export class Twitter extends Service {
       'https://api.twitter.com/1.1/statuses/update.json' +
         `?status=${encodeURIComponent(text)}` +
         (mediaStr ? `&media_ids=${mediaStr}` : ''),
+      this.token,
       {
         method: 'POST'
       }

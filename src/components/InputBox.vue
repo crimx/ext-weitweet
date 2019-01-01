@@ -157,7 +157,7 @@ export default class InputBox extends Vue {
             this.$Notice.error({
               title,
               desc: `${title} ${decodeError(err)}`,
-              duration: 10
+              duration: 15
             })
             platform.loggingin = false
           })
@@ -167,7 +167,7 @@ export default class InputBox extends Vue {
               this.$Notice.error({
                 title,
                 desc: `${title} ${this.$i18n('unknown_error')}`,
-                duration: 10
+                duration: 15
               })
             }
             platform.loggingin = false
@@ -178,6 +178,7 @@ export default class InputBox extends Vue {
     const searchUrl = new URL(document.URL)
     this.content =
       decodeURIComponent(searchUrl.searchParams.get('title') || '') +
+      ' ' +
       decodeURIComponent(searchUrl.searchParams.get('url') || '')
   }
 
@@ -192,7 +193,7 @@ export default class InputBox extends Vue {
       this.$Notice.error({
         title,
         desc: `${title} ${decodeError(err)}`,
-        duration: 10
+        duration: 15
       })
       platform.loggingin = false
       return
@@ -203,7 +204,7 @@ export default class InputBox extends Vue {
         this.$Notice.error({
           title,
           desc: `${title} ${this.$i18n('unknown_error')}`,
-          duration: 10
+          duration: 15
         })
       }
       platform.loggingin = false
@@ -243,17 +244,20 @@ export default class InputBox extends Vue {
       if (!service.enable || !service.user) { return }
       platform.posting = true
       try {
-        await service.postContent(this.content)
+        await service.postContent(this.content, this.img)
+        this.$Notice.success({
+          title: this.$i18n(service.id) + this.$i18n('post_success'),
+          duration: 15
+        })
       } catch (err) {
         const title = this.$i18n(encodeError('post'))
         this.$Notice.error({
           title,
           desc: `${title} ${decodeError(err)}`,
-          duration: 10
+          duration: 15
         })
       }
       platform.posting = false
-      this.$Message.success(this.$i18n(service.id) + this.$i18n('post_success'))
     })
   }
 }
