@@ -34,7 +34,7 @@ export function clearServiceStorage (serviceId: ServiceId): Promise<void> {
 export async function setupExtractor (
   callback: () => { service: ServiceId; code: string } | void
 ) {
-  const proceed = browser.runtime.sendMessage<Message>({
+  const proceed = await browser.runtime.sendMessage<Message>({
     type: MsgType.ExtractorReady
   })
   if (proceed) {
