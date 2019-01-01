@@ -28,17 +28,13 @@ export default class Gallery extends Vue {
   loaded = process.env.NODE_ENV === 'development'
 
   async created () {
-    browser.runtime.onMessage.addListener(async (data: Partial<Message>) => {
-      switch (data.type) {
-        case MsgType.IMGs:
-          this.srcList = await sortImgs((data as MsgIMGs).col)
+    browser.runtime.onMessage.addListener((data: Partial<Message>) => {
+      if (data.type === MsgType.IMGs) {
+        return sortImgs((data as MsgIMGs).col).then(async list => {
+          this.srcList = list
           await this.$nextTick()
-          this.loaded = false
-          break
-        case MsgType.ExtractorReady:
-          return true
-        default:
-          break
+          this.loaded = true
+        })
       }
     })
 

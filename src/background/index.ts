@@ -1,7 +1,7 @@
 import { MsgType, Message, MsgOpenUrl } from '@/background/types'
 
 browser.runtime.onMessage.addListener(
-  async (data: Partial<Message>, sender: browser.runtime.MessageSender) => {
+  (data: Partial<Message>, sender: browser.runtime.MessageSender) => {
     switch (data.type) {
       case MsgType.OpenUrl:
         return openUrl(data as MsgOpenUrl)

@@ -61,9 +61,8 @@ export class Weibo extends Service {
         accessToken: json.access_token,
         uid: json.uid
       }
+      await this.checkAccessToken()
     }
-
-    await this.checkAccessToken()
   }
 
   async checkAccessToken () {
