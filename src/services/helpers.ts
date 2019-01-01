@@ -5,10 +5,12 @@ export async function getServiceStorage<T = {}> (
   serviceId: ServiceId
 ): Promise<T | undefined> {
   const response = await browser.storage.local.get<any>(serviceId)
-  if (response) {
+  if (response && response[serviceId]) {
     try {
       return JSON.parse(decodeURIComponent(atob(response[serviceId])))
-    } catch (err) {}
+    } catch (err) {
+      console.warn(`get service ${serviceId} storage error`, err)
+    }
   }
 }
 
