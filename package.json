@@ -5,6 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build && node scripts/post-build.js",
+    "fastbuild": "vue-cli-service build --fastbuild && node scripts/post-build.js",
     "lint": "vue-cli-service lint",
     "zip": "node scripts/zip.js",
     "test:unit": "vue-cli-service test:unit"
@@ -15,7 +16,6 @@
     "crypto-js": "^3.1.9-1",
     "iview": "^3.2.1",
     "oauth-1.0a": "^2.2.5",
-    "probe-image-size": "^4.0.0",
     "twitter-text": "^3.0.0",
     "vue": "^2.5.17",
     "vue-class-component": "^6.0.0",

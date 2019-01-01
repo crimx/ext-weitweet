@@ -1,5 +1,6 @@
 const fs = require('fs-extra')
 const path = require('path')
+const argv = require('minimist')(process.argv.slice(2))
 const DEV_BG_ENV = fs.readFileSync(
   path.join(__dirname, 'scripts/dev-env/webextension-background.js'),
   'utf8'
@@ -87,18 +88,31 @@ function chainWebpackDev (config) {
 }
 
 function chainWebpackProd (config) {
+  // chunk files are loaded in manifest
   // disable chunk splitting
   config.optimization.delete('splitChunks')
+  config.plugins.delete('preload')
+  config.plugins.delete('prefetch')
+  // exclude other chunks
+  config.plugin('html').tap(args => {
+    args[0].chunks = ['app']
+    return args
+  })
 
   config.entry('background').add(path.join(__dirname, 'src/background'))
   config
     .entry('img-extractor')
     .add(path.join(__dirname, 'src/content/img-extractor'))
-
   config
     .entry('extractor_twitter')
     .add(path.join(__dirname, 'src/services/twitter/extractor.ts'))
   config
     .entry('extractor_fanfou')
     .add(path.join(__dirname, 'src/services/fanfou/extractor.ts'))
+
+  if (argv.fastbuild) {
+    config.plugins.delete('fork-ts-checker')
+    config.plugins.delete('optimize-css')
+    config.delete('optimization')
+  }
 }
