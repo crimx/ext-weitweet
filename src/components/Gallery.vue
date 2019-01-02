@@ -1,6 +1,6 @@
 <template>
   <div class="gallery-wrap">
-    <masonry v-if="loaded" :cols="3" :gutter="30">
+    <masonry v-if="srcList.length > 0" :cols="3" :gutter="30">
       <a
         v-for="src in srcList"
         :key="src"
