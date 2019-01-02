@@ -4,7 +4,7 @@
 Post Fanfou, Weibo and Twitter in one click.
 
 <p align="center">
-  <a href="https://chrome.google.com/webstore/detail/jcgjbjbbcjgkpdanbnafdbdlbjacdkln" target="_blank"><img src="assets/1400x560.png" /></a>
+  <img src="https://raw.githubusercontent.com/wiki/crimx/ext-weitweet/img/1400x560.png" />
 </p>
 
 <h2></h2>
@@ -26,7 +26,8 @@ Post Fanfou, Weibo and Twitter in one click.
 ## Downloads
 
 - Chrome Web Store: <https://chrome.google.com/webstore/detail/jcgjbjbbcjgkpdanbnafdbdlbjacdkln>
-- crx: <https://github.com/crimx/crx-weitweet/releases/>
+- Firefox AMO: <https://addons.mozilla.org/firefox/addon/weitweet>
+- crx: <https://www.chromefor.com/?s=weitweet>
 
 ## Privacy Policy & Terms of Service
 
