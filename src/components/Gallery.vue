@@ -69,19 +69,25 @@ export default class Gallery extends Vue {
 .gallery-img {
   object-fit: cover;
   width: 100%;
-  background-image: -webkit-gradient(
-      linear,
-      0 100%,
-      100% 0,
-      color-stop(0.25, #ccc),
-      color-stop(0.25, transparent)
-    ),
-    -webkit-gradient(linear, 0 0, 100% 100%, color-stop(0.25, #ccc), color-stop(0.25, transparent)),
-    -webkit-gradient(linear, 0 100%, 100% 0, color-stop(0.75, transparent), color-stop(0.75, #ccc)),
-    -webkit-gradient(linear, 0 0, 100% 100%, color-stop(0.75, transparent), color-stop(0.75, #ccc));
-  background-size: 20px 21px;
-  background-position: 0 0, 10px 0, 10px -10px, 0px 10px;
   background-color: #fff;
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  background-image: linear-gradient(
+      45deg,
+      #ccc 25%,
+      transparent 25%,
+      transparent 75%,
+      #ccc 75%,
+      #ccc
+    ),
+    linear-gradient(
+      45deg,
+      #ccc 25%,
+      transparent 25%,
+      transparent 75%,
+      #ccc 75%,
+      #ccc
+    );
 }
 
 .gallery-empty {
