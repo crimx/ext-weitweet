@@ -294,6 +294,21 @@ export default class InputBox extends Vue {
   padding: 5px;
   text-align: right;
   background: #f5f5f5 no-repeat center / contain;
+
+  button {
+    opacity: 0;
+    transition: opacity 0.4s;
+
+    &:hover,
+    &:focus,
+    &:active {
+      opacity: 1;
+    }
+  }
+
+  &:hover button {
+    opacity: 1;
+  }
 }
 
 .ib-wordcount {
