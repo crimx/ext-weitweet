@@ -56,7 +56,7 @@
         class="ib-textarea"
         type="textarea"
         :autosize="{ minRows: 6 }"
-        @paste="handleTextareaPaste"
+        @paste.native="handleTextareaPaste"
       />
       <i-button type="success" long @click="post">{{ $i18n('post') }}</i-button>
     </Card>
@@ -81,6 +81,7 @@
             prefix="md-image"
             style="width: 100%"
             @on-search="$emit('select', $event)"
+            @paste.native="handleTextareaPaste"
           />
         </div>
         <transition name="ib-img-preview">
