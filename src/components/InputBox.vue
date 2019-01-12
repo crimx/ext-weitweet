@@ -58,6 +58,7 @@
         :autosize="{ minRows: 6 }"
         @paste.native="handleTextareaPaste"
       />
+      <emoji-picker @emoji="content += $event"/>
       <i-button type="success" long @click="post">{{ $i18n('post') }}</i-button>
     </Card>
     <Card bordered class="ib-card">
@@ -102,6 +103,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { Message, MsgType, MsgPinCode } from '@/background/types'
+import EmojiPicker from './EmojiPicker.vue'
 import { Service } from '@/services/service'
 import { Fanfou } from '@/services/fanfou/service'
 import { Twitter } from '@/services/twitter/service'
@@ -118,7 +120,11 @@ function genPlatform (service: Service) {
   }
 }
 
-@Component
+@Component({
+  components: {
+    EmojiPicker
+  }
+})
 export default class InputBox extends Vue {
   /** selected image */
   @Prop() readonly img!: string | Blob

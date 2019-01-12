@@ -14,6 +14,12 @@ Vue.use(i18n)
 Vue.use(iView)
 Vue.use(VueMasonry)
 
+Vue.directive('focus', {
+  inserted: function (el) {
+    el.focus()
+  }
+})
+
 new Vue({
   render: h => h(App)
 }).$mount('#app')

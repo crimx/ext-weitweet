@@ -19,6 +19,7 @@
     "twitter-text": "1.x",
     "vue": "^2.5.17",
     "vue-class-component": "^6.0.0",
+    "vue-emoji-picker": "^1.0.1",
     "vue-masonry-css": "^1.0.3",
     "vue-plugin-webextension-i18n": "^0.1.2",
     "vue-property-decorator": "^7.0.0",
