@@ -65,7 +65,12 @@ function packSource () {
     archive.pipe(output)
 
     fs.readdirSync(path.join(__dirname, `..`))
-      .filter(name => !/^(\.github|dist|node_modules|\.git)$/.test(name))
+      .filter(
+        name =>
+          !/^(\.github|dist|node_modules|\.git|\.env\.development(\.local)?)$/.test(
+            name
+          )
+      )
       .forEach(name => {
         const filePath = path.join(__dirname, `../`, name)
         const stats = fs.lstatSync(filePath)
