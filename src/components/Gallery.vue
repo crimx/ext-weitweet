@@ -41,8 +41,13 @@ export default class Gallery extends Vue {
     const searchUrl = new URL(document.URL)
     const tabid = Number(decodeURIComponent(searchUrl.searchParams.get('tabid') || ''))
     if (tabid) {
-      await browser.tabs.executeScript(tabid, { file: '/js/browser-polyfill.min.js' })
-      await browser.tabs.executeScript(tabid, { file: '/js/img-extractor.js' })
+      try {
+        await browser.tabs.executeScript(tabid, { file: '/js/browser-polyfill.min.js' })
+        await browser.tabs.executeScript(tabid, { file: '/js/img-extractor.js' })
+      } catch (err) {
+        console.error(err)
+        this.loaded = true
+      }
     }
   }
 }
