@@ -59,7 +59,7 @@
         @paste.native="handleTextareaPaste"
       />
       <emoji-picker @emoji="content += $event"/>
-      <i-button type="success" long @click="post">{{ $i18n('post') }}</i-button>
+      <i-button type="success" long @click="post" :disabled="isServicesBusy">{{ $i18n('post') }}</i-button>
     </Card>
     <Card bordered class="ib-card">
       <div class="ib-upload">
@@ -137,11 +137,19 @@ export default class InputBox extends Vue {
     weibo: genPlatform(new Weibo())
   }
 
+  get platformList () {
+    return Object.values(this.platforms)
+  }
+
+  get isServicesBusy () {
+    return this.platformList.some(platform => platform.loggingin || platform.posting)
+  }
+
   @Watch('content', { immediate: true })
   onContentChanged (val: string) {
-    this.platforms.fanfou.wordCount = this.platforms.fanfou.service.countWords(val)
-    this.platforms.twitter.wordCount = this.platforms.twitter.service.countWords(val)
-    this.platforms.weibo.wordCount = this.platforms.weibo.service.countWords(val)
+    for (const platform of this.platformList) {
+      platform.wordCount = platform.service.countWords(val)
+    }
   }
 
   created () {
@@ -245,8 +253,7 @@ export default class InputBox extends Vue {
   }
 
   post () {
-    Object.keys(this.platforms).forEach(async id => {
-      const platform = this.platforms[id as ServiceId]
+    this.platformList.forEach(async platform => {
       const { service } = platform
       if (!service.enable || !service.user) { return }
       platform.posting = true
