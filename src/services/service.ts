@@ -31,7 +31,11 @@ export abstract class Service {
   abstract authorize(): Promise<boolean>
   abstract obtainAccessToken(code: string): Promise<void>
   abstract checkAccessToken(): Promise<void>
-  abstract postContent(text: string, img?: string | Blob): Promise<void>
+
+  /**
+   * @returns {Promise<string>} url
+   */
+  abstract postContent(text: string, img?: string | Blob): Promise<string>
 
   enable = true
 

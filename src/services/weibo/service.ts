@@ -6,6 +6,13 @@ import { encodeError } from '@/helpers/error'
 const errMsg = require('./error.json')
 
 export class Weibo extends Service {
+  token:
+    | undefined
+    | {
+        accessToken: string
+        uid: string
+      }
+
   constructor () {
     super('weibo')
   }
@@ -68,8 +75,8 @@ export class Weibo extends Service {
   async checkAccessToken () {
     const response = await fetch(
       `https://api.weibo.com/2/users/show.json?access_token=${
-        this.token.accessToken
-      }&uid=${this.token.uid}`
+        this.token!.accessToken
+      }&uid=${this.token!.uid}`
     )
     const json = await response.json()
     if (json && json.avatar_large) {
@@ -84,7 +91,7 @@ export class Weibo extends Service {
 
   async postContent (text: string, img?: string | Blob) {
     const formattedText = await replaceUrls(text)
-    const { accessToken } = this.token
+    const { accessToken } = this.token!
     let formData: FormData | string
     const headers: Record<string, string> = {
       Accept: 'application/json'
@@ -121,6 +128,20 @@ export class Weibo extends Service {
       }
       return Promise.reject(new Error(err))
     }
+
+    let mid = ''
+    try {
+      const midResponse = await fetch(
+        `https://api.weibo.com/2/statuses/querymid.json?access_token=${
+          this.token!.accessToken
+        }&id=${json.id}&type=1`
+      )
+      ;({ mid } = await midResponse.json())
+    } catch (err) {
+      /* do nothing */
+    }
+    // fallback to use page
+    return `https://weibo.com/${json.user.idstr}/${mid || ''}`
   }
 }
 

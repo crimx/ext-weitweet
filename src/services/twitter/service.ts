@@ -107,6 +107,7 @@ export class Twitter extends Service {
     if (!json || !json.created_at) {
       return Promise.reject(new Error())
     }
+    return `https://twitter.com/${this.user!.id}/status/${json.id_str}`
   }
 }
 

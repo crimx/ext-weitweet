@@ -92,6 +92,7 @@ export class Fanfou extends Service {
     if (!json || !json.created_at) {
       return Promise.reject(new Error(json))
     }
+    return `https://fanfou.com/statuses/${json.id}`
   }
 }
 

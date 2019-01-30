@@ -253,15 +253,30 @@ export default class InputBox extends Vue {
   }
 
   post () {
+    // destroy all notification
+    this.$Notice.destroy()
+
     this.platformList.forEach(async platform => {
       const { service } = platform
       if (!service.enable || !service.user) { return }
       platform.posting = true
       try {
-        await service.postContent(this.content, this.img)
+        const url = await service.postContent(this.content, this.img)
         this.$Notice.success({
           title: this.$i18n(service.id) + this.$i18n('post_success'),
-          duration: 15
+          // keep opening
+          duration: 0,
+          render: h => h!(
+            'a',
+            {
+              attrs: {
+                href: url,
+                target: '_blank',
+                rel: 'nofollow'
+              }
+            },
+            this.$i18n('post_view_msg')
+          )
         })
       } catch (err) {
         const title = this.$i18n(encodeError('post'))

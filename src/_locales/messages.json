@@ -101,6 +101,12 @@
     "zh_CN": "：发布成功",
     "zh_TW": "：傳送成功"
   },
+  "post_view_msg": {
+    "description": "'Click here to view the message.'",
+    "en": "Click here to view the message.",
+    "zh_CN": "点击这里查看消息。",
+    "zh_TW": "點選這裡檢視訊息。"
+  },
   "posting": {
     "description": "Posting...",
     "en": "Posting...",
