@@ -1,5 +1,6 @@
 import { MsgType, MsgPinCode, Message } from '@/background/types'
 import { ServiceId } from './types'
+import tText from 'twitter-text'
 
 export async function getServiceStorage<T = {}> (
   serviceId: ServiceId
@@ -50,4 +51,59 @@ export async function setupExtractor (
       }
     }, 100)
   }
+}
+
+declare global {
+  interface Window {
+    __shorturls__: Map<string, string>
+  }
+}
+
+/**
+ * Replace all the urls in a text with shorter ones.
+ */
+export async function replaceUrls (text: string): Promise<string> {
+  let cache = window.__shorturls__
+  if (!cache) {
+    cache = window.__shorturls__ = new Map()
+  }
+  if (cache.has(text)) {
+    return cache.get(text)!
+  }
+  const entities = await shortenUrls(tText.extractUrlsWithIndices(text))
+  let result = ''
+  let beginIndex = 0
+  entities.sort((a, b) => a.indices[0] - b.indices[0])
+  for (let i = 0; i < entities.length; i++) {
+    const entity = entities[i]
+    result += text.substring(beginIndex, entity.indices[0])
+    result += entity.url
+    beginIndex = entity.indices[1]
+  }
+  result += text.substring(beginIndex, text.length)
+  cache.set(text, result)
+  return result
+}
+
+/**
+ * Shorten urls with tinyrl service.
+ */
+function shortenUrls (urlsWithIndices: tText.UrlWithIndices[]) {
+  if (!Array.isArray(urlsWithIndices)) {
+    return Promise.resolve([])
+  }
+  return Promise.all(
+    urlsWithIndices.map(({ url }) =>
+      fetch(
+        'http://tinyurl.com/api-create.php?url=' + encodeURIComponent(url)
+      ).then(r => r.text())
+    )
+  )
+    .then(urls =>
+      urls.map((url, i) => ({ url, indices: urlsWithIndices[i].indices }))
+    )
+    .catch(() => {
+      console.error('Shorten urls failed')
+      return urlsWithIndices
+    })
 }

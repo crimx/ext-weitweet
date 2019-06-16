@@ -110,6 +110,7 @@ import { Twitter } from '@/services/twitter/service'
 import { Weibo } from '@/services/weibo/service'
 import { decodeError, encodeError } from '@/helpers/error'
 import { ServiceId } from '@/services/types'
+import { replaceUrls } from '../services/helpers'
 
 function genPlatform (service: Service) {
   return {
@@ -252,18 +253,25 @@ export default class InputBox extends Vue {
       })
   }
 
-  post () {
+  async post () {
     // destroy all notification
     this.$Notice.destroy()
 
-    this.platformList.forEach(async platform => {
-      const { service } = platform
-      if (!service.enable || !service.user) { return }
-      platform.posting = true
+    const toStart = this.platformList.filter(platform => {
+      if (platform.service.enable && platform.service.user) {
+        platform.posting = true
+        return true
+      }
+      return false
+    })
+
+    this.content = await replaceUrls(this.content)
+
+    toStart.forEach(async platform => {
       try {
-        const url = await service.postContent(this.content, this.img)
+        const url = await platform.service.postContent(this.content, this.img)
         this.$Notice.success({
-          title: this.$i18n(service.id) + this.$i18n('post_success'),
+          title: this.$i18n(platform.service.id) + this.$i18n('post_success'),
           // keep opening
           duration: 0,
           render: h => h!(

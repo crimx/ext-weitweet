@@ -1,8 +1,6 @@
 import tText from 'twitter-text'
 import { Service } from '../service'
 
-import { encodeError } from '@/helpers/error'
-
 const errMsg = require('./error.json')
 
 export class Weibo extends Service {
@@ -90,7 +88,7 @@ export class Weibo extends Service {
   }
 
   async postContent (text: string, img?: string | Blob) {
-    const formattedText = await replaceUrls(text)
+    const formattedText = toRfc3986(text)
     const { accessToken } = this.token!
     let formData: FormData | string
     const headers: Record<string, string> = {
@@ -146,44 +144,6 @@ export class Weibo extends Service {
 }
 
 export default Weibo
-
-/**
- * Replace urls with shorter ones.
- */
-async function replaceUrls (text: string) {
-  const entities = await shortenUrls(tText.extractUrlsWithIndices(text))
-  let result = ''
-  let beginIndex = 0
-  entities.sort((a, b) => a.indices[0] - b.indices[0])
-  for (let i = 0; i < entities.length; i++) {
-    const entity = entities[i]
-    result += text.substring(beginIndex, entity.indices[0])
-    result += entity.url
-    beginIndex = entity.indices[1]
-  }
-  result += text.substring(beginIndex, text.length)
-  return toRfc3986(result)
-}
-
-/**
- * Shorten urls with tinyrl service.
- */
-function shortenUrls (urlsWithIndices: tText.UrlWithIndices[]) {
-  if (!Array.isArray(urlsWithIndices)) {
-    return Promise.resolve([])
-  }
-  return Promise.all(
-    urlsWithIndices.map(({ url }) =>
-      fetch('http://tinyurl.com/api-create.php?url=' + url).then(response =>
-        response.text()
-      )
-    )
-  )
-    .then(urls =>
-      urls.map((url, i) => ({ url, indices: urlsWithIndices[i].indices }))
-    )
-    .catch(() => Promise.reject(new Error(encodeError('shorten_urls'))))
-}
 
 function toRfc3986 (val: string): string {
   return encodeURIComponent(val)
