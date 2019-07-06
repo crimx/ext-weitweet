@@ -110,7 +110,6 @@ import { Twitter } from '@/services/twitter/service'
 import { Weibo } from '@/services/weibo/service'
 import { decodeError, encodeError } from '@/helpers/error'
 import { ServiceId } from '@/services/types'
-import { replaceUrls } from '../services/helpers'
 
 function genPlatform (service: Service) {
   return {
@@ -264,8 +263,6 @@ export default class InputBox extends Vue {
       }
       return false
     })
-
-    this.content = await replaceUrls(this.content)
 
     toStart.forEach(async platform => {
       try {

@@ -3,6 +3,7 @@ import { Service } from '../service'
 import { OAuth1a } from '../OAuth1a'
 import tText from 'twitter-text'
 import { encodeError } from '@/helpers/error'
+import { replaceUrls } from '../helpers'
 
 export class Fanfou extends Service {
   constructor () {
@@ -72,6 +73,8 @@ export class Fanfou extends Service {
   }
 
   async postContent (text: string, img?: string | Blob) {
+    text = await replaceUrls(text)
+
     const formData = new FormData()
     formData.append('status', text)
     if (img) {

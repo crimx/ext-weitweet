@@ -1,5 +1,6 @@
 import tText from 'twitter-text'
 import { Service } from '../service'
+import { replaceUrls, gitTo } from '../helpers';
 
 const errMsg = require('./error.json')
 
@@ -88,6 +89,12 @@ export class Weibo extends Service {
   }
 
   async postContent (text: string, img?: string | Blob) {
+    text = await replaceUrls(
+      text,
+      // bypass weibo's freaking policy
+      (url: string) => Promise.resolve('http://jump.crimx.com?url=' + encodeURIComponent(url))
+    )
+
     const formattedText = toRfc3986(text)
     const { accessToken } = this.token!
     let formData: FormData | string

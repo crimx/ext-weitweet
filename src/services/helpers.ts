@@ -62,15 +62,26 @@ declare global {
 /**
  * Replace all the urls in a text with shorter ones.
  */
-export async function replaceUrls (text: string): Promise<string> {
-  let cache = window.__shorturls__
-  if (!cache) {
-    cache = window.__shorturls__ = new Map()
+export async function replaceUrls (
+  text: string,
+  transformer = gitTo
+): Promise<string> {
+  const urlsWithIndices = tText.extractUrlsWithIndices(text)
+  if (!Array.isArray(urlsWithIndices) || urlsWithIndices.length <= 0) {
+    return text
   }
-  if (cache.has(text)) {
-    return cache.get(text)!
-  }
-  const entities = await shortenUrls(tText.extractUrlsWithIndices(text))
+
+  const entities = await Promise.all(
+    urlsWithIndices.map(({ url }) => transformer(url))
+  )
+    .then(urls =>
+      urls.map((url, i) => ({ url, indices: urlsWithIndices[i].indices }))
+    )
+    .catch(() => {
+      console.error('Shorten urls failed')
+      return urlsWithIndices
+    })
+
   let result = ''
   let beginIndex = 0
   entities.sort((a, b) => a.indices[0] - b.indices[0])
@@ -81,29 +92,38 @@ export async function replaceUrls (text: string): Promise<string> {
     beginIndex = entity.indices[1]
   }
   result += text.substring(beginIndex, text.length)
-  cache.set(text, result)
   return result
 }
 
-/**
- * Shorten urls with tinyrl service.
- */
-function shortenUrls (urlsWithIndices: tText.UrlWithIndices[]) {
-  if (!Array.isArray(urlsWithIndices)) {
-    return Promise.resolve([])
+export async function gitTo (url: string): Promise<string> {
+  let cache = window.__shorturls__
+  if (!cache) {
+    cache = window.__shorturls__ = new Map()
   }
-  return Promise.all(
-    urlsWithIndices.map(({ url }) =>
-      fetch(
-        'http://tinyurl.com/api-create.php?url=' + encodeURIComponent(url)
-      ).then(r => r.text())
-    )
+  if (cache.has(url)) {
+    return cache.get(url)!
+  }
+
+  const result = await fetch(
+    'https://git.io/create',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: 'url=' + encodeURIComponent('https://auntlucy.github.io/jump?url=' + encodeURIComponent(url))
+    }
   )
-    .then(urls =>
-      urls.map((url, i) => ({ url, indices: urlsWithIndices[i].indices }))
-    )
-    .catch(() => {
-      console.error('Shorten urls failed')
-      return urlsWithIndices
-    })
+    .then(r => r.text())
+    .then(t => 'https://git.io/' + t)
+
+  cache.set(url, result)
+
+  return result
+}
+
+export function tinyUrl (url: string): Promise<string> {
+  return fetch(
+    'http://tinyurl.com/api-create.php?url=' + encodeURIComponent(url)
+  ).then(r => r.text())
 }
