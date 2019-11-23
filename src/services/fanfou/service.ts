@@ -29,7 +29,7 @@ export class Fanfou extends Service {
 
   async authorize () {
     const requestToken = await this.oauth.obtainRequestToken({
-      url: 'https://fanfou.com/oauth/request_token',
+      url: 'http://fanfou.com/oauth/request_token',
       method: 'GET'
     })
     if (!requestToken) {
@@ -48,7 +48,7 @@ export class Fanfou extends Service {
 
   async obtainAccessToken (code: string) {
     this.token = await this.oauth.obtainAccessToken({
-      url: 'https://fanfou.com/oauth/access_token',
+      url: 'http://fanfou.com/oauth/access_token',
       method: 'GET',
       data: { oauth_verifier: code }
     })
@@ -57,7 +57,7 @@ export class Fanfou extends Service {
 
   async checkAccessToken () {
     const json = await this.oauth.send(
-      'https://api.fanfou.com/account/verify_credentials.json',
+      'http://api.fanfou.com/account/verify_credentials.json',
       this.token
     )
 
@@ -85,7 +85,7 @@ export class Fanfou extends Service {
       formData.append('photo', img)
     }
     const json = await this.oauth.send(
-      `https://api.fanfou.com/${img ? 'photos/upload' : 'statuses/update'}.json`,
+      `http://api.fanfou.com/${img ? 'photos/upload' : 'statuses/update'}.json`,
       this.token,
       {
         method: 'POST',
