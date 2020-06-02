@@ -1,6 +1,6 @@
 import tText from 'twitter-text'
 import { Service } from '../service'
-import { replaceUrls, gitTo } from '../helpers';
+import { replaceUrls, gitTo } from '../helpers'
 
 const errMsg = require('./error.json')
 
@@ -57,7 +57,7 @@ export class Weibo extends Service {
         `&client_secret=${process.env.VUE_APP_WEIBO_CONSUMER_SECRET}` +
         `&code=${code}` +
         `&redirect_uri=${encodeURIComponent(
-          process.env.VUE_APP_REDIRECT_URI
+          process.env.VUE_APP_REDIRECT_URI || ''
         )}` +
         `&grant_type=authorization_code`
     })

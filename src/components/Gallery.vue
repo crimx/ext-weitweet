@@ -23,7 +23,7 @@ import { sortImgs } from '@/helpers/sort-imgs'
 
 @Component
 export default class Gallery extends Vue {
-  srcList: string[] = process.env.NODE_ENV === 'development' ? JSON.parse(process.env.VUE_APP_IMGS) : []
+  srcList: string[] = process.env.NODE_ENV === 'development' ? JSON.parse(process.env.VUE_APP_IMGS || '') : []
 
   loaded = process.env.NODE_ENV === 'development'
 

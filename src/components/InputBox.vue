@@ -240,7 +240,7 @@ export default class InputBox extends Vue {
   }
 
   handleTextareaPaste (evt: ClipboardEvent) {
-    Array.from(evt.clipboardData.items)
+    Array.from(evt.clipboardData ? evt.clipboardData.items : [])
       .some(item => {
         if (/image/i.test(item.type)) {
           var blob = item.getAsFile()

@@ -13,8 +13,8 @@ export class Twitter extends Service {
 
   private readonly oauth = new OAuth1a({
     consumer: {
-      key: process.env.VUE_APP_TWITTER_CONSUMER_KEY,
-      secret: process.env.VUE_APP_TWITTER_CONSUMER_SECRET
+      key: process.env.VUE_APP_TWITTER_CONSUMER_KEY || '',
+      secret: process.env.VUE_APP_TWITTER_CONSUMER_SECRET || ''
     },
     accessToken: this.token
   })

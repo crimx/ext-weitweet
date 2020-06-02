@@ -14,8 +14,8 @@ export class Fanfou extends Service {
 
   private oauth = new OAuth1a({
     consumer: {
-      key: process.env.VUE_APP_FANFOU_CONSUMER_KEY,
-      secret: process.env.VUE_APP_FANFOU_CONSUMER_SECRET
+      key: process.env.VUE_APP_FANFOU_CONSUMER_KEY || '',
+      secret: process.env.VUE_APP_FANFOU_CONSUMER_SECRET || ''
     },
     accessToken: this.token
   })
